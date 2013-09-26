@@ -40,7 +40,7 @@ class DPAttachmentsPlugin extends JPlugin {
                 $buffer .= '<div class="row-fluid">';
             }
             $buffer .= '<div class="span6">';
-            $isImage = in_array(JFile::getExt($attachment->path), array('png', 'gif', 'jpg', 'jpeg'));
+            $isImage = in_array(strtolower(JFile::getExt($attachment->path)), array('png', 'gif', 'jpg', 'jpeg'));
             if ($isImage) {
                 $buffer .= '<a href="' . $path . '/' . $attachment->path . '" class="dpattachment-button" title="' . $attachment->title . '">' . $attachment->title .
                          '</a>';
