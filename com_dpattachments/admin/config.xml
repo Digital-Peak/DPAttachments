@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<fieldset name="dpattachments" label="COM_DPATTACHMENTS_ATTACHMENTS"
+		description="COM_DPATTACHMENTS_CONFIG_ATTACHMENT_SETTINGS_DESC">
+		<field name="attachment_path" type="text" default="media/com_dpattachments/attachments"
+			label="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_PATH_LABEL" description="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_PATH_DESC" />
+		<field name="attachment_extensions" type="text" default="gif,jpg,png,zip,rar,csv,txt,pdf"
+			label="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_EXTENSIONS_LABEL" description="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_EXTENSIONS_DESC" />
+	</fieldset>
+	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL"
+		description="JCONFIG_PERMISSIONS_DESC">
+		<field name="rules" type="rules" label="JCONFIG_PERMISSIONS_LABEL"
+			class="inputbox" validate="rules" filter="rules" component="com_dpattachments"
+			section="component" />
+	</fieldset>
+</config>
