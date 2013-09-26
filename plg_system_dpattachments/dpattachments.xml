@@ -10,7 +10,7 @@
 	</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>1.0.0</version>
+	<version>1.1.0</version>
 	<description>PLG_SYSTEM_DPATTACHMENTS_XML_DESCRIPTION</description>
 	<files>
 		<filename plugin="dpattachments">dpattachments.php</filename>
@@ -20,6 +20,20 @@
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
+				<field name="menuitems" type="menuitem" multiple="true"
+					label="PLG_SYSTEM_DPATTACHMENTS_FIELD_MENU_ITEMS_LABEL" description="PLG_SYSTEM_DPATTACHMENTS_FIELD_MENU_ITEMS_DESC" />
+				<field name="menuitems_exclude" type="menuitem" multiple="true"
+					label="PLG_SYSTEM_DPATTACHMENTS_FIELD_MENU_ITEMS_EXCLUDE_LABEL" description="PLG_SYSTEM_DPATTACHMENTS_FIELD_MENU_ITEMS_EXCLUDE_DESC" />
+				<field name="components" type="sql" multiple="true" translate="true"
+					query="SELECT extension_id, name FROM `#__extensions` WHERE `type`='component' AND `enabled`=1"
+					label="PLG_SYSTEM_DPATTACHMENTS_FIELD_COMPONENTS_LABEL" description="PLG_SYSTEM_DPATTACHMENTS_FIELD_COMPONENTS_DESC"
+					key_field="name" value_field="name">
+				</field>
+				<field name="components_exclude" type="sql" multiple="true" translate="true"
+					query="SELECT extension_id, name FROM `#__extensions` WHERE `type`='component' AND `enabled`=1"
+					label="PLG_SYSTEM_DPATTACHMENTS_FIELD_COMPONENTS_EXCLUDE_LABEL" description="PLG_SYSTEM_DPATTACHMENTS_FIELD_COMPONENTS_EXCLUDE_DESC"
+					key_field="name" value_field="name">
+				</field>
 			</fieldset>
 		</fields>
 	</config>

@@ -33,6 +33,12 @@ class DPAttachmentsHelper {
                 $tableName = 'Content';
             }
 
+            // Handle the category table special
+            if ($tableName == 'Category') {
+                $prefix = 'JTable';
+                $tableName = 'Category';
+            }
+
             JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/' . $component . '/tables');
             $table = JTable::getInstance($tableName, $prefix);
 

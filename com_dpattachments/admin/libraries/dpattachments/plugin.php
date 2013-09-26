@@ -10,6 +10,9 @@ defined('_JEXEC') or die();
 class DPAttachmentsPlugin extends JPlugin {
 
     public function onContentAfterDisplay($context, $item, $params) {
+        if (! $this->isEnabled($context)) {
+            return '';
+        }
         return $this->render($context, $item);
     }
 
@@ -154,6 +157,58 @@ class DPAttachmentsPlugin extends JPlugin {
         $db->setQuery($query);
 
         $db->execute();
+
+        return true;
+    }
+
+    private function isEnabled($context) {
+        $input = JFactory::getApplication()->input;
+
+        // check for menu items to include
+        $menuItems = $this->params->get('menuitems');
+        if (! empty($menuItems)) {
+            if (! is_array($menuItems)) {
+                $menuItems = array($menuItems);
+            }
+
+            if (! in_array($input->getInt('Itemid'), $menuItems)) {
+                return false;
+            }
+        }
+
+        $menuItems = $this->params->get('menuitems_exclude');
+        if (! empty($menuItems)) {
+            if (! is_array($menuItems)) {
+                $menuItems = array($menuItems);
+            }
+
+            if (in_array($input->getInt('Itemid'), $menuItems)) {
+                return false;
+            }
+        }
+
+        // check for components to include
+        $components = $this->params->get('components');
+        if (! empty($components)) {
+            if (! is_array($components)) {
+                $components = array($components);
+            }
+
+            if (! in_array($input->getCmd('option'), $components)) {
+                return false;
+            }
+        }
+
+        $components = $this->params->get('components_exclude');
+        if (! empty($components)) {
+            if (! is_array($components)) {
+                $components = array($components);
+            }
+
+            if (in_array($input->getCmd('option'), $components)) {
+                return false;
+            }
+        }
 
         return true;
     }
