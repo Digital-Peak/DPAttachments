@@ -15,4 +15,8 @@
 		<file id="plg_system_dpattachments" type="plugin" group="system" client="site">plg_system_dpattachments.zip</file>
 		<file id="com_dpattachments" type="component">com_dpattachments.zip</file>
 	</files>
+	
+	<updateservers>
+		<server type="extension" priority="1" name="DPAttachments Update Site"><![CDATA[http://joomla.digital-peak.com/index.php?option=com_ars&view=update&task=stream&format=xml&id=3&ext=extension.xml]]></server>
+	</updateservers>
 </extension>
