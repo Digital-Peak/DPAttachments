@@ -27,7 +27,7 @@ class DPAttachmentsPlugin extends JPlugin {
 
         $user = JFactory::getUser();
         $count = count($attachments);
-        $path = JComponentHelper::getParams('com_dpattachments')->get('attachment_path', 'media/com_dpattachments/attachments/' . $context);
+        $path = JComponentHelper::getParams('com_dpattachments')->get('attachment_path', 'media/com_dpattachments/attachments/').'/'.$context;
 
         $buffer = '<h4>' . JText::_('COM_DPATTACHMENTS_ATTACHMENTS') . '</h4>';
 

@@ -2,7 +2,7 @@
 <config>
 	<fieldset name="dpattachments" label="COM_DPATTACHMENTS_ATTACHMENTS"
 		description="COM_DPATTACHMENTS_CONFIG_ATTACHMENT_SETTINGS_DESC">
-		<field name="attachment_path" type="text" default="media/com_dpattachments/attachments"
+		<field name="attachment_path" type="text" default="media/com_dpattachments/attachments/"
 			label="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_PATH_LABEL" description="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_PATH_DESC" />
 		<field name="attachment_extensions" type="text" default="gif,jpg,png,zip,rar,csv,txt,pdf"
 			label="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_EXTENSIONS_LABEL" description="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_EXTENSIONS_DESC" />
