@@ -13,6 +13,17 @@ class DPAttachmentsHelper {
 
     public static $extension = 'com_dpattachments';
 
+    public static function renderContext($context) {
+        $context = str_replace('com_', '', strtolower($context));
+
+        $buffer = '';
+        foreach ( explode('.', $context) as $part ) {
+            $buffer .= ucfirst($part) . ' ';
+        }
+
+        return trim($buffer, ' ');
+    }
+
     public static function addSubmenu($vName) {
         JHtmlSidebar::addEntry(JText::_('COM_DPATTACHMENTS_ATTACHMENTS'), 'index.php?option=com_dpattachments&view=attachments', $vName == 'attachments');
     }

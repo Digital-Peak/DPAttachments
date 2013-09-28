@@ -143,15 +143,24 @@ $sortFields = $this->getSortFields();
 							<?php if ($item->checked_out) : ?>
 								<?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'dpattachments.', $canCheckin); ?>
 							<?php endif; ?>
-							<?php if ($canEdit || $canEditOwn) : ?>
+							<?php if ($canEdit || $canEditOwn) { ?>
 								<a
 									href="<?php echo JRoute::_('index.php?option=com_dpattachments&task=attachment.edit&id=' . $item->id); ?>"
 									title="<?php echo JText::_('JACTION_EDIT'); ?>">
-									<?php echo $this->escape($item->title).' '.$this->escape($item->context).' '.$this->escape($item->item_id); ?></a>
-							<?php else : ?>
+									<?php echo $this->escape($item->title); ?></a>
+							<?php } else { ?>
 								<span
 									title="<?php echo JText::sprintf('JFIELD_ALIAS_LABEL', $this->escape($item->alias)); ?>"><?php echo $this->escape($item->title); ?></span>
-							<?php endif; ?>
+							<?php } ?>
+							     <p class="small">
+                                    <?php
+        							echo JText::_('COM_DPATTACHMENTS_FIELD_CONTEXT_LABEL').': '.$this->escape(DPAttachmentsHelper::renderContext($item->context));
+        							?>
+        							<br/>
+                                    <?php
+        							echo JText::_('COM_DPATTACHMENTS_FIELD_ITEM_ID_LABEL').': '.$this->escape($item->item_id);
+        							?>
+    							 </p>
 							</div>
 							<div class="pull-left">
 							<?php

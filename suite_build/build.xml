@@ -32,7 +32,7 @@
 			<param name="dpattachments" value="DPAttachments" />
 		</antcall>
 		<zip destfile="${dist}/DPAttachments-Core_${dpattachmentsVersion}.zip">
-			<zipfileset dir="${build}/DPAttachments" includes="**/*"/>
+			<zipfileset dir="${build}/DPAttachments" includes="**/*" />
 			<zipfileset dir="${basedir}" includes="ReadFirst.txt" />
 			<zipfileset dir="${basedir}" includes="license.txt" />
 			<zipfileset dir="${basedir}" includes="pkg_DPAttachments.xml" />
@@ -49,10 +49,15 @@
 			<zipfileset dir="${basedir}/../com_dpattachments" prefix="com_dpattachments" excludes="admin/dpattachments.xml" />
 			<zipfileset dir="${basedir}/../com_dpattachments/admin" includes="dpattachments.xml" fullpath="com_dpattachments/dpattachments.xml" />
 		</zip>
-		
-		<!-- create system plugin -->
-		<zip destfile="${build}/${dpattachments}/plg_system_dpattachments.zip">
-			<zipfileset dir="${basedir}/../plg_system_dpattachments" prefix="plg_system_dpattachments" />
+
+		<!-- create content plugin -->
+		<zip destfile="${build}/${dpattachments}/plg_content_dpattachments.zip">
+			<zipfileset dir="${basedir}/../plg_content_dpattachments" prefix="plg_content_dpattachments" />
+		</zip>
+
+		<!-- create DPCalendar plugin -->
+		<zip destfile="${build}/${dpattachments}/plg_dpcalendar_dpattachments.zip">
+			<zipfileset dir="${basedir}/../plg_dpcalendar_dpattachments" prefix="plg_dpcalendar_dpattachments" />
 		</zip>
 	</target>
 

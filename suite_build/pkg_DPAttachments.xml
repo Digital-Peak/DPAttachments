@@ -12,7 +12,7 @@
 	<authorUrl>joomla.digital-peak.com</authorUrl>
 	<version>1.0.0</version>
 	<files>
-		<file id="plg_system_dpattachments" type="plugin" group="system" client="site">plg_system_dpattachments.zip</file>
+		<file id="plg_content_dpattachments" type="plugin" group="content" client="site">plg_content_dpattachments.zip</file>
 		<file id="com_dpattachments" type="component">com_dpattachments.zip</file>
 	</files>
 	

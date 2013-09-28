@@ -14,15 +14,7 @@ if (! class_exists('DPAttachmentsCore')) {
     return;
 }
 
-class plgSystemDpattachments extends JPlugin {
-
-    public function onContentAfterDisplay($context, $item, $params) {
-        return DPAttachmentsCore::render($context, (int)$item->id);
-    }
-
-    public function onContentAfterDelete($context, $item) {
-        return DPAttachmentsCore::delete($context, (int)$item->id);
-    }
+class plgDPCalendarDpattachments extends JPlugin {
 
     public function onEventAfterDisplay($event, $output) {
         return DPAttachmentsCore::render('com_dpcalendar.event', $event->id);
