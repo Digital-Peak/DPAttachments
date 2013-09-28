@@ -2,10 +2,30 @@
 <config>
 	<fieldset name="dpattachments" label="COM_DPATTACHMENTS_ATTACHMENTS"
 		description="COM_DPATTACHMENTS_CONFIG_ATTACHMENT_SETTINGS_DESC">
-		<field name="attachment_path" type="text" default="media/com_dpattachments/attachments/"
-			label="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_PATH_LABEL" description="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_PATH_DESC" />
-		<field name="attachment_extensions" type="text" default="gif,jpg,png,zip,rar,csv,txt,pdf"
-			label="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_EXTENSIONS_LABEL" description="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_EXTENSIONS_DESC" />
+		<field name="attachment_path" type="text"
+			default="media/com_dpattachments/attachments/" label="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_PATH_LABEL"
+			description="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_PATH_DESC" />
+		<field name="attachment_extensions" type="text"
+			default="gif,jpg,png,zip,rar,csv,txt,pdf" label="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_EXTENSIONS_LABEL"
+			description="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_EXTENSIONS_DESC" />
+
+		<field name="menuitems" type="menuitem" multiple="true"
+			label="COM_DPATTACHMENTS_CONFIG_FIELD_MENU_ITEMS_LABEL" description="COM_DPATTACHMENTS_CONFIG_FIELD_MENU_ITEMS_DESC" />
+		<field name="menuitems_exclude" type="menuitem" multiple="true"
+			label="COM_DPATTACHMENTS_CONFIG_FIELD_MENU_ITEMS_EXCLUDE_LABEL"
+			description="COM_DPATTACHMENTS_CONFIG_FIELD_MENU_ITEMS_EXCLUDE_DESC" />
+		<field name="components" type="sql" multiple="true" translate="true"
+			query="SELECT extension_id, name FROM `#__extensions` WHERE `type`='component' AND `enabled`=1"
+			label="COM_DPATTACHMENTS_CONFIG_FIELD_COMPONENTS_LABEL" description="COM_DPATTACHMENTS_CONFIG_FIELD_COMPONENTS_DESC"
+			key_field="name" value_field="name">
+		</field>
+		<field name="components_exclude" type="sql" multiple="true"
+			translate="true"
+			query="SELECT extension_id, name FROM `#__extensions` WHERE `type`='component' AND `enabled`=1"
+			label="COM_DPATTACHMENTS_CONFIG_FIELD_COMPONENTS_EXCLUDE_LABEL"
+			description="COM_DPATTACHMENTS_CONFIG_FIELD_COMPONENTS_EXCLUDE_DESC"
+			key_field="name" value_field="name">
+		</field>
 	</fieldset>
 	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL"
 		description="JCONFIG_PERMISSIONS_DESC">

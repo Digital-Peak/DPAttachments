@@ -20,14 +20,14 @@ class DPAttachmentsModelAttachment extends JModelAdmin {
             if ($record->state != - 2) {
                 return false;
             }
-            return DPAttachmentsHelper::canDo('core.delete', $record->context, $record->item_id);
+            return DPAttachmentsCore::canDo('core.delete', $record->context, $record->item_id);
         }
         return parent::canDelete($record);
     }
 
     protected function canEditState($record) {
         if (! empty($record->id)) {
-            return DPAttachmentsHelper::canDo('core.edit.state', $record->context, $record->item_id);
+            return DPAttachmentsCore::canDo('core.edit.state', $record->context, $record->item_id);
         }
         return parent::canEditState($record);
     }
@@ -50,7 +50,7 @@ class DPAttachmentsModelAttachment extends JModelAdmin {
     public function upload($data) {
         $user = JFactory::getUser();
 
-        if (! DPAttachmentsHelper::canDo('core.edit', $data['context'], $data['item_id'])) {
+        if (! DPAttachmentsCore::canDo('core.edit', $data['context'], $data['item_id'])) {
             $this->setError(JText::_('COM_DPATTACHMENTS_UPLOAD_NO_PERMISSION'));
             return false;
         }
@@ -76,11 +76,11 @@ class DPAttachmentsModelAttachment extends JModelAdmin {
 
         $fileName = preg_replace("/[^A-Za-z0-9.]/i", "-", $fileName);
 
-        $targetFile = DPAttachmentsHelper::getPath($fileName, $data['context']);
+        $targetFile = DPAttachmentsCore::getPath($fileName, $data['context']);
         JLoader::import('joomla.filesystem.file');
         if (JFile::exists($targetFile)) {
             $fileName = JFactory::getDate()->format('YmdHi') . '-' . $fileName;
-            $targetFile = DPAttachmentsHelper::getPath($fileName, $data['context']);
+            $targetFile = DPAttachmentsCore::getPath($fileName, $data['context']);
         }
         if (! JFile::upload($_FILES['file']['tmp_name'], $targetFile)) {
             $this->setError(JText::_('COM_DPATTACHMENTS_UPLOAD_ERROR'));

@@ -116,10 +116,10 @@ $sortFields = $this->getSortFields();
 			<?php foreach ( $this->items as $i => $item ) :
                         $item->max_ordering = 0; // ??
                         $ordering = ($listOrder == 'a.ordering');
-                        $canEdit = DPAttachmentsHelper::canDo('core.edit', $item->context, $item->item_id);
+                        $canEdit = DPAttachmentsCore::canDo('core.edit', $item->context, $item->item_id);
                         $canCheckin = $user->authorise('core.manage', 'com_checkin') || $item->checked_out == $userId || $item->checked_out == 0;
-                        $canEditOwn = DPAttachmentsHelper::canDo('core.edit.own', $item->context, $item->item_id);
-                        $canChange = DPAttachmentsHelper::canDo('core.edit.state', $item->context, $item->item_id) && $canCheckin;
+                        $canEditOwn = DPAttachmentsCore::canDo('core.edit.own', $item->context, $item->item_id);
+                        $canChange = DPAttachmentsCore::canDo('core.edit.state', $item->context, $item->item_id) && $canCheckin;
                         ?>
 				<tr class="row<?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->context; ?>">
 				    <td class="order nowrap center hidden-phone">

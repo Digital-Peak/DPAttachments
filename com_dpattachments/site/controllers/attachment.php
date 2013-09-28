@@ -17,7 +17,7 @@ class DPAttachmentsControllerAttachment extends JControllerForm {
 
         $record = $this->getModel()->getItem($recordId);
         if (! empty($record)) {
-            return DPAttachmentsHelper::canDo('core.edit', $record->context, $record->item_id);
+            return DPAttachmentsCore::canDo('core.edit', $record->context, $record->item_id);
         }
 
         return parent::allowEdit($data, $key);
@@ -121,7 +121,7 @@ class DPAttachmentsControllerAttachment extends JControllerForm {
         JLoader::import('joomla.filesystem.folder');
         JLoader::import('joomla.filesystem.file');
 
-        $filename = DPAttachmentsHelper::getPath($attachment->path, $attachment->context);
+        $filename = DPAttachmentsCore::getPath($attachment->path, $attachment->context);
         if (! JFile::exists($filename)) {
             header('HTTP/1.0 404 Not Found');
             exit(0);
