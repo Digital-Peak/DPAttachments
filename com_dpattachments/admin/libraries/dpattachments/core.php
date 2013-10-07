@@ -113,9 +113,8 @@ class DPAttachmentsCore {
                     <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
                     <h3></h3>
                 </div>
-                <iframe id='dpattachments-iframe' style='zoom:0.60;width:99.6%;height:500px;border:none;'></iframe>
-                <div class='modal-footer'><button class='btn btn-primary' data-dismiss='modal' aria-hidden='true'>" .
-                     JText::_('COM_DPATTACHMENTS_CLOSE') . "</button></div>
+                <iframe id='dpattachments-iframe' style='zoom:0.60;width:99.6%;height:500px;border:none'></iframe>
+                <div class='modal-footer'><button class='btn btn-primary' data-dismiss='modal' aria-hidden='true'>" . JText::_('COM_DPATTACHMENTS_CLOSE') . "</button></div>
               </div>";
 
             $script = "
@@ -241,14 +240,14 @@ class DPAttachmentsCore {
             self::$itemCache[$key] = $table;
         }
 
+        $user = JFactory::getUser();
+
         $item = self::$itemCache[$key];
 
         // no item so we can only check for component permission
         if (! $item || ! $item->id) {
             return $user->authorise($action, $component) || $user->authorise($action, 'com_dpattachments');
         }
-
-        $user = JFactory::getUser();
 
         $asset = $component;
         if (isset($item->asset_id)) {
