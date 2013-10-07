@@ -63,10 +63,9 @@ class DPAttachmentsCore {
                 $buffer .= '<div class="row-fluid">';
             }
             $buffer .= '<div class="span6">';
-            $isImage = in_array(strtolower(JFile::getExt($attachment->path)), array('png', 'gif', 'jpg', 'jpeg'));
-            if ($isImage) {
-                $buffer .= '<a href="' . $path . '/' . $attachment->path . '" class="dpattachment-button" title="' . $attachment->title . '">' . $attachment->title .
-                         '</a>';
+            if (self::previewAvailable($attachment)) {
+                $buffer .= '<a href="' . JRoute::_('index.php?option=com_dpattachments&view=attachment&tmpl=component&id=' . (int)$attachment->id) .
+                         '" class="dpattachment-button" title="' . $attachment->title . '">' . $attachment->title . '</a>';
             } else {
                 $buffer .= $attachment->title;
             }
@@ -114,15 +113,16 @@ class DPAttachmentsCore {
                     <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
                     <h3></h3>
                 </div>
-                <div class='modal-body'><img id='dpattachments-image' src=''></div>
-                <div class='modal-footer'><button class='btn btn-primary' data-dismiss='modal' aria-hidden='true'>" . JText::_('COM_DPATTACHMENTS_CLOSE') . "</button></div>
+                <iframe id='dpattachments-iframe' style='zoom:0.60;width:99.6%;height:500px;border:none;'></iframe>
+                <div class='modal-footer'><button class='btn btn-primary' data-dismiss='modal' aria-hidden='true'>" .
+                     JText::_('COM_DPATTACHMENTS_CLOSE') . "</button></div>
               </div>";
 
             $script = "
             jQuery('.dpattachment-button').click(function (event) {
                 event.preventDefault();
-                jQuery('#dpattachments-image').attr('src', this.href);
-                jQuery('#dpattachments-modal h3').html(jQuery(this).attr('title'));
+                jQuery('#dpattachments-iframe').attr('src', this.href);
+                jQuery('#dpattachments-modal h3').html(jQuery(this).attr('title')+\" <a href='\"+this.href.replace('tmpl=component', '')+\"'><span class='icon-expand small'></span></a>\");
                 jQuery('#dpattachments-modal').modal();
             });";
             $doc->addScriptDeclaration('jQuery(document).ready(function(){' . $script . '});');
@@ -295,6 +295,25 @@ class DPAttachmentsCore {
     }
 
     /**
+     * Internal helper function to check if a preview is available
+     * for the given attachment.
+     *
+     * @return boolean
+     */
+    private static function previewAvailable($attachment) {
+        $ext = strtolower(JFile::getExt($attachment->path));
+        switch ($ext) {
+            case 'png' :
+            case 'gif' :
+            case 'jpg' :
+            case 'jpeg' :
+            case 'patch' :
+                return true;
+        }
+        return false;
+    }
+
+    /**
      * Internal helper function to check if the acual menu item or component
      * is enabled for attachment support.
      *
@@ -383,7 +402,7 @@ class DPAttachmentsCore {
     private static function size($size) {
         // size in bytes
         if ($size <= 1024) {
-            return $filesizebytes . JText::_('COM_DPATTACHMENTS_BYTE_SHORT');
+            return $size . JText::_('COM_DPATTACHMENTS_BYTE_SHORT');
         }
 
         // size in kilo bytes
