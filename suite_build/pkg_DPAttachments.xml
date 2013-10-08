@@ -10,10 +10,11 @@
 		GNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>1.1.0</version>
+	<version>1.2.0</version>
 	<files>
 		<file id="plg_content_dpattachments" type="plugin" group="content" client="site">plg_content_dpattachments.zip</file>
 		<file id="com_dpattachments" type="component">com_dpattachments.zip</file>
+		<file id="plg_dpcalendar_dpattachments" type="plugin" group="content" client="site">plg_dpcalendar_dpattachments.zip</file>
 	</files>
 	
 	<updateservers>
