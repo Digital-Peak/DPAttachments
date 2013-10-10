@@ -121,7 +121,7 @@ class DPAttachmentsCore {
             jQuery('.dpattachment-button').click(function (event) {
                 event.preventDefault();
                 jQuery('#dpattachments-iframe').attr('src', this.href);
-                jQuery('#dpattachments-modal h3').html(jQuery(this).attr('title')+\" <a href='\"+this.href.replace('tmpl=component', '')+\"'><span class='icon-expand small'></span></a>\");
+                jQuery('#dpattachments-modal h3').html(jQuery(this).attr('title')+\" <a href='\"+this.href.replace('tmpl=component', '')+\"' title='".JText::_('COM_DPATTACHMENTS_TEXT_FULL_SCREEN_MODE')."'><span class='icon-expand small'></span></a>\");
                 jQuery('#dpattachments-modal').modal();
             });";
             $doc->addScriptDeclaration('jQuery(document).ready(function(){' . $script . '});');
