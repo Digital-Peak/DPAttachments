@@ -56,6 +56,14 @@ class DPAttachmentsModelAttachment extends JModelAdmin {
         }
 
         $fileName = $_FILES['file']['name'];
+
+        if ($fileName == 'blob') {
+            $extension = explode('/', $_FILES['file']['type']);
+            if (count($extension) > 1) {
+                $fileName = 'clipboard.' . $extension[1];
+            }
+        }
+
         $uploadedFileNameParts = explode('.', $fileName);
         $uploadedFileExtension = array_pop($uploadedFileNameParts);
 

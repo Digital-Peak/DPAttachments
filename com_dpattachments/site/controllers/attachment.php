@@ -102,12 +102,16 @@ class DPAttachmentsControllerAttachment extends JControllerForm {
         $model = $this->getModel('Attachment');
         $success = $model->upload($data);
 
+        $returnData = array('html' => '');
         if ($success) {
             JFactory::getApplication()->enqueueMessage(JText::_('COM_DPATTACHMENTS_UPLOAD_SUCCESS'), 'success');
+
+            $returnData['html'] = '<div>' . DPAttachmentsCore::toHtml($model->getItem($model->getState($model->getName() . '.id'))) . '</div>';
         } else {
             JFactory::getApplication()->enqueueMessage(JText::sprintf('JLIB_APPLICATION_ERROR_SAVE_FAILED', $model->getError()), 'error');
         }
-        DPAttachmentsHelper::sendMessage(null, ! $success);
+
+        DPAttachmentsHelper::sendMessage(null, ! $success, $returnData);
     }
 
     public function download() {
@@ -259,7 +263,7 @@ class DPAttachmentsControllerAttachment extends JControllerForm {
         $success = $model->publish($id, $this->input->getInt('state'));
 
         if ($success) {
-        	$message = 'COM_DPATTACHMENTS_N_ITEMS_TRASHED';
+            $message = 'COM_DPATTACHMENTS_N_ITEMS_TRASHED';
             $this->setMessage(JText::plural($message, 1), 'success');
         } else {
             $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_SAVE_FAILED', $model->getError()));
