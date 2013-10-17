@@ -54,48 +54,14 @@ class DPAttachmentsCore {
         $attachments = self::getAttachments($context, $itemId);
         $count = count($attachments);
 
-        $canEditState = self::canDo('core.edit.state', $context, $itemId);
-        $canEdit = self::canDo('core.edit', $context, $itemId);
-        $canEditOwn = self::canDo('core.edit.own', $context, $itemId);
+        $buffer .= '<div id="dpattachments-container">';
         for($i = 0; $i < $count; $i ++) {
             $attachment = $attachments[$i];
             if ($i % 2 == 0) {
                 $buffer .= '<div class="row-fluid">';
             }
             $buffer .= '<div class="span6">';
-            if (self::previewAvailable($attachment)) {
-                $buffer .= '<a href="' . JRoute::_('index.php?option=com_dpattachments&view=attachment&tmpl=component&id=' . (int)$attachment->id) .
-                         '" class="dpattachment-button" title="' . $attachment->title . '">' . $attachment->title . '</a>';
-            } else {
-                $buffer .= $attachment->title;
-            }
-
-            $author = $attachment->author_name;
-            if ($attachment->created_by_alias) {
-                $author = $attachment->created_by_alias;
-            }
-            $buffer .= ' <span class="small">[' . self::size($attachment->size) . ']</span> ';
-            $buffer .= '<a href="' . JRoute::_('index.php?option=com_dpattachments&task=attachment.download&id=' . (int)$attachment->id) .
-                     '" target="_blank"><span class="icon-download"></span></a>';
-            $buffer .= '<p>' . JText::sprintf('COM_DPATTACHMENTS_TEXT_UPLOADED_LABEL', JHtmlDate::relative($attachment->created), $author) . '</p>';
-
-            if ($canEdit || $canEditState) {
-                $buffer .= '<div class="btn-toolbar"><div class="btn-group">';
-                if ($canEdit) {
-                    $buffer .= '<a href="' . JRoute::_('index.php?option=com_dpattachments&task=attachment.edit&a_id=' . $attachment->id . '&return=' .
-                             base64_encode(JUri::getInstance()->toString())) . '" class="btn btn-small">';
-                    $buffer .= '    <span class="icon-edit"></span> ' . JText::_('JACTION_EDIT');
-                    $buffer .= '</a>';
-                }
-                if ($canEditState) {
-                    $buffer .= '<a href="' . JRoute::_('index.php?option=com_dpattachments&task=attachment.publish&state=-2&id=' . $attachment->id . '&' .
-                             JSession::getFormToken() . '=1&return=' . base64_encode(JUri::getInstance()->toString())) . '" class="btn btn-small">';
-                    $buffer .= '    <span class="icon-trash"></span> ' . JText::_('JTRASH');
-                    $buffer .= '</a>';
-                }
-                $buffer .= '</div></div>';
-            }
-
+            $buffer .= self::toHtml($attachment);
             $buffer .= '</div>';
             if ($i % 2 == 1) {
                 $buffer .= '</div>';
@@ -104,6 +70,7 @@ class DPAttachmentsCore {
         if ($count && ($count - 1) % 2 != 1) {
             $buffer .= '</div>';
         }
+        $buffer .= '</div>';
 
         $doc = JFactory::getDocument();
         if ($count) {
@@ -114,48 +81,96 @@ class DPAttachmentsCore {
                     <h3></h3>
                 </div>
                 <iframe id='dpattachments-iframe' style='zoom:0.60;width:99.6%;height:500px;border:none'></iframe>
-                <div class='modal-footer'><button class='btn btn-primary' data-dismiss='modal' aria-hidden='true'>" . JText::_('COM_DPATTACHMENTS_CLOSE') . "</button></div>
+                <div class='modal-footer'><button class='btn btn-primary' data-dismiss='modal' aria-hidden='true'>" .
+                     JText::_('COM_DPATTACHMENTS_CLOSE') . "</button></div>
               </div>";
 
             $script = "
-            jQuery('.dpattachment-button').click(function (event) {
+            jQuery('.dpattachments-button').click(function (event) {
                 event.preventDefault();
                 jQuery('#dpattachments-iframe').attr('src', this.href);
-                jQuery('#dpattachments-modal h3').html(jQuery(this).attr('title')+\" <a href='\"+this.href.replace('tmpl=component', '')+\"' title='".JText::_('COM_DPATTACHMENTS_TEXT_FULL_SCREEN_MODE')."'><span class='icon-expand small'></span></a>\");
+                jQuery('#dpattachments-modal h3').html(jQuery(this).attr('title')+\" <a href='\"+this.href.replace('tmpl=component', '')+\"' title='" .
+                     JText::_('COM_DPATTACHMENTS_TEXT_FULL_SCREEN_MODE') . "'><span class='icon-expand small'></span></a>\");
                 jQuery('#dpattachments-modal').modal();
             });";
             $doc->addScriptDeclaration('jQuery(document).ready(function(){' . $script . '});');
         }
 
-        if (! $canEdit) {
+        if (! self::canDo('core.edit', $context, $itemId)) {
             return $buffer;
         }
 
         $buffer .= '<form action="' . JRoute::_('index.php?option=com_dpattachments&task=attachment.upload') .
-                 '" method="get" class="dropzone alert alert-info" id="dpattachmentfileupload">';
+                 '" method="get" class="alert alert-info" id="dpattachments-fileupload">';
+        $buffer .= '<span class="clearfix">' . JText::_('COM_DPATTACHMENTS_TEXT_SELECT_FILE') . ' ';
+        $buffer .= '<span id="dpattachments-text-drag">' . JText::_('COM_DPATTACHMENTS_TEXT_DROP') . '</span> ';
+        $buffer .= JText::_('COM_DPATTACHMENTS_TEXT_TO_UPLOAD').'</span> ';
+        $buffer .= '<input type="file" name="file">';
+        $buffer .= '<p id="dpattachments-text-paste">' . JText::_('COM_DPATTACHMENTS_TEXT_PASTE') . '</p> ';
         $buffer .= '<input type="hidden" name="attachment[context]" value="' . $context . '" />';
         $buffer .= '<input type="hidden" name="attachment[item_id]" value="' . $itemId . '" />';
         $buffer .= JHtml::_('form.token');
+        $buffer .= '<div class="progress progress-striped progress-success active hide" id="dpattachments-progress"><div class="bar" style="text-align:left"></div></div>';
         $buffer .= '</form>';
 
-        $doc->addScript(JUri::root() . '/components/com_dpattachments/libraries/dropzone/dropzone.min.js');
+        JHtml::_('jquery.framework');
+        $doc->addScript(JUri::root() . '/components/com_dpattachments/libraries/uploader/filereader.min.js');
 
-        $doc->addScriptDeclaration("Dropzone.options.dpattachmentfileupload = {
-			createImageThumbnails: false,
-            dictDefaultMessage: '" . JText::_('COM_DPATTACHMENTS_TEXT_DROP') . "',
-            dictFallbackMessage: '" . JText::_('COM_DPATTACHMENTS_TEXT_FALLBACK') . "',
-            dictFallbackText: '" . JText::_('COM_DPATTACHMENTS_TEXT_FALLBACK_FORM') . "',
-            previewTemplate: '<div class=\'dz-preview dz-file-preview\'><div class=\'dz-details\'><div class=\'dz-filename\'><span data-dz-name></span></div><div class=\'dz-size\' data-dz-size></div></div><div class=\'dz-progress\'><span class=\'dz-upload\' data-dz-uploadprogress></span></div><div class=\'dz-error-message\'><span data-dz-errormessage></span></div></div>',
-		 	init: function() {
-				this.on('success', function(file, responseText) {
-					var json = jQuery.parseJSON(responseText);
-		 			if (json.success == false) {
-		 				this.removeFile(file);
-		 			}
-					Joomla.renderMessages(json.messages);
-				});
-		  	}
-		};");
+        $doc->addScriptDeclaration("jQuery(document).ready(function(){
+	var opts = {
+		dragClass: 'alert-success',
+		readAsMap: {},
+		on: {
+			groupstart: function(group) {
+				for (var i = 0; i < group.files.length; i++) {
+					var file = group.files[i];
+
+					var fd = new FormData(jQuery('#dpattachments-fileupload')[0]);
+				    fd.append('file', file);
+
+        	        jQuery('#dpattachments-progress').show();
+        	        jQuery('#dpattachments-progress div').html('<p>0%</p>');
+					jQuery.ajax({
+					    url: jQuery('#dpattachments-fileupload').attr('action'),
+					    data: fd,
+					    processData: false,
+					    contentType: false,
+	                    type: 'POST',
+                        xhr: function(){
+                            var myXHR = jQuery.ajaxSettings.xhr();
+                            myXHR.upload.addEventListener('progress', function (e) {
+			        	        if (e.lengthComputable) {
+			            	        var percentage = Math.round((e.loaded * 100) / e.total);
+			            	        jQuery('#dpattachments-progress div').html('<p>'+percentage+'%</p>');
+			            	        jQuery('#dpattachments-progress div').css('width', percentage + '%');
+			        	        }
+					        }, false);
+                            return myXHR;
+                        },
+	                    success: function(responseText){
+	                       var json = jQuery.parseJSON(responseText);
+					       Joomla.renderMessages(json.messages);
+
+                	       jQuery('#dpattachments-progress').fadeOut();
+                           jQuery('#dpattachments-container').append(json.data.html);
+	                    }
+					});
+				}
+			}
+		}
+	};
+
+	jQuery('#dpattachments-fileupload, #dpattachments-fileupload input[type=file]').fileReaderJS(opts);
+	jQuery('body').fileClipboard(opts);
+    if (!FileReaderJS.enabled) {
+        jQuery('#dpattachments-text-paste').hide();
+        jQuery('#dpattachments-text-drag').hide();
+    }
+    if (typeof jQuery('body')[0]['onpaste'] != 'object') {
+        jQuery('#dpattachments-text-paste').hide();
+    }
+    jQuery(':file').filestyle({buttonText: '".JText::_('COM_DPATTACHMENTS_BUTTON_SELECT_FILE')."', classButton: 'btn btn-small', input: false});
+});");
 
         return $buffer;
     }
@@ -291,6 +306,50 @@ class DPAttachmentsCore {
         $folder = JComponentHelper::getParams('com_dpattachments')->get('attachment_path', 'media/com_dpattachments/attachments/');
         $folder = trim($folder, '/');
         return JPATH_ROOT . '/' . $folder . '/' . $context . '/' . $attachmentPath;
+    }
+
+    public static function toHtml($attachment) {
+        if (empty($attachment)) {
+            return '';
+        }
+        $canEditState = self::canDo('core.edit.state', $attachment->context, $attachment->item_id);
+        $canEdit = self::canDo('core.edit', $attachment->context, $attachment->item_id);
+
+        $buffer = '';
+        if (self::previewAvailable($attachment)) {
+            $buffer .= '<a href="' . JRoute::_('index.php?option=com_dpattachments&view=attachment&tmpl=component&id=' . (int)$attachment->id) .
+                     '" class="dpattachments-button" title="' . $attachment->title . '">' . $attachment->title . '</a>';
+        } else {
+            $buffer .= $attachment->title;
+        }
+
+        $author = $attachment->author_name;
+        if ($attachment->created_by_alias) {
+            $author = $attachment->created_by_alias;
+        }
+        $buffer .= ' <span class="small">[' . self::size($attachment->size) . ']</span> ';
+        $buffer .= '<a href="' . JRoute::_('index.php?option=com_dpattachments&task=attachment.download&id=' . (int)$attachment->id) .
+                 '" target="_blank"><span class="icon-download"></span></a>';
+        $buffer .= '<p>' . JText::sprintf('COM_DPATTACHMENTS_TEXT_UPLOADED_LABEL', JHtmlDate::relative($attachment->created), $author) . '</p>';
+
+        if ($canEdit || $canEditState) {
+            $buffer .= '<div class="btn-toolbar"><div class="btn-group">';
+            if ($canEdit) {
+                $buffer .= '<a href="' . JRoute::_('index.php?option=com_dpattachments&task=attachment.edit&a_id=' . $attachment->id . '&return=' .
+                         base64_encode(JUri::getInstance()->toString())) . '" class="btn btn-small">';
+                $buffer .= '    <span class="icon-edit"></span> ' . JText::_('JACTION_EDIT');
+                $buffer .= '</a>';
+            }
+            if ($canEditState) {
+                $buffer .= '<a href="' . JRoute::_('index.php?option=com_dpattachments&task=attachment.publish&state=-2&id=' . $attachment->id . '&' .
+                         JSession::getFormToken() . '=1&return=' . base64_encode(JUri::getInstance()->toString())) . '" class="btn btn-small">';
+                $buffer .= '    <span class="icon-trash"></span> ' . JText::_('JTRASH');
+                $buffer .= '</a>';
+            }
+            $buffer .= '</div></div>';
+        }
+
+        return $buffer;
     }
 
     /**
