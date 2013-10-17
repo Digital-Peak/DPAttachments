@@ -12,11 +12,11 @@
 			description="COM_DPATTACHMENTS_FIELD_PATH_DESC" class="input-xlarge" size="30"
 			required="true" labelclass="control-label" />
 			
-		<field name="item_id" type="text" label="COM_DPATTACHMENTS_FIELD_ITEM_ID_LABEL"
+		<field name="item_id" type="text" label="COM_DPATTACHMENTS_FIELD_ITEM_ID_LABEL" readonly="true"
 			description="COM_DPATTACHMENTS_FIELD_ITEM_ID_DESC" class="input-xlarge" size="30"
 			required="true" labelclass="control-label" />
 
-		<field name="context" type="text" label="COM_DPATTACHMENTS_FIELD_CONTEXT_LABEL"
+		<field name="context" type="text" label="COM_DPATTACHMENTS_FIELD_CONTEXT_LABEL" readonly="true"
 			description="COM_DPATTACHMENTS_FIELD_CONTEXT_DESC" class="input-xlarge" size="30"
 			required="true" labelclass="control-label" />
 

@@ -25,6 +25,8 @@ class DPAttachmentsTableAttachment extends JTable {
             $this->title = str_replace(array('_', '-', ':'), ' ', $this->path);
         }
 
+        $this->path = basename($this->path);
+
         return true;
     }
 
