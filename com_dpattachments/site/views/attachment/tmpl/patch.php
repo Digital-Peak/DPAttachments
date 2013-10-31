@@ -40,6 +40,9 @@ foreach ( $patches as $patch ) {
         if ($toNumberStart + $toLength < $toNumber && $fromNumberStart + $fromLength < $fromNumber) {
             break;
         }
+        if ($line == '\ No newline at end of file') {
+            continue;
+        }
         if (strpos($line, '@@ ') === 0) {
             $stripped = explode(' ', substr($line, 3, strlen($line) - 6));
 
