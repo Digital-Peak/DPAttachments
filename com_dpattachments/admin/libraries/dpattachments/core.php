@@ -86,7 +86,7 @@ class DPAttachmentsCore {
               </div>";
 
 			$script = "
-            jQuery('.dpattachments-button').click(function (event) {
+            jQuery(document).on('click', '.dpattachments-button', function (event) {
                 event.preventDefault();
                 jQuery('#dpattachments-iframe').attr('src', this.href);
                 jQuery('#dpattachments-modal h3').html(jQuery(this).attr('title')+\" <a href='\"+this.href.replace('tmpl=component', '')+\"' title='" .
