@@ -7,3 +7,9 @@
 .dp-content{
 	width: 90%
 }
+#dpattachments-container{
+    border: 2px solid;
+    border-radius: 5px 5px 5px 5px;
+    margin-bottom: 5px;
+    padding: 5px;
+}
