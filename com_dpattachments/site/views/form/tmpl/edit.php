@@ -1,9 +1,9 @@
 <?php
 /**
- * @package		DPAttachments
- * @author		Digital Peak http://www.digital-peak.com
- * @copyright	Copyright (C) 2012 - 2013 Digital Peak. All rights reserved.
- * @license		http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package    DPAttachments
+ * @author     Digital Peak http://www.digital-peak.com
+ * @copyright  Copyright (C) 2012 - 2013 Digital Peak. All rights reserved.
+ * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -26,15 +26,17 @@ $params = $this->state->get('params');
 	}
 </script>
 <div class="edit item-page<?php echo $this->pageclass_sfx; ?>">
-	<?php if ($params->get('show_page_heading', 1)) : ?>
+	<?php if ($params->get('show_page_heading', 1))
+	{ ?>
 	<div class="page-header">
 		<h1>
 			<?php echo $this->escape($params->get('page_heading')); ?>
 		</h1>
 	</div>
-	<?php endif; ?>
+	<?php
+	}?>
 
-	<form action="<?php echo JRoute::_('index.php?option=com_dpattachments&a_id='.(int) $this->item->id); ?>"
+	<form action="<?php echo JRoute::_('index.php?option=com_dpattachments&a_id=' . (int) $this->item->id); ?>"
 		method="post" name="adminForm" id="adminForm" class="form-validate form-vertical">
 		<div class="btn-toolbar">
 			<div class="btn-group">
@@ -92,7 +94,8 @@ $params = $this->state->get('params');
     					</div>
     				</div>
 
-					<?php if ($this->item->params->get('access-change')) { ?>
+					<?php if ($this->item->params->get('access-change'))
+					{ ?>
 					<div class="control-group">
 						<div class="control-label">
 							<?php echo $this->form->getLabel('state'); ?>
@@ -101,7 +104,8 @@ $params = $this->state->get('params');
 							<?php echo $this->form->getInput('state'); ?>
 						</div>
 					</div>
-					<?php } ?>
+					<?php
+					} ?>
 
 					<div class="control-group">
 						<div class="control-label">
@@ -114,7 +118,8 @@ $params = $this->state->get('params');
 					<?php echo $this->form->getInput('description'); ?>
 				</div>
 				<div class="tab-pane" id="publishing">
-					<?php if (is_null($this->item->id)) : ?>
+					<?php if (is_null($this->item->id))
+					{ ?>
 					<div class="control-group">
 						<div class="control-label">
 							<?php echo $this->form->getLabel('alias'); ?>
@@ -123,7 +128,8 @@ $params = $this->state->get('params');
 							<?php echo $this->form->getInput('alias'); ?>
 						</div>
 					</div>
-					<?php endif; ?>
+					<?php
+					}?>
 					<div class="control-group">
 						<div class="control-label">
 							<?php echo $this->form->getLabel('created_by_alias'); ?>
@@ -161,10 +167,12 @@ $params = $this->state->get('params');
 
 			<input type="hidden" name="task" value="" />
 			<input type="hidden" name="return" value="<?php echo $this->return_page; ?>" />
-			<?php if ($this->params->get('enable_category', 0) == 1) :?>
+			<?php if ($this->params->get('enable_category', 0) == 1)
+			{?>
 				<input type="hidden" name="jform[catid]" value="<?php echo $this->params->get('catid', 1); ?>" />
-			<?php endif; ?>
-			<?php echo JHtml::_('form.token'); ?>
+			<?php
+			}
+			echo JHtml::_('form.token'); ?>
 		</fieldset>
 	</form>
 </div>

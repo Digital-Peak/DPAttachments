@@ -1,9 +1,9 @@
 <?php
 /**
- * @package		DPAttachments
- * @author		Digital Peak http://www.digital-peak.com
- * @copyright	Copyright (C) 2012 - 2013 Digital Peak. All rights reserved.
- * @license		http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package    DPAttachments
+ * @author     Digital Peak http://www.digital-peak.com
+ * @copyright  Copyright (C) 2012 - 2013 Digital Peak. All rights reserved.
+ * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -26,14 +26,19 @@ $sortFields = $this->getSortFields();
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_dpattachments&view=attachments'); ?>" method="post" name="adminForm" id="adminForm">
-<?php if (!empty( $this->sidebar)) { ?>
+<?php if (!empty( $this->sidebar))
+{ ?>
 	<div id="j-sidebar-container" class="span2">
 		<?php echo $this->sidebar; ?>
 	</div>
 	<div id="j-main-container" class="span10">
-<?php } else { ?>
+<?php
+}
+else
+{ ?>
 	<div id="j-main-container">
-<?php };?>
+<?php
+}?>
 		<div id="filter-bar" class="btn-toolbar">
 				<div class="filter-search btn-group pull-left">
 					<label for="filter_search" class="element-invisible"><?php echo JText::_('COM_DPATTACHMENTS_FILTER_SEARCH_DESC'); ?></label>
@@ -64,9 +69,13 @@ $sortFields = $this->getSortFields();
 						class="input-medium" onchange="Joomla.orderTable()">
 						<option value=""><?php echo JText::_('JFIELD_ORDERING_DESC'); ?></option>
 						<option value="asc"
-							<?php if ($listDirn == 'asc') echo 'selected="selected"'; ?>><?php echo JText::_('JGLOBAL_ORDER_ASCENDING'); ?></option>
+							<?php echo $listDirn == 'asc' ? 'selected="selected"' : ''; ?>>
+							<?php echo JText::_('JGLOBAL_ORDER_ASCENDING'); ?>
+						</option>
 						<option value="desc"
-							<?php if ($listDirn == 'desc') echo 'selected="selected"'; ?>><?php echo JText::_('JGLOBAL_ORDER_DESCENDING');  ?></option>
+							<?php echo $listDirn == 'desc' ? 'selected="selected"' : ''; ?>>
+							<?php echo JText::_('JGLOBAL_ORDER_DESCENDING');  ?>
+						</option>
 					</select>
 				</div>
 				<div class="btn-group pull-right">
@@ -113,19 +122,22 @@ $sortFields = $this->getSortFields();
 					</tr>
 				</thead>
 				<tbody>
-			<?php foreach ( $this->items as $i => $item ) :
-                        $item->max_ordering = 0; // ??
+			<?php foreach ( $this->items as $i => $item )
+			{
+                        $item->max_ordering = 0;
                         $ordering = ($listOrder == 'a.ordering');
                         $canEdit = DPAttachmentsCore::canDo('core.edit', $item->context, $item->item_id);
                         $canCheckin = $user->authorise('core.manage', 'com_checkin') || $item->checked_out == $userId || $item->checked_out == 0;
                         $canEditOwn = DPAttachmentsCore::canDo('core.edit.own', $item->context, $item->item_id);
                         $canChange = DPAttachmentsCore::canDo('core.edit.state', $item->context, $item->item_id) && $canCheckin;
                         ?>
-				<tr class="row<?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->context; ?>">
+				<tr class="row<?php echo $i % 2; ?>"
+					sortable-group-id="<?php echo $item->context; ?>">
 				    <td class="order nowrap center hidden-phone">
 						<?php
                         $iconClass = '';
-                        if (! $canChange) {
+                        if (! $canChange)
+                        {
                             $iconClass = ' inactive';
                         }
                         ?>
@@ -140,25 +152,33 @@ $sortFields = $this->getSortFields();
 						</td>
 						<td class="nowrap has-context">
 							<div class="pull-left">
-							<?php if ($item->checked_out) : ?>
-								<?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'dpattachments.', $canCheckin); ?>
-							<?php endif; ?>
-							<?php if ($canEdit || $canEditOwn) { ?>
+							<?php if ($item->checked_out)
+							{
+								echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'dpattachments.', $canCheckin);
+							}
+							if ($canEdit || $canEditOwn)
+							{ ?>
 								<a
 									href="<?php echo JRoute::_('index.php?option=com_dpattachments&task=attachment.edit&id=' . $item->id); ?>"
 									title="<?php echo JText::_('JACTION_EDIT'); ?>">
 									<?php echo $this->escape($item->title); ?></a>
-							<?php } else { ?>
+							<?php
+							}
+							else
+							{ ?>
 								<span
-									title="<?php echo JText::sprintf('JFIELD_ALIAS_LABEL', $this->escape($item->alias)); ?>"><?php echo $this->escape($item->title); ?></span>
-							<?php } ?>
+									title="<?php echo JText::sprintf('JFIELD_ALIAS_LABEL', $this->escape($item->alias)); ?>">
+									<?php echo $this->escape($item->title); ?>
+								</span>
+							<?php
+							} ?>
 							     <p class="small">
                                     <?php
-        							echo JText::_('COM_DPATTACHMENTS_FIELD_CONTEXT_LABEL').': '.$this->escape(DPAttachmentsHelper::renderContext($item->context));
+        							echo JText::_('COM_DPATTACHMENTS_FIELD_CONTEXT_LABEL') . ': ' . $this->escape(DPAttachmentsHelper::renderContext($item->context));
         							?>
         							<br/>
                                     <?php
-        							echo JText::_('COM_DPATTACHMENTS_FIELD_ITEM_ID_LABEL').': '.$this->escape($item->item_id);
+        							echo JText::_('COM_DPATTACHMENTS_FIELD_ITEM_ID_LABEL') . ': ' . $this->escape($item->item_id);
         							?>
     							 </p>
 							</div>
@@ -167,29 +187,39 @@ $sortFields = $this->getSortFields();
 						    // Create dropdown items
 						    JHtml::_('dropdown.edit', $item->id, 'attachment');
 						    JHtml::_('dropdown.divider');
-						    if ($item->state) :
+						    if ($item->state)
+						    {
 						        JHtml::_('dropdown.unpublish', 'cb' . $i, 'attachments.');
-						     else :
+						    }
+						    else
+						    {
 						        JHtml::_('dropdown.publish', 'cb' . $i, 'attachments.');
-						    endif;
+						    }
 
 						    JHtml::_('dropdown.divider');
 
-						    if ($archived) :
+						    if ($archived)
+						    {
 						        JHtml::_('dropdown.unarchive', 'cb' . $i, 'attachments.');
-						     else :
+						    }
+						    else
+						    {
 						        JHtml::_('dropdown.archive', 'cb' . $i, 'attachments.');
-						    endif;
+						    }
 
-						    if ($item->checked_out) :
+						    if ($item->checked_out)
+						    {
 						        JHtml::_('dropdown.checkin', 'cb' . $i, 'attachments.');
-							endif;
+						    }
 
-						    if ($trashed) :
+						    if ($trashed)
+						    {
 						        JHtml::_('dropdown.untrash', 'cb' . $i, 'attachments.');
-						     else :
+						    }
+						    else
+						    {
 						        JHtml::_('dropdown.trash', 'cb' . $i, 'attachments.');
-						    endif;
+						    }
 
 						    echo JHtml::_('dropdown.render');
 						    ?>
@@ -200,7 +230,7 @@ $sortFields = $this->getSortFields();
 					</td>
 					<td class="small hidden-phone">
 							<a
-							href="<?php echo JRoute::_('index.php?option=com_users&task=user.edit&id='.(int) $item->created_by); ?>"
+							href="<?php echo JRoute::_('index.php?option=com_users&task=user.edit&id=' . (int) $item->created_by); ?>"
 							title="<?php echo JText::_('JAUTHOR'); ?>">
 							<?php echo $this->escape($item->author_name); ?></a>
 					</td>
@@ -214,11 +244,11 @@ $sortFields = $this->getSortFields();
 						<?php echo (int) $item->id; ?>
 					</td>
 					</tr>
-				<?php endforeach; ?>
+				<?php
+				} ?>
 			</tbody>
 			</table>
 		<?php echo $this->pagination->getListFooter(); ?>
-		<?php //Load the batch processing form. ?>
 		<?php echo $this->loadTemplate('batch'); ?>
 
 		<input type="hidden" name="task" value="" /> <input type="hidden"

@@ -1,9 +1,9 @@
 <?php
 /**
- * @package		DPAttachments
- * @author		Digital Peak http://www.digital-peak.com
- * @copyright	Copyright (C) 2012 - 2013 Digital Peak. All rights reserved.
- * @license		http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package    DPAttachments
+ * @author     Digital Peak http://www.digital-peak.com
+ * @copyright  Copyright (C) 2012 - 2013 Digital Peak. All rights reserved.
+ * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -32,13 +32,15 @@ $published = $this->state->get('filter.published');
 				<?php echo JHtml::_('batch.language'); ?>
 			</div>
 		</div>
-		<?php if ($published >= 0) : ?>
+		<?php if ($published >= 0)
+		{ ?>
 		<div class="control-group">
 			<div class="controls">
 				<?php echo JHtml::_('batch.item', 'com_dpattachments');?>
 			</div>
 		</div>
-		<?php endif; ?>
+		<?php
+		} ?>
 	</div>
 	<div class="modal-footer">
 		<button class="btn" type="button"

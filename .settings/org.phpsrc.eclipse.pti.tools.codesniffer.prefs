@@ -1,0 +1,11 @@
+active_standards=Joomla
+custom_standard_names=Joomla
+custom_standard_paths=C\:\\Program Files\\Eclipse\\ws-g4j\\Joomla
+debug_print_output=true
+default_tab_width=0
+eclipse.preferences.version=1
+file_extension=
+ignore_pattern=libraries
+pear_library=<Internal>
+php_executable=PHP 5.4
+pref_ignore_sniffs=

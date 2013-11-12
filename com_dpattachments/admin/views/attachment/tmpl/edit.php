@@ -1,9 +1,9 @@
 <?php
 /**
- * @package		DPAttachments
- * @author		Digital Peak http://www.digital-peak.com
- * @copyright	Copyright (C) 2012 - 2013 Digital Peak. All rights reserved.
- * @license		http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package    DPAttachments
+ * @author     Digital Peak http://www.digital-peak.com
+ * @copyright  Copyright (C) 2012 - 2013 Digital Peak. All rights reserved.
+ * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -32,7 +32,7 @@ $input = $app->input;
 	}
 </script>
 
-<form action="<?php echo JRoute::_('index.php?option=com_dpattachments&layout=edit&id='.(int) $this->item->id); ?>"
+<form action="<?php echo JRoute::_('index.php?option=com_dpattachments&layout=edit&id=' . (int) $this->item->id); ?>"
 	method="post" name="adminForm" id="item-form" class="form-validate">
 
 	<?php echo JLayoutHelper::render('joomla.edit.item_title', $this); ?>
@@ -127,7 +127,8 @@ $input = $app->input;
 							<?php echo $this->form->getInput('publish_down'); ?>
 						</div>
 					</div>
-					<?php if ($this->item->modified_by) : ?>
+					<?php if ($this->item->modified_by)
+					{?>
 						<div class="control-group">
 							<?php echo $this->form->getLabel('modified_by'); ?>
 							<div class="controls">
@@ -140,18 +141,22 @@ $input = $app->input;
 								<?php echo $this->form->getInput('modified'); ?>
 							</div>
 					   </div>
-					<?php endif; ?>
+					<?php
+					}?>
 
-					<?php if ($this->item->version) : ?>
+					<?php if ($this->item->version)
+					{ ?>
 						<div class="control-group">
 							<?php echo $this->form->getLabel('version'); ?>
 							<div class="controls">
 								<?php echo $this->form->getInput('version'); ?>
 							</div>
 					    </div>
-					<?php endif; ?>
+					<?php
+					}?>
 
-					<?php if ($this->item->hits) : ?>
+					<?php if ($this->item->hits)
+					{ ?>
 						<div class="control-group">
 						    <div class="control-label">
 							 <?php echo $this->form->getLabel('hits'); ?>
@@ -160,7 +165,8 @@ $input = $app->input;
     							<?php echo $this->form->getInput('hits'); ?>
     						</div>
 					   </div>
-				    <?php endif; ?>
+				    <?php
+					}?>
 				</div>
 			</div>
 			<?php echo JHtml::_('bootstrap.endTab'); ?>

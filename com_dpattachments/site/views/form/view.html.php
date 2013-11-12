@@ -1,13 +1,14 @@
 <?php
 /**
- * @package		DPAttachments
- * @author		Digital Peak http://www.digital-peak.com
- * @copyright	Copyright (C) 2012 - 2013 Digital Peak. All rights reserved.
- * @license		http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package    DPAttachments
+ * @author     Digital Peak http://www.digital-peak.com
+ * @copyright  Copyright (C) 2012 - 2013 Digital Peak. All rights reserved.
+ * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
-class DPAttachmentsViewForm extends JViewLegacy {
+class DPAttachmentsViewForm extends JViewLegacy
+{
 
 	protected $form;
 
@@ -17,7 +18,8 @@ class DPAttachmentsViewForm extends JViewLegacy {
 
 	protected $state;
 
-	public function display($tpl = null) {
+	public function display ($tpl = null)
+	{
 		$user = JFactory::getUser();
 
 		// Get model data.
@@ -26,24 +28,30 @@ class DPAttachmentsViewForm extends JViewLegacy {
 		$this->form = $this->get('Form');
 		$this->return_page = $this->get('ReturnPage');
 
-		if (empty($this->item->id)) {
+		if (empty($this->item->id))
+		{
 			$authorised = false;
-		} else {
+		}
+		else
+		{
 			$authorised = $this->item->params->get('access-edit');
 		}
 
-		if ($authorised !== true) {
+		if ($authorised !== true)
+		{
 			JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
 			return false;
 		}
 
 		$this->item->tags = new JHelperTags();
-		if (! empty($this->item->id)) {
+		if (! empty($this->item->id))
+		{
 			$this->item->tags->getItemTags('com_dpattachments.attachment.', $this->item->id);
 		}
 
 		// Check for errors.
-		if (count($errors = $this->get('Errors'))) {
+		if (count($errors = $this->get('Errors')))
+		{
 			JError::raiseWarning(500, implode("\n", $errors));
 			return false;
 		}
@@ -62,7 +70,8 @@ class DPAttachmentsViewForm extends JViewLegacy {
 		parent::display($tpl);
 	}
 
-	protected function _prepareDocument() {
+	protected function _prepareDocument ()
+	{
 		$app = JFactory::getApplication();
 		$menus = $app->getMenu();
 		$title = null;
@@ -70,16 +79,22 @@ class DPAttachmentsViewForm extends JViewLegacy {
 		// Because the application sets a default page title,
 		// we need to get it from the menu item itself
 		$menu = $menus->getActive();
-		if ($menu) {
+		if ($menu)
+		{
 			$this->params->def('page_heading', $this->params->get('page_title', $menu->title));
-		} else {
+		}
+		else
+		{
 			$this->params->def('page_heading', JText::_('COM_DPATTACHMENTS_FORM_EDIT_ATTACHMENT'));
 		}
 
 		$title = $this->params->def('page_title', JText::_('COM_DPATTACHMENTS_FORM_EDIT_ATTACHMENT'));
-		if ($app->getCfg('sitename_pagetitles', 0) == 1) {
+		if ($app->getCfg('sitename_pagetitles', 0) == 1)
+		{
 			$title = JText::sprintf('JPAGETITLE', $app->getCfg('sitename'), $title);
-		} elseif ($app->getCfg('sitename_pagetitles', 0) == 2) {
+		}
+		elseif ($app->getCfg('sitename_pagetitles', 0) == 2)
+		{
 			$title = JText::sprintf('JPAGETITLE', $title, $app->getCfg('sitename'));
 		}
 		$this->document->setTitle($title);
@@ -87,15 +102,18 @@ class DPAttachmentsViewForm extends JViewLegacy {
 		$pathway = $app->getPathWay();
 		$pathway->addItem($title, '');
 
-		if ($this->params->get('menu-meta_description')) {
+		if ($this->params->get('menu-meta_description'))
+		{
 			$this->document->setDescription($this->params->get('menu-meta_description'));
 		}
 
-		if ($this->params->get('menu-meta_keywords')) {
+		if ($this->params->get('menu-meta_keywords'))
+		{
 			$this->document->setMetadata('keywords', $this->params->get('menu-meta_keywords'));
 		}
 
-		if ($this->params->get('robots')) {
+		if ($this->params->get('robots'))
+		{
 			$this->document->setMetadata('robots', $this->params->get('robots'));
 		}
 	}
