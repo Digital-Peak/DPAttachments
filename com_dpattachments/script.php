@@ -13,6 +13,16 @@ class Com_DPAttachmentsInstallerScript
 	public function install ($parent)
 	{
 		$this->run("update #__extensions set enabled=1 where type = 'plugin' and element = 'dpattachments'");
+
+		$content = 'deny from all
+<Files ~ "^\w+\.(gif|jpe?g|png)$">
+order deny,allow
+allow from all
+</Files>';
+
+		$folder = JPATH_ROOT . '/media/com_dpattachments/attachments/';
+		JFolder::create($folder);
+		JFile::write($folder . '.htaccess', $content);
 	}
 
 	public function update ($parent)
