@@ -37,17 +37,32 @@ class DPAttachmentsCore
 	 * code.
 	 * A HTML string is returned which can be printed in any
 	 * Joomla view.
+	 * The options array or JRegistry option can customize the following
+	 * attributes:
+	 * - render.columns: The amount of columns to render
 	 *
 	 * @param string $context
 	 * @param string $itemId
+	 * @param mixed $options
 	 * @return string
 	 */
-	public static function render ($context, $itemId)
+	public static function render ($context, $itemId, $options = null)
 	{
 		if (! self::isEnabled())
 		{
 			return '';
 		}
+
+		if (empty($options))
+		{
+			$options = new JRegistry();
+		}
+
+		if (is_array($options))
+		{
+			$options = new JRegistry($options);
+		}
+
 		JFactory::getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR . '/components/com_dpattachments');
 
 		$path = JComponentHelper::getParams('com_dpattachments')->get('attachment_path', 'media/com_dpattachments/attachments/');
@@ -59,22 +74,23 @@ class DPAttachmentsCore
 		$count = count($attachments);
 
 		$buffer .= '<div id="dpattachments-container">';
+		$columns = $options->get('render.columns', 2);
 		for ($i = 0; $i < $count; $i ++)
 		{
 			$attachment = $attachments[$i];
-			if ($i % 2 == 0)
+			if ($i % $columns == 0)
 			{
 				$buffer .= '<div class="row-fluid">';
 			}
-			$buffer .= '<div class="span6">';
+			$buffer .= '<div class="span' . (round(12 / $columns)) . '">';
 			$buffer .= self::toHtml($attachment);
 			$buffer .= '</div>';
-			if ($i % 2 == 1)
+			if ($i % $columns == $columns - 1)
 			{
 				$buffer .= '</div>';
 			}
 		}
-		if ($count && ($count - 1) % 2 != 1)
+		if ($count && ($count - 1) % $columns != $columns - 1)
 		{
 			$buffer .= '</div>';
 		}
@@ -180,7 +196,8 @@ class DPAttachmentsCore
     if (typeof jQuery('body')[0]['onpaste'] != 'object') {
         jQuery('#dpattachments-text-paste').hide();
     }
-    jQuery(':file').filestyle({buttonText: '" . JText::_('COM_DPATTACHMENTS_BUTTON_SELECT_FILE') . "', classButton: 'btn btn-small', input: false});
+    jQuery(':file').filestyle({buttonText: '" .
+						 JText::_('COM_DPATTACHMENTS_BUTTON_SELECT_FILE') . "', classButton: 'btn btn-small', input: false});
 });");
 
 		return $buffer;

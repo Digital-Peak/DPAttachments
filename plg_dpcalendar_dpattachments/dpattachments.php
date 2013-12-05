@@ -20,7 +20,9 @@ class PlgDPCalendarDpattachments extends JPlugin
 
 	public function onEventAfterDisplay ($event, $output)
 	{
-		return DPAttachmentsCore::render('com_dpcalendar.event', $event->id);
+		$options = new JRegistry();
+		$options->set('render.columns', $this->params->get('column_count', 2));
+		return DPAttachmentsCore::render('com_dpcalendar.event', $event->id, $options);
 	}
 
 	public function onEventAfterDelete ($event)

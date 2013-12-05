@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<extension type="plugin" version="3.1" group="dpcalendar" method="upgrade">
+<extension type="plugin" version="3.1" group="dpcalendar"
+	method="upgrade">
 	<name>plg_dpcalendar_dpattachments</name>
 	<author>Digital Peak</author>
 	<creationDate>Nov 2013</creationDate>
@@ -20,6 +21,15 @@
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
+				<field name="column_count" type="list" default="2"
+					label="PLG_DPCALENDAR_DPATTACHMENTS_CONFIG_COLUMN_COUNT_LABEL"
+					description="PLG_DPCALENDAR_DPATTACHMENTS_CONFIG_COLUMN_COUNT_DESC">
+					<option value="1">J1</option>
+					<option value="2">J2</option>
+					<option value="3">J3</option>
+					<option value="4">J4</option>
+					<option value="6">J6</option>
+				</field>
 			</fieldset>
 		</fields>
 	</config>

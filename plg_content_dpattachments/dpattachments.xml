@@ -20,6 +20,15 @@
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
+				<field name="column_count" type="list" default="2"
+					label="PLG_CONTENT_DPATTACHMENTS_CONFIG_COLUMN_COUNT_LABEL"
+					description="PLG_CONTENT_DPATTACHMENTS_CONFIG_COLUMN_COUNT_DESC">
+					<option value="1">J1</option>
+					<option value="2">J2</option>
+					<option value="3">J3</option>
+					<option value="4">J4</option>
+					<option value="6">J6</option>
+				</field>
 			</fieldset>
 		</fields>
 	</config>

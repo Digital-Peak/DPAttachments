@@ -20,7 +20,9 @@ class PlgContentDpattachments extends JPlugin
 
 	public function onContentAfterDisplay ($context, $item, $params)
 	{
-		return DPAttachmentsCore::render($context, (int) $item->id);
+		$options = new JRegistry();
+		$options->set('render.columns', $this->params->get('column_count', 2));
+		return DPAttachmentsCore::render($context, (int) $item->id, $options);
 	}
 
 	public function onContentAfterDelete ($context, $item)
