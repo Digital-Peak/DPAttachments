@@ -99,7 +99,7 @@ class DPAttachmentsModelAttachment extends JModelAdmin
 			return false;
 		}
 
-		$fileName = preg_replace("/[^A-Za-z0-9]/i", "-", substr($fileName, 0, strlen($fileName) - strlen($uploadedFileExtension))) . '.' .
+		$fileName = preg_replace("/[^A-Za-z0-9\-]/i", "-", substr($fileName, 0, strlen($fileName) - strlen($uploadedFileExtension) - 1)) . '.' .
 				 $uploadedFileExtension;
 
 		$targetFile = DPAttachmentsCore::getPath($fileName, $data['context']);
