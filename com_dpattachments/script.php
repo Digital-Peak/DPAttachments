@@ -15,7 +15,7 @@ class Com_DPAttachmentsInstallerScript
 		$this->run("update #__extensions set enabled=1 where type = 'plugin' and element = 'dpattachments'");
 
 		$content = 'deny from all
-<Files ~ "^\w+\.(gif|jpe?g|png)$">
+<Files ~ "\.(?i:gif|jpe?g|png)$">
 order deny,allow
 allow from all
 </Files>';
