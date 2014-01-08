@@ -2,8 +2,8 @@
 <extension type="component" version="3.1" method="upgrade">
 	<name>com_dpattachments</name>
 	<author>Digital Peak</author>
-	<creationDate>Nov 2013</creationDate>
-	<copyright>(C) 2012 - 2013 Digital Peak. All rights reserved.
+	<creationDate>Jan 2014</creationDate>
+	<copyright>(C) 2012 - 2014 Digital Peak. All rights reserved.
 	</copyright>
 	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
