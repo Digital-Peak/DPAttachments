@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<buildpath>
+	<buildpathentry kind="src" path="com_dpattachments"/>
+	<buildpathentry kind="src" path="plg_content_dpattachments"/>
+	<buildpathentry kind="src" path="plg_dpcalendar_dpattachments"/>
+	<buildpathentry kind="lib" path="suite_build/build/DPAttachments/com_dpattachments.zip"/>
+	<buildpathentry kind="lib" path="suite_build/build/DPAttachments/plg_content_dpattachments.zip"/>
+	<buildpathentry kind="lib" path="suite_build/build/DPAttachments/plg_dpcalendar_dpattachments.zip"/>
+	<buildpathentry kind="lib" path="suite_build/dist/DPAttachments-Core_2_1_1.zip"/>
+	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
+</buildpath>

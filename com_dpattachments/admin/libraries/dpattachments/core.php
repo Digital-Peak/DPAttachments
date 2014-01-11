@@ -7,6 +7,8 @@
  */
 defined('_JEXEC') or die();
 
+JLoader::import('joomla.filesystem.file');
+
 /**
  * Public DPAttachments API class.
  *
