@@ -29,6 +29,9 @@
 					<option value="4">J4</option>
 					<option value="6">J6</option>
 				</field>
+
+				<field name="cat-ids" type="category" description="JGLOBAL_CHOOSE_CATEGORY_DESC"
+					extension="com_content" label="JGLOBAL_CHOOSE_CATEGORY_LABEL" multiple="true"/>
 			</fieldset>
 		</fields>
 	</config>

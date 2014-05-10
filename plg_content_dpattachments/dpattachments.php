@@ -24,6 +24,13 @@ class PlgContentDpattachments extends JPlugin
 		{
 			return '';
 		}
+
+		$catIds = $this->params->get('cat-ids');
+		if (isset($item->catid) && ! empty($catIds) && ! in_array($item->catid, $catIds))
+		{
+			return '';
+		}
+
 		$options = new JRegistry();
 		$options->set('render.columns', $this->params->get('column_count', 2));
 		return DPAttachmentsCore::render($context, (int) $item->id, $options);
