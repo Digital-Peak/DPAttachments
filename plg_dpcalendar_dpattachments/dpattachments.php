@@ -20,6 +20,12 @@ class PlgDPCalendarDpattachments extends JPlugin
 
 	public function onEventAfterDisplay ($event, $output)
 	{
+		$catIds = $this->params->get('cat-ids');
+		if (! empty($catIds) && ! in_array($event->catid, $catIds))
+		{
+			return '';
+		}
+
 		$options = new JRegistry();
 		$options->set('render.columns', $this->params->get('column_count', 2));
 		return DPAttachmentsCore::render('com_dpcalendar.event', $event->id, $options);
