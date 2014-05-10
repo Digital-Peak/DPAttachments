@@ -70,10 +70,16 @@ class DPAttachmentsCore
 		$path = JComponentHelper::getParams('com_dpattachments')->get('attachment_path', 'media/com_dpattachments/attachments/');
 		$path = trim($path, '/') . '/' . $context;
 
-		$buffer = '<h4>' . JText::_('COM_DPATTACHMENTS_ATTACHMENTS') . '</h4>';
+		$canEdit = self::canDo('core.edit', $context, $itemId);
 
 		$attachments = self::getAttachments($context, $itemId);
 		$count = count($attachments);
+
+		if ($count == 0 && ! $canEdit)
+		{
+			return '';
+		}
+		$buffer = '<h4>' . JText::_('COM_DPATTACHMENTS_ATTACHMENTS') . '</h4>';
 
 		$buffer .= '<div id="dpattachments-container">';
 		$columns = $options->get('render.columns', 2);
@@ -123,7 +129,7 @@ class DPAttachmentsCore
 			$doc->addScriptDeclaration('jQuery(document).ready(function(){' . $script . '});');
 		}
 
-		if (! self::canDo('core.edit', $context, $itemId))
+		if (! $canEdit)
 		{
 			return $buffer;
 		}

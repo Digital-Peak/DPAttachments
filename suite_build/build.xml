@@ -35,7 +35,7 @@
 			<zipfileset dir="${build}/DPAttachments" includes="**/*" />
 			<zipfileset dir="${basedir}" includes="ReadFirst.txt" />
 			<zipfileset dir="${basedir}" includes="license.txt" />
-			<zipfileset dir="${basedir}" includes="pkg_DPAttachments.xml" />
+			<zipfileset dir="${basedir}" includes="pkg_dpattachments.xml" />
 		</zip>
 	</target>
 

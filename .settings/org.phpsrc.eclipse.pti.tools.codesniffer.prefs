@@ -1,0 +1,10 @@
+active_standards=Joomla
+custom_standard_names=Joomla
+custom_standard_paths=/home/laoneo/Eclipse/workspace/Joomla
+default_tab_width=0
+eclipse.preferences.version=1
+file_extension=
+ignore_pattern=libraries
+pear_library=<Internal>
+php_executable=PHP 5.3
+pref_ignore_sniffs=
