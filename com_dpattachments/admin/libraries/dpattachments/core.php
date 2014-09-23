@@ -81,7 +81,7 @@ class DPAttachmentsCore
 		}
 		$buffer = '<h4>' . JText::_('COM_DPATTACHMENTS_ATTACHMENTS') . '</h4>';
 
-		$buffer .= '<div id="dpattachments-container">';
+		$buffer .= '<div id="dpattachments-container-' . $itemId . '">';
 		$columns = $options->get('render.columns', 2);
 		for ($i = 0; $i < $count; $i ++)
 		{
@@ -108,12 +108,12 @@ class DPAttachmentsCore
 		if ($count)
 		{
 			JHtmlBootstrap::framework();
-			$buffer .= "<div id='dpattachments-modal' class='modal fade hide' tabindex='-1' role='dialog' aria-hidden='true'>
+			$buffer .= "<div id='dpattachments-modal-" . $itemId . "' class='modal fade hide' tabindex='-1' role='dialog' aria-hidden='true'>
                 <div class='modal-header'>
                     <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
                     <h3></h3>
                 </div>
-                <iframe id='dpattachments-iframe' style='zoom:0.60;width:99.6%;height:500px;border:none'></iframe>
+                <iframe id='dpattachments-iframe-" . $itemId . "' style='zoom:0.60;width:99.6%;height:500px;border:none'></iframe>
                 <div class='modal-footer'><button class='btn btn-primary' data-dismiss='modal' aria-hidden='true'>" .
 					 JText::_('COM_DPATTACHMENTS_CLOSE') . "</button></div>
               </div>";
@@ -121,10 +121,12 @@ class DPAttachmentsCore
 			$script = "
             jQuery(document).on('click', '.dpattachments-button', function (event) {
                 event.preventDefault();
-                jQuery('#dpattachments-iframe').attr('src', this.href);
-                jQuery('#dpattachments-modal h3').html(jQuery(this).attr('title')+\" <a href='\"+this.href.replace('tmpl=component', '')+\"' title='" .
+                jQuery('#dpattachments-iframe-" . $itemId .
+					 "').attr('src', this.href);
+                jQuery('#dpattachments-modal-" .
+					 $itemId . " h3').html(jQuery(this).attr('title')+\" <a href='\"+this.href.replace('tmpl=component', '')+\"' title='" .
 					 JText::_('COM_DPATTACHMENTS_TEXT_FULL_SCREEN_MODE') . "'><span class='icon-expand small'></span></a>\");
-                jQuery('#dpattachments-modal').modal();
+                jQuery('#dpattachments-modal-" . $itemId . "').modal();
             });";
 			$doc->addScriptDeclaration('jQuery(document).ready(function(){' . $script . '});');
 		}
@@ -135,16 +137,17 @@ class DPAttachmentsCore
 		}
 
 		$buffer .= '<form action="' . JRoute::_('index.php?option=com_dpattachments&task=attachment.upload') .
-				 '" method="get" class="alert alert-info" id="dpattachments-fileupload">';
+				 '" method="get" class="alert alert-info dpattachments-fileupload-form" id="dpattachments-fileupload-' . $itemId . '">';
 		$buffer .= '<span class="clearfix">' . JText::_('COM_DPATTACHMENTS_TEXT_SELECT_FILE') . ' ';
-		$buffer .= '<span id="dpattachments-text-drag">' . JText::_('COM_DPATTACHMENTS_TEXT_DROP') . '</span> ';
+		$buffer .= '<span id="dpattachments-text-drag-' . $itemId . '">' . JText::_('COM_DPATTACHMENTS_TEXT_DROP') . '</span> ';
 		$buffer .= JText::_('COM_DPATTACHMENTS_TEXT_TO_UPLOAD') . '</span> ';
 		$buffer .= '<input type="file" name="file">';
-		$buffer .= '<p id="dpattachments-text-paste">' . JText::_('COM_DPATTACHMENTS_TEXT_PASTE') . '</p> ';
+		$buffer .= '<p id="dpattachments-text-paste-' . $itemId . '">' . JText::_('COM_DPATTACHMENTS_TEXT_PASTE') . '</p> ';
 		$buffer .= '<input type="hidden" name="attachment[context]" value="' . $context . '" />';
 		$buffer .= '<input type="hidden" name="attachment[item_id]" value="' . $itemId . '" />';
 		$buffer .= JHtml::_('form.token');
-		$buffer .= '<div class="progress progress-striped progress-success active hide" id="dpattachments-progress"><div class="bar" style="text-align:left"></div></div>';
+		$buffer .= '<div class="progress progress-striped progress-success active hide" id="dpattachments-progress-' . $itemId .
+				 '"><div class="bar" style="text-align:left"></div></div>';
 		$buffer .= '</form>';
 
 		JHtml::_('jquery.framework');
@@ -160,13 +163,13 @@ class DPAttachmentsCore
 				for (var i = 0; i < group.files.length; i++) {
 					var file = group.files[i];
 
-					var fd = new FormData(jQuery('#dpattachments-fileupload')[0]);
+					var fd = new FormData(jQuery('#dpattachments-fileupload-" . $itemId . "')[0]);
 				    fd.append('file', file);
 
-        	        jQuery('#dpattachments-progress').show();
-        	        jQuery('#dpattachments-progress div').html('<p>0%</p>');
+        	        jQuery('#dpattachments-progress-" . $itemId . "').show();
+        	        jQuery('#dpattachments-progress-" . $itemId . " div').html('<p>0%</p>');
 					jQuery.ajax({
-					    url: jQuery('#dpattachments-fileupload').attr('action'),
+					    url: jQuery('#dpattachments-fileupload-" . $itemId . "').attr('action'),
 					    data: fd,
 					    processData: false,
 					    contentType: false,
@@ -176,8 +179,8 @@ class DPAttachmentsCore
                             myXHR.upload.addEventListener('progress', function (e) {
 			        	        if (e.lengthComputable) {
 			            	        var percentage = Math.round((e.loaded * 100) / e.total);
-			            	        jQuery('#dpattachments-progress div').html('<p>'+percentage+'%</p>');
-			            	        jQuery('#dpattachments-progress div').css('width', percentage + '%');
+			            	        jQuery('#dpattachments-progress-" . $itemId . " div').html('<p>'+percentage+'%</p>');
+			            	        jQuery('#dpattachments-progress-" . $itemId . " div').css('width', percentage + '%');
 			        	        }
 					        }, false);
                             return myXHR;
@@ -186,8 +189,8 @@ class DPAttachmentsCore
 	                       var json = jQuery.parseJSON(responseText);
 					       Joomla.renderMessages(json.messages);
 
-                	       jQuery('#dpattachments-progress').fadeOut();
-                           jQuery('#dpattachments-container').append(json.data.html);
+                	       jQuery('#dpattachments-progress-" . $itemId . "').fadeOut();
+                           jQuery('#dpattachments-container-" . $itemId . "').append(json.data.html);
 	                    }
 					});
 				}
@@ -195,14 +198,17 @@ class DPAttachmentsCore
 		}
 	};
 
-	jQuery('#dpattachments-fileupload, #dpattachments-fileupload input[type=file]').fileReaderJS(opts);
-	jQuery('body').fileClipboard(opts);
+	jQuery('#dpattachments-fileupload-" . $itemId .
+						 ", #dpattachments-fileupload-" . $itemId . " input[type=file]').fileReaderJS(opts);
+	if (jQuery('.dpattachments-fileupload-form').size() == 1) {
+		jQuery('body').fileClipboard(opts);
+	}
     if (!FileReaderJS.enabled) {
-        jQuery('#dpattachments-text-paste').hide();
-        jQuery('#dpattachments-text-drag').hide();
+        jQuery('#dpattachments-text-paste-" . $itemId . "').hide();
+        jQuery('#dpattachments-text-drag-" . $itemId . "').hide();
     }
     if (typeof jQuery('body')[0]['onpaste'] != 'object') {
-        jQuery('#dpattachments-text-paste').hide();
+        jQuery('#dpattachments-text-paste-" . $itemId . "').hide();
     }
     jQuery(':file').filestyle({buttonText: '" .
 						 JText::_('COM_DPATTACHMENTS_BUTTON_SELECT_FILE') . "', classButton: 'btn btn-small', input: false});
