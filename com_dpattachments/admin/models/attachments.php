@@ -192,7 +192,7 @@ class DPAttachmentsModelAttachments extends JModelList
 			}
 		}
 
-		$item = (int) $this->getState('filter.item');
+		$item = $this->getState('filter.item');
 		if ($item)
 		{
 			$query->where('a.item_id = ' . $db->quote($item));
