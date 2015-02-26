@@ -309,7 +309,7 @@ class DPAttachmentsCore
 		$item = self::$itemCache[$key];
 
 		// No item so we can only check for component permission
-		if (! $item || ! $item->id)
+		if (! $item || (isset($item->id) && ! $item->id))
 		{
 			return $user->authorise($action, $component) || $user->authorise($action, 'com_dpattachments');
 		}
