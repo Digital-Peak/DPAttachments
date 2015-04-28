@@ -150,6 +150,7 @@ class DPAttachmentsCore
 				 '"><div class="bar" style="text-align:left"></div></div>';
 		$buffer .= '</form>';
 
+		JHtml::_('script', 'system/core.js', false, true);
 		JHtml::_('jquery.framework');
 		$doc->addScript(JUri::root() . '/components/com_dpattachments/libraries/uploader/filereader.min.js');
 
