@@ -295,7 +295,11 @@ class DPAttachmentsCore
 			}
 
 			JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/' . $component . '/tables');
-			$table = JTable::getInstance($tableName, $prefix);
+			$table = false;
+			if (JPath::find(JPATH_ADMINISTRATOR . '/components/' . $component . '/tables', strtolower($tableName) . '.php'))
+			{
+				JTable::getInstance($tableName, $prefix);
+			}
 
 			if ($table)
 			{
