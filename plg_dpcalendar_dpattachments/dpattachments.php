@@ -18,7 +18,7 @@ if (! class_exists('DPAttachmentsCore'))
 class PlgDPCalendarDpattachments extends JPlugin
 {
 
-	public function onEventAfterDisplay ($event, $output)
+	public function onEventAfterDisplay ($event)
 	{
 		$catIds = $this->params->get('cat-ids');
 		if (! empty($catIds) && ! in_array($event->catid, $catIds))
