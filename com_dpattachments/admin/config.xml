@@ -8,6 +8,12 @@
 		<field name="attachment_extensions" type="text"
 			default="gif,jpg,png,zip,rar,csv,txt,pdf" label="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_EXTENSIONS_LABEL"
 			description="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_EXTENSIONS_DESC" />
+		<field name="allow_unsafe_uploads" type="radio" class="btn-group"
+			default="0" label="COM_DPATTACHMENTS_CONFIG_FIELD_UNSAFE_UPLOADS_LABEL"
+			description="COM_DPATTACHMENTS_CONFIG_FIELD_UNSAFE_UPLOADS_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
 
 		<field name="menuitems" type="menuitem" multiple="true"
 			label="COM_DPATTACHMENTS_CONFIG_FIELD_MENU_ITEMS_LABEL" description="COM_DPATTACHMENTS_CONFIG_FIELD_MENU_ITEMS_DESC" />

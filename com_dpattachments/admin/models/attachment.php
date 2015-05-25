@@ -109,7 +109,8 @@ class DPAttachmentsModelAttachment extends JModelAdmin
 			$fileName = JFactory::getDate()->format('YmdHi') . '-' . $fileName;
 			$targetFile = DPAttachmentsCore::getPath($fileName, $data['context']);
 		}
-		if (! JFile::upload($_FILES['file']['tmp_name'], $targetFile))
+
+		if (! JFile::upload($_FILES['file']['tmp_name'], $targetFile, false, JComponentHelper::getParams('com_dpattachments')->get('allow_unsafe_uploads', 0)))
 		{
 			$this->setError(JText::_('COM_DPATTACHMENTS_UPLOAD_ERROR'));
 			return false;
