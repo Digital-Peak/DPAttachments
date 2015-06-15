@@ -296,9 +296,9 @@ class DPAttachmentsCore
 
 			JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/' . $component . '/tables');
 			$table = false;
-			if (JFile::exists(JPATH_ADMINISTRATOR . '/components/' . $component . '/tables/', strtolower($tableName) . '.php'))
+			if (JFile::exists(JPATH_ADMINISTRATOR . '/components/' . $component . '/tables/' . strtolower($tableName) . '.php'))
 			{
-				JTable::getInstance($tableName, $prefix);
+				$table = JTable::getInstance($tableName, $prefix);
 			}
 
 			if ($table)
