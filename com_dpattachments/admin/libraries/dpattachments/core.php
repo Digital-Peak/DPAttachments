@@ -48,9 +48,9 @@ class DPAttachmentsCore
 	 * @param mixed $options
 	 * @return string
 	 */
-	public static function render ($context, $itemId, $options = null)
+	public static function render($context, $itemId, $options = null)
 	{
-		if (! self::isEnabled())
+		if (!self::isEnabled())
 		{
 			return '';
 		}
@@ -75,7 +75,7 @@ class DPAttachmentsCore
 		$attachments = self::getAttachments($context, $itemId);
 		$count = count($attachments);
 
-		if ($count == 0 && ! $canEdit)
+		if ($count == 0 && !$canEdit)
 		{
 			return '';
 		}
@@ -91,7 +91,13 @@ class DPAttachmentsCore
 				$buffer .= '<div class="row-fluid">';
 			}
 			$buffer .= '<div class="span' . (round(12 / $columns)) . '">';
-			$buffer .= self::toHtml($attachment);
+			$buffer .= JLayoutHelper::render('attachment.render', array(
+					'attachment' => $attachment
+			), null, array(
+					'component' => 'com_dpattachments',
+					'client' => 0
+			));
+
 			$buffer .= '</div>';
 			if ($i % $columns == $columns - 1)
 			{
@@ -121,99 +127,26 @@ class DPAttachmentsCore
 			$script = "
             jQuery(document).on('click', '.dpattachments-button', function (event) {
                 event.preventDefault();
-                jQuery('#dpattachments-iframe-" . $itemId .
-					 "').attr('src', this.href);
-                jQuery('#dpattachments-modal-" .
-					 $itemId . " h3').html(jQuery(this).attr('title')+\" <a href='\"+this.href.replace('tmpl=component', '')+\"' title='" .
+                jQuery('#dpattachments-iframe-" . $itemId . "').attr('src', this.href);
+                jQuery('#dpattachments-modal-" . $itemId .
+					 " h3').html(jQuery(this).attr('title')+\" <a href='\"+this.href.replace('tmpl=component', '')+\"' title='" .
 					 JText::_('COM_DPATTACHMENTS_TEXT_FULL_SCREEN_MODE') . "'><span class='icon-expand small'></span></a>\");
                 jQuery('#dpattachments-modal-" . $itemId . "').modal();
             });";
 			$doc->addScriptDeclaration('jQuery(document).ready(function(){' . $script . '});');
 		}
 
-		if (! $canEdit)
+		if (!$canEdit)
 		{
 			return $buffer;
 		}
 
-		$buffer .= '<form action="' . JRoute::_('index.php?option=com_dpattachments&task=attachment.upload') .
-				 '" method="get" class="alert alert-info dpattachments-fileupload-form" id="dpattachments-fileupload-' . $itemId . '">';
-		$buffer .= '<span class="clearfix">' . JText::_('COM_DPATTACHMENTS_TEXT_SELECT_FILE') . ' ';
-		$buffer .= '<span id="dpattachments-text-drag-' . $itemId . '">' . JText::_('COM_DPATTACHMENTS_TEXT_DROP') . '</span> ';
-		$buffer .= JText::_('COM_DPATTACHMENTS_TEXT_TO_UPLOAD') . '</span> ';
-		$buffer .= '<input type="file" name="file">';
-		$buffer .= '<p id="dpattachments-text-paste-' . $itemId . '">' . JText::_('COM_DPATTACHMENTS_TEXT_PASTE') . '</p> ';
-		$buffer .= '<input type="hidden" name="attachment[context]" value="' . $context . '" />';
-		$buffer .= '<input type="hidden" name="attachment[item_id]" value="' . $itemId . '" />';
-		$buffer .= JHtml::_('form.token');
-		$buffer .= '<div class="progress progress-striped progress-success active hide" id="dpattachments-progress-' . $itemId .
-				 '"><div class="bar" style="text-align:left"></div></div>';
-		$buffer .= '</form>';
-
-		JHtml::_('script', 'system/core.js', false, true);
-		JHtml::_('jquery.framework');
-		$doc->addScript(JUri::root() . '/components/com_dpattachments/libraries/uploader/filereader.min.js');
-
-		$doc->addScriptDeclaration(
-				"jQuery(document).ready(function(){
-	var opts = {
-		dragClass: 'alert-success',
-		readAsMap: {},
-		on: {
-			groupstart: function(group) {
-				for (var i = 0; i < group.files.length; i++) {
-					var file = group.files[i];
-
-					var fd = new FormData(jQuery('#dpattachments-fileupload-" . $itemId . "')[0]);
-				    fd.append('file', file);
-
-        	        jQuery('#dpattachments-progress-" . $itemId . "').show();
-        	        jQuery('#dpattachments-progress-" . $itemId . " div').html('<p>0%</p>');
-					jQuery.ajax({
-					    url: jQuery('#dpattachments-fileupload-" . $itemId . "').attr('action'),
-					    data: fd,
-					    processData: false,
-					    contentType: false,
-	                    type: 'POST',
-                        xhr: function(){
-                            var myXHR = jQuery.ajaxSettings.xhr();
-                            myXHR.upload.addEventListener('progress', function (e) {
-			        	        if (e.lengthComputable) {
-			            	        var percentage = Math.round((e.loaded * 100) / e.total);
-			            	        jQuery('#dpattachments-progress-" . $itemId . " div').html('<p>'+percentage+'%</p>');
-			            	        jQuery('#dpattachments-progress-" . $itemId . " div').css('width', percentage + '%');
-			        	        }
-					        }, false);
-                            return myXHR;
-                        },
-	                    success: function(responseText){
-	                       var json = jQuery.parseJSON(responseText);
-					       Joomla.renderMessages(json.messages);
-
-                	       jQuery('#dpattachments-progress-" . $itemId . "').fadeOut();
-                           jQuery('#dpattachments-container-" . $itemId . "').append(json.data.html);
-	                    }
-					});
-				}
-			}
-		}
-	};
-
-	jQuery('#dpattachments-fileupload-" . $itemId .
-						 ", #dpattachments-fileupload-" . $itemId . " input[type=file]').fileReaderJS(opts);
-	if (jQuery('.dpattachments-fileupload-form').size() == 1) {
-		jQuery('body').fileClipboard(opts);
-	}
-    if (!FileReaderJS.enabled) {
-        jQuery('#dpattachments-text-paste-" . $itemId . "').hide();
-        jQuery('#dpattachments-text-drag-" . $itemId . "').hide();
-    }
-    if (typeof jQuery('body')[0]['onpaste'] != 'object') {
-        jQuery('#dpattachments-text-paste-" . $itemId . "').hide();
-    }
-    jQuery(':file').filestyle({buttonText: '" .
-						 JText::_('COM_DPATTACHMENTS_BUTTON_SELECT_FILE') . "', classButton: 'btn btn-small', input: false});
-});");
+		$buffer .= JLayoutHelper::render('attachment.form', array(
+				'attachment' => $attachment
+		), null, array(
+				'component' => 'com_dpattachments',
+				'client' => 0
+		));
 
 		return $buffer;
 	}
@@ -227,13 +160,13 @@ class DPAttachmentsCore
 	 * @param string $itemId
 	 * @return boolean
 	 */
-	public static function delete ($context, $itemId)
+	public static function delete($context, $itemId)
 	{
 		$ids = array();
 		foreach (self::getAttachments($context, $itemId) as $attachment)
 		{
 			JFile::delete(self::getPath($attachment->path, $attachment->context));
-			$ids[] = (int) $attachment->id;
+			$ids[] = (int)$attachment->id;
 		}
 
 		if (empty($ids))
@@ -269,12 +202,12 @@ class DPAttachmentsCore
 	 * @param string $itemId
 	 * @return boolean
 	 */
-	public static function canDo ($action, $context, $itemId)
+	public static function canDo($action, $context, $itemId)
 	{
 		$key = $context . '.' . $itemId;
 
 		list ($component, $modelName) = explode('.', $context);
-		if (! key_exists($key, self::$itemCache))
+		if (!key_exists($key, self::$itemCache))
 		{
 			// Load the model to get the item
 			$tableName = ucfirst($modelName);
@@ -314,7 +247,7 @@ class DPAttachmentsCore
 		$item = self::$itemCache[$key];
 
 		// No item so we can only check for component permission
-		if (! $item || (isset($item->id) && ! $item->id))
+		if (!$item || (isset($item->id) && !$item->id))
 		{
 			return $user->authorise($action, $component) || $user->authorise($action, 'com_dpattachments');
 		}
@@ -366,88 +299,40 @@ class DPAttachmentsCore
 	 * @param string $context
 	 * @return string
 	 */
-	public static function getPath ($attachmentPath, $context)
+	public static function getPath($attachmentPath, $context)
 	{
 		$folder = JComponentHelper::getParams('com_dpattachments')->get('attachment_path', 'media/com_dpattachments/attachments/');
 		$folder = trim($folder, '/');
 		return JPATH_ROOT . '/' . $folder . '/' . $context . '/' . $attachmentPath;
 	}
 
-	public static function toHtml ($attachment)
-	{
-		if (empty($attachment))
-		{
-			return '';
-		}
-		$canEditState = self::canDo('core.edit.state', $attachment->context, $attachment->item_id);
-		$canEdit = self::canDo('core.edit', $attachment->context, $attachment->item_id);
-
-		$buffer = '';
-		if (self::previewAvailable($attachment))
-		{
-			$buffer .= '<a href="' . JRoute::_('index.php?option=com_dpattachments&view=attachment&tmpl=component&id=' . (int) $attachment->id) .
-					 '" class="dpattachments-button" title="' . $attachment->title . '">' . $attachment->title . '</a>';
-		}
-		else
-		{
-			$buffer .= $attachment->title;
-		}
-
-		$author = $attachment->author_name;
-		if ($attachment->created_by_alias)
-		{
-			$author = $attachment->created_by_alias;
-		}
-		$buffer .= ' <span class="small">[' . self::size($attachment->size) . ']</span> ';
-		$buffer .= '<a href="' . JRoute::_('index.php?option=com_dpattachments&task=attachment.download&id=' . (int) $attachment->id) .
-				 '" target="_blank"><span class="icon-download"></span></a>';
-		$buffer .= '<p>' . JText::sprintf('COM_DPATTACHMENTS_TEXT_UPLOADED_LABEL', JHtmlDate::relative($attachment->created), $author) . '</p>';
-
-		if ($canEdit || $canEditState)
-		{
-			$buffer .= '<div class="btn-toolbar"><div class="btn-group">';
-			if ($canEdit)
-			{
-				$buffer .= '<a href="' . JRoute::_(
-						'index.php?option=com_dpattachments&task=attachment.edit&a_id=' . $attachment->id . '&return=' .
-								 base64_encode(JUri::getInstance()->toString())) . '" class="btn btn-small">';
-				$buffer .= '    <span class="icon-edit"></span> ' . JText::_('JACTION_EDIT');
-				$buffer .= '</a>';
-			}
-			if ($canEditState)
-			{
-				$buffer .= '<a href="' . JRoute::_(
-						'index.php?option=com_dpattachments&task=attachment.publish&state=-2&id=' . $attachment->id . '&' . JSession::getFormToken() .
-								 '=1&return=' . base64_encode(JUri::getInstance()->toString())) . '" class="btn btn-small">';
-				$buffer .= '    <span class="icon-trash"></span> ' . JText::_('JTRASH');
-				$buffer .= '</a>';
-			}
-			$buffer .= '</div></div>';
-		}
-
-		return $buffer;
-	}
-
 	/**
-	 * Internal helper function to check if a preview is available
-	 * for the given attachment.
+	 * Helper function to create a human readable
+	 * size string for the given size which is in bytes.
 	 *
-	 * @return boolean
+	 * @param integer $size
+	 * @return string
 	 */
-	private static function previewAvailable ($attachment)
+	public static function size($size)
 	{
-		JLoader::import('joomla.filesystem.folder');
-
-		$ext = strtolower(JFile::getExt($attachment->path));
-		foreach (JFolder::files(JPATH_SITE . '/components/com_dpattachments/views/attachment/tmpl') as $file)
+		// Size in bytes
+		if ($size <= 1024)
 		{
-			if (JFile::stripExt($file) == $ext)
-			{
-				return true;
-			}
+			return $size . JText::_('COM_DPATTACHMENTS_BYTE_SHORT');
 		}
 
-		return false;
+		// Size in kilo bytes
+		$filekb = $size / 1024;
+		if ($filekb <= 1024)
+		{
+			$flieinkb = round($filekb, 2);
+			return $flieinkb . JText::_('COM_DPATTACHMENTS_KILOBYTE_SHORT');
+		}
+
+		// Size in mega bytes
+		$filemb = $filekb / 1024;
+		$fileinmb = round($filemb, 2);
+		return $fileinmb . JText::_('COM_DPATTACHMENTS_MEGA_BYTE_SHORT');
 	}
 
 	/**
@@ -456,32 +341,32 @@ class DPAttachmentsCore
 	 *
 	 * @return boolean
 	 */
-	private static function isEnabled ()
+	private static function isEnabled()
 	{
 		$input = JFactory::getApplication()->input;
 		$params = JComponentHelper::getParams('com_dpattachments');
 
 		// Check for menu items to include
 		$menuItems = $params->get('menuitems');
-		if (! empty($menuItems))
+		if (!empty($menuItems))
 		{
-			if (! is_array($menuItems))
+			if (!is_array($menuItems))
 			{
 				$menuItems = array(
 						$menuItems
 				);
 			}
 
-			if (! in_array($input->getInt('Itemid'), $menuItems))
+			if (!in_array($input->getInt('Itemid'), $menuItems))
 			{
 				return false;
 			}
 		}
 
 		$menuItems = $params->get('menuitems_exclude');
-		if (! empty($menuItems))
+		if (!empty($menuItems))
 		{
-			if (! is_array($menuItems))
+			if (!is_array($menuItems))
 			{
 				$menuItems = array(
 						$menuItems
@@ -496,25 +381,25 @@ class DPAttachmentsCore
 
 		// Check for components to include
 		$components = $params->get('components');
-		if (! empty($components))
+		if (!empty($components))
 		{
-			if (! is_array($components))
+			if (!is_array($components))
 			{
 				$components = array(
 						$components
 				);
 			}
 
-			if (! in_array($input->getCmd('option'), $components))
+			if (!in_array($input->getCmd('option'), $components))
 			{
 				return false;
 			}
 		}
 
 		$components = $params->get('components_exclude');
-		if (! empty($components))
+		if (!empty($components))
 		{
-			if (! is_array($components))
+			if (!is_array($components))
 			{
 				$components = array(
 						$components
@@ -538,7 +423,7 @@ class DPAttachmentsCore
 	 * @param string $itemId
 	 * @return array
 	 */
-	private static function getAttachments ($context, $itemId)
+	private static function getAttachments($context, $itemId)
 	{
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpattachments/models', 'DPAttachmentsModel');
 		$model = JModelLegacy::getInstance('Attachments', 'DPAttachmentsModel');
@@ -549,34 +434,5 @@ class DPAttachmentsCore
 		$model->setState('list.start', 0);
 
 		return $model->getItems();
-	}
-
-	/**
-	 * Internal helper function to create a human readable
-	 * size string for the given size which is in bytes.
-	 *
-	 * @param integer $size
-	 * @return string
-	 */
-	private static function size ($size)
-	{
-		// Size in bytes
-		if ($size <= 1024)
-		{
-			return $size . JText::_('COM_DPATTACHMENTS_BYTE_SHORT');
-		}
-
-		// Size in kilo bytes
-		$filekb = $size / 1024;
-		if ($filekb <= 1024)
-		{
-			$flieinkb = round($filekb, 2);
-			return $flieinkb . JText::_('COM_DPATTACHMENTS_KILOBYTE_SHORT');
-		}
-
-		// Size in mega bytes
-		$filemb = $filekb / 1024;
-		$fileinmb = round($filemb, 2);
-		return $fileinmb . JText::_('COM_DPATTACHMENTS_MEGA_BYTE_SHORT');
 	}
 }
