@@ -12,13 +12,13 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 
 	protected $view_item = 'form';
 
-	protected function allowEdit ($data = array(), $key = 'id')
+	protected function allowEdit($data = array(), $key = 'id')
 	{
-		$recordId = (int) isset($data[$key]) ? $data[$key] : 0;
+		$recordId = (int)isset($data[$key]) ? $data[$key] : 0;
 		$user = JFactory::getUser();
 
 		$record = $this->getModel()->getItem($recordId);
-		if (! empty($record))
+		if (!empty($record))
 		{
 			return DPAttachmentsCore::canDo('core.edit', $record->context, $record->item_id);
 		}
@@ -26,24 +26,24 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 		return parent::allowEdit($data, $key);
 	}
 
-	public function cancel ($key = 'a_id')
+	public function cancel($key = 'a_id')
 	{
 		parent::cancel($key);
 
 		$this->setRedirect($this->getReturnPage());
 	}
 
-	public function edit ($key = null, $urlVar = 'a_id')
+	public function edit($key = null, $urlVar = 'a_id')
 	{
 		return parent::edit($key, $urlVar);
 	}
 
-	public function getModel ($name = 'form', $prefix = '', $config = array('ignore_request' => true))
+	public function getModel($name = 'form', $prefix = '', $config = array('ignore_request' => true))
 	{
 		return parent::getModel($name, $prefix, $config);
 	}
 
-	protected function getRedirectToItemAppend ($recordId = null, $urlVar = 'a_id')
+	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'a_id')
 	{
 		$tmpl = $this->input->get('tmpl');
 		$append = '';
@@ -76,11 +76,11 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 		return $append;
 	}
 
-	protected function getReturnPage ()
+	protected function getReturnPage()
 	{
 		$return = $this->input->get('return', null, 'base64');
 
-		if (empty($return) || ! JUri::isInternal(base64_decode($return)))
+		if (empty($return) || !JUri::isInternal(base64_decode($return)))
 		{
 			return JUri::base();
 		}
@@ -90,12 +90,12 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 		}
 	}
 
-	protected function postSaveHook (JModelLegacy $model, $validData = array())
+	protected function postSaveHook(JModelLegacy $model, $validData = array())
 	{
 		return;
 	}
 
-	public function save ($key = null, $urlVar = 'a_id')
+	public function save($key = null, $urlVar = 'a_id')
 	{
 		$result = parent::save($key, $urlVar);
 
@@ -108,7 +108,7 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 		return $result;
 	}
 
-	public function upload ()
+	public function upload()
 	{
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
@@ -128,21 +128,28 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 		{
 			JFactory::getApplication()->enqueueMessage(JText::_('COM_DPATTACHMENTS_UPLOAD_SUCCESS'), 'success');
 
-			$returnData['html'] = '<div>' . DPAttachmentsCore::toHtml($model->getItem($model->getState($model->getName() . '.id'))) . '</div>';
+			$content = JLayoutHelper::render('attachment.render',
+					array(
+							'attachment' => $model->getItem($model->getState($model->getName() . '.id'))
+					), null, array(
+							'component' => 'com_dpattachments',
+							'client' => 0
+					));
+			$returnData['html'] = '<div>' . $content . '</div>';
 		}
 		else
 		{
 			JFactory::getApplication()->enqueueMessage(JText::sprintf('JLIB_APPLICATION_ERROR_SAVE_FAILED', $model->getError()), 'error');
 		}
 
-		DPAttachmentsHelper::sendMessage(null, ! $success, $returnData);
+		DPAttachmentsHelper::sendMessage(null, !$success, $returnData);
 	}
 
-	public function download ()
+	public function download()
 	{
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpattachments/models', 'DPAttachmentsModel');
 		$attachment = $this->getModel()->getItem($this->input->get('id'));
-		if (! $attachment)
+		if (!$attachment)
 		{
 			header('HTTP/1.0 404 Not Found');
 			exit(0);
@@ -152,7 +159,7 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 		JLoader::import('joomla.filesystem.file');
 
 		$filename = DPAttachmentsCore::getPath($attachment->path, $attachment->context);
-		if (! JFile::exists($filename))
+		if (!JFile::exists($filename))
 		{
 			header('HTTP/1.0 404 Not Found');
 			exit(0);
@@ -199,7 +206,7 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 		header('Connection: close');
 
 		error_reporting(0);
-		if (! ini_get('safe_mode'))
+		if (!ini_get('safe_mode'))
 		{
 			set_time_limit(0);
 		}
@@ -272,11 +279,11 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 				// Notify of filesize, if this info is available
 				if ($filesize > 0)
 				{
-					header('Content-Length: ' . (int) $filesize);
+					header('Content-Length: ' . (int)$filesize);
 				}
 			}
 			$read = 0;
-			while (! feof($handle) && ($chunksize > 0))
+			while (!feof($handle) && ($chunksize > 0))
 			{
 				if ($isResumable)
 				{
@@ -305,7 +312,7 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 			// Notify of filesize, if this info is available
 			if ($filesize > 0)
 			{
-				header('Content-Length: ' . (int) $filesize);
+				header('Content-Length: ' . (int)$filesize);
 			}
 			@readfile($filename);
 		}
@@ -313,7 +320,7 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 		JFactory::getApplication()->close();
 	}
 
-	public function publish ()
+	public function publish()
 	{
 		JSession::checkToken('get') or jexit(JText::_('JINVALID_TOKEN'));
 

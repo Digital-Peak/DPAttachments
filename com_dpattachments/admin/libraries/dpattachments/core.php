@@ -65,76 +65,21 @@ class DPAttachmentsCore
 			$options = new JRegistry($options);
 		}
 
-		JFactory::getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR . '/components/com_dpattachments');
-
-		$path = JComponentHelper::getParams('com_dpattachments')->get('attachment_path', 'media/com_dpattachments/attachments/');
-		$path = trim($path, '/') . '/' . $context;
-
 		$canEdit = self::canDo('core.edit', $context, $itemId);
-
 		$attachments = self::getAttachments($context, $itemId);
-		$count = count($attachments);
 
-		if ($count == 0 && !$canEdit)
+		if (!$attachments && !$canEdit)
 		{
 			return '';
 		}
-		$buffer = '<h4>' . JText::_('COM_DPATTACHMENTS_ATTACHMENTS') . '</h4>';
 
-		$buffer .= '<div id="dpattachments-container-' . $itemId . '">';
-		$columns = $options->get('render.columns', 2);
-		for ($i = 0; $i < $count; $i ++)
-		{
-			$attachment = $attachments[$i];
-			if ($i % $columns == 0)
-			{
-				$buffer .= '<div class="row-fluid">';
-			}
-			$buffer .= '<div class="span' . (round(12 / $columns)) . '">';
-			$buffer .= JLayoutHelper::render('attachment.render', array(
-					'attachment' => $attachment
-			), null, array(
-					'component' => 'com_dpattachments',
-					'client' => 0
-			));
-
-			$buffer .= '</div>';
-			if ($i % $columns == $columns - 1)
-			{
-				$buffer .= '</div>';
-			}
-		}
-		if ($count && ($count - 1) % $columns != $columns - 1)
-		{
-			$buffer .= '</div>';
-		}
-		$buffer .= '</div>';
-
-		$doc = JFactory::getDocument();
-		if ($count)
-		{
-			JHtmlBootstrap::framework();
-			$buffer .= "<div id='dpattachments-modal-" . $itemId . "' class='modal fade hide' tabindex='-1' role='dialog' aria-hidden='true'>
-                <div class='modal-header'>
-                    <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
-                    <h3></h3>
-                </div>
-                <iframe id='dpattachments-iframe-" . $itemId . "' style='zoom:0.60;width:99.6%;height:500px;border:none'></iframe>
-                <div class='modal-footer'><button class='btn btn-primary' data-dismiss='modal' aria-hidden='true'>" .
-					 JText::_('COM_DPATTACHMENTS_CLOSE') . "</button></div>
-              </div>";
-
-			$script = "
-            jQuery(document).on('click', '.dpattachments-button', function (event) {
-                event.preventDefault();
-                jQuery('#dpattachments-iframe-" . $itemId . "').attr('src', this.href);
-                jQuery('#dpattachments-modal-" . $itemId .
-					 " h3').html(jQuery(this).attr('title')+\" <a href='\"+this.href.replace('tmpl=component', '')+\"' title='" .
-					 JText::_('COM_DPATTACHMENTS_TEXT_FULL_SCREEN_MODE') . "'><span class='icon-expand small'></span></a>\");
-                jQuery('#dpattachments-modal-" . $itemId . "').modal();
-            });";
-			$doc->addScriptDeclaration('jQuery(document).ready(function(){' . $script . '});');
-		}
+		$buffer = JLayoutHelper::render('attachments.render', array(
+				'attachments' => $attachments,
+				'options' => $options
+		), null, array(
+				'component' => 'com_dpattachments',
+				'client' => 0
+		));
 
 		if (!$canEdit)
 		{
@@ -142,7 +87,8 @@ class DPAttachmentsCore
 		}
 
 		$buffer .= JLayoutHelper::render('attachment.form', array(
-				'attachment' => $attachment
+				'itemId' => $itemId,
+				'context' => $context
 		), null, array(
 				'component' => 'com_dpattachments',
 				'client' => 0

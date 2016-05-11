@@ -13,6 +13,8 @@ if (!$attachment)
 	return;
 }
 
+JFactory::getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR . '/components/com_dpattachments');
+
 $canEditState = DPAttachmentsCore::canDo('core.edit.state', $attachment->context, $attachment->item_id);
 $canEdit = DPAttachmentsCore::canDo('core.edit', $attachment->context, $attachment->item_id);
 
@@ -39,7 +41,7 @@ else
 	$buffer .= $attachment->title;
 }
 
-$author = $attachment->author_name;
+$author = isset($attachment->author_name) ? $attachment->author_name : $attachment->created_by;
 if ($attachment->created_by_alias)
 {
 	$author = $attachment->created_by_alias;
