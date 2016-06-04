@@ -27,7 +27,7 @@ $count = count($attachments);
 $itemId = $attachments['0']->item_id;
 $buffer = '<h4>' . JText::_('COM_DPATTACHMENTS_ATTACHMENTS') . '</h4>';
 
-$buffer .= '<div id="dpattachments-container-' . $attachments[0]->context . '-' . $itemId . '">';
+$buffer .= '<div id="dpattachments-container-' . $attachments[0]->context . '-' . $itemId . '" class="dpattachments-container">';
 $columns = $options->get('render.columns', 2);
 for ($i = 0; $i < $count; $i ++)
 {
