@@ -60,7 +60,7 @@ $doc = JFactory::getDocument();
 if ($count)
 {
 	JHtmlBootstrap::framework();
-	$buffer .= "<div id='dpattachments-modal-" . $itemId . "' class='modal fade hide' tabindex='-1' role='dialog' aria-hidden='true' style='max-width:700px;display:none'>
+	$buffer .= "<div id='dpattachments-modal-" . $itemId . "' class='modal fade hide' tabindex='-1' role='dialog' aria-hidden='true' style='display:none'>
                 <div class='modal-header'>
                     <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
                     <h3></h3>
