@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<buildpath>
-	<buildpathentry kind="src" path="com_dpattachments"/>
-	<buildpathentry kind="src" path="plg_content_dpattachments"/>
-	<buildpathentry kind="src" path="plg_dpcalendar_dpattachments"/>
-	<buildpathentry kind="src" path="suite_build"/>
-	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
-</buildpath>

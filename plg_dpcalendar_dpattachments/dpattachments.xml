@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <extension type="plugin" version="3.1" group="dpcalendar"
-	method="upgrade">
+           method="upgrade">
 	<name>plg_dpcalendar_dpattachments</name>
 	<author>Digital Peak</author>
-	<creationDate>May 2016</creationDate>
-	<copyright>(C) 2012 - 2015 Digital Peak. All rights reserved.
-	</copyright>
-	<license>http://www.gnu.org/copyleft/gpl.html
-		GNU/GPL
-	</license>
+	<creationDate>Jan 2018</creationDate>
+	<copyright>(C) 2012 - 2018 Digital Peak. All rights reserved.</copyright>
+	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
 	<version>2.2.0</version>
@@ -22,8 +19,8 @@
 		<fields name="params">
 			<fieldset name="basic">
 				<field name="column_count" type="list" default="2"
-					label="PLG_DPCALENDAR_DPATTACHMENTS_CONFIG_COLUMN_COUNT_LABEL"
-					description="PLG_DPCALENDAR_DPATTACHMENTS_CONFIG_COLUMN_COUNT_DESC">
+				       label="PLG_DPCALENDAR_DPATTACHMENTS_CONFIG_COLUMN_COUNT_LABEL"
+				       description="PLG_DPCALENDAR_DPATTACHMENTS_CONFIG_COLUMN_COUNT_DESC">
 					<option value="1">J1</option>
 					<option value="2">J2</option>
 					<option value="3">J3</option>
@@ -32,8 +29,8 @@
 				</field>
 
 				<field name="cat-ids" type="category" description="JGLOBAL_CHOOSE_CATEGORY_DESC"
-					extension="com_dpcalendar" label="JGLOBAL_CHOOSE_CATEGORY_LABEL"
-					multiple="true" />
+				       extension="com_dpcalendar" label="JGLOBAL_CHOOSE_CATEGORY_LABEL"
+				       multiple="true"/>
 			</fieldset>
 		</fields>
 	</config>
