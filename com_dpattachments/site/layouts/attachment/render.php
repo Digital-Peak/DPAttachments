@@ -8,69 +8,50 @@
 defined('_JEXEC') or die();
 
 $attachment = $displayData['attachment'];
-if (!$attachment)
-{
+if (!$attachment) {
 	return;
 }
 
+JLoader::import('joomla.filesystem.folder');
+
 JFactory::getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR . '/components/com_dpattachments');
 
-$canEditState = DPAttachmentsCore::canDo('core.edit.state', $attachment->context, $attachment->item_id);
-$canEdit = DPAttachmentsCore::canDo('core.edit', $attachment->context, $attachment->item_id);
-
-$canPreview = false;
-JLoader::import('joomla.filesystem.folder');
-$ext = strtolower(JFile::getExt($attachment->path));
-foreach (JFolder::files(JPATH_SITE . '/components/com_dpattachments/views/attachment/tmpl') as $file)
-{
-	if (JFile::stripExt($file) == $ext)
-	{
-		$canPreview = true;
-		break;
-	}
+$previewExtensions = [];
+foreach (JFolder::files(JPATH_SITE . '/components/com_dpattachments/views/attachment/tmpl') as $file) {
+	$previewExtensions[] = JFile::stripExt($file);
 }
-
-$buffer = '';
-if ($canPreview)
-{
-	$buffer .= '<a href="' . JRoute::_('index.php?option=com_dpattachments&view=attachment&tmpl=component&id=' . (int)$attachment->id) .
-			 '" class="dpattachments-button" title="' . $attachment->title . '">' . $attachment->title . '</a>';
-}
-else
-{
-	$buffer .= $attachment->title;
-}
-
-$author = isset($attachment->author_name) ? $attachment->author_name : $attachment->created_by;
-if ($attachment->created_by_alias)
-{
-	$author = $attachment->created_by_alias;
-}
-$buffer .= ' <span class="small">[' . DPAttachmentsCore::size($attachment->size) . ']</span> ';
-$buffer .= '<a href="' . JRoute::_('index.php?option=com_dpattachments&task=attachment.download&id=' . (int)$attachment->id) .
-		 '" target="_blank"><span class="icon-download"></span></a>';
-$buffer .= '<p>' . JText::sprintf('COM_DPATTACHMENTS_TEXT_UPLOADED_LABEL', JHtmlDate::relative($attachment->created), $author) . '</p>';
-
-if ($canEdit || $canEditState)
-{
-	$buffer .= '<div class="btn-toolbar"><div class="btn-group">';
-	if ($canEdit)
-	{
-		$buffer .= '<a href="' . JRoute::_(
-				'index.php?option=com_dpattachments&task=attachment.edit&a_id=' . $attachment->id . '&return=' .
-						 base64_encode(JUri::getInstance()->toString())) . '" class="btn btn-small">';
-		$buffer .= '    <span class="icon-edit"></span> ' . JText::_('JACTION_EDIT');
-		$buffer .= '</a>';
-	}
-	if ($canEditState)
-	{
-		$buffer .= '<a href="' . JRoute::_(
-				'index.php?option=com_dpattachments&task=attachment.publish&state=-2&id=' . $attachment->id . '&' . JSession::getFormToken() .
-						 '=1&return=' . base64_encode(JUri::getInstance()->toString())) . '" class="btn btn-small">';
-		$buffer .= '    <span class="icon-trash"></span> ' . JText::_('JTRASH');
-		$buffer .= '</a>';
-	}
-	$buffer .= '</div></div>';
-}
-
-echo $buffer;
+?>
+<div class="dp-attachment">
+	<?php if (in_array(strtolower(JFile::getExt($attachment->path)), $previewExtensions)) { ?>
+		<a href="<?php echo JRoute::_('index.php?option=com_dpattachments&view=attachment&tmpl=component&id=' . (int)$attachment->id); ?>"
+		   class="dp-attachment__link">
+			<?php echo $attachment->title; ?>
+		</a>
+	<?php } else { ?>
+		<span class="dp-attachment__title"><?php echo $attachment->title; ?></span>
+	<?php } ?>
+	<span class="dp-attachment__size">[<?php echo \DPAttachments\Helper\Core::size($attachment->size); ?>]</span>
+	<a href="<?php echo JRoute::_('index.php?option=com_dpattachments&task=attachment.download&id=' . (int)$attachment->id); ?>" target="_blank">
+		<?php echo \DPAttachments\Helper\Core::renderLayout('block.icon', ['icon' => 'download']); ?>
+	</a>
+	<div class="dp-attachment__date">
+		<?php $author = $attachment->created_by_alias ?: isset($attachment->author_name) ? $attachment->author_name : $attachment->created_by; ?>
+		<?php echo JText::sprintf('COM_DPATTACHMENTS_TEXT_UPLOADED_LABEL', JHtmlDate::relative($attachment->created), $author); ?>
+	</div>
+	<div class="dp-attachment__actions">
+		<?php if (\DPAttachments\Helper\Core::canDo('core.edit', $attachment->context, $attachment->item_id)) { ?>
+			<a href="<?php echo JRoute::_('index.php?option=com_dpattachments&task=attachment.edit&a_id=' . $attachment->id . '&return=' .
+				base64_encode(JUri::getInstance()->toString())); ?>" class="dp-button">
+				<?php echo \DPAttachments\Helper\Core::renderLayout('block.icon', ['icon' => 'pencil-alt']); ?>
+				<?php echo JText::_('JACTION_EDIT'); ?>
+			</a>
+		<?php } ?>
+		<?php if (\DPAttachments\Helper\Core::canDo('core.edit.state', $attachment->context, $attachment->item_id)) { ?>
+			<a href="<?php echo JRoute::_('index.php?option=com_dpattachments&task=attachment.publish&state=-2&id=' . $attachment->id . '&' . JSession::getFormToken() .
+				'=1&return=' . base64_encode(JUri::getInstance()->toString())); ?>" class="dp-button">
+				<?php echo \DPAttachments\Helper\Core::renderLayout('block.icon', ['icon' => 'trash-alt']); ?>
+				<?php echo JText::_('JTRASH'); ?>
+			</a>
+		<?php } ?>
+	</div>
+</div>

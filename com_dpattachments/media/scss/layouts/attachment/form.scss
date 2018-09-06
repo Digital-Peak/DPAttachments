@@ -1,0 +1,47 @@
+.com-dpattachments-layout-form {
+	padding: 10px;
+	margin: 5px;
+	border: 1px solid #cbcbcb;
+
+	.dp-form {
+		margin: 0;
+	}
+
+	.dp-form__progress {
+		display: none;
+	}
+
+	.dp-input {
+		margin-top: 10px;
+
+		&__file {
+			width: 0.1px;
+			height: 0.1px;
+			opacity: 0;
+			overflow: hidden;
+			position: absolute;
+			z-index: -1;
+		}
+
+		&__label {
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			cursor: pointer;
+			display: inline-block;
+			overflow: hidden;
+			padding: 10px;
+
+			border: 1px solid #cbcbcb;
+			background-color: whitesmoke;
+
+			svg {
+				width: 1em;
+				height: 1em;
+				vertical-align: middle;
+				fill: currentColor;
+				margin-top: -0.25em;
+				margin-right: 0.25em;
+			}
+		}
+	}
+}

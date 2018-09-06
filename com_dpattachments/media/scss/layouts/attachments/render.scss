@@ -1,0 +1,27 @@
+.com-dpattachments-layout-attachments {
+	@import "../../block/button";
+	@import "../../block/icon";
+
+	&__attachments {
+		display: flex;
+		flex-wrap: wrap;
+
+		.dp-attachment {
+			flex: 1 0 40%;
+			padding: 10px;
+			margin: 5px;
+			border: 1px solid #cbcbcb;
+		}
+	}
+}
+
+.dp-attachment-preview {
+	zoom: 0.60;
+	width: 99.6%;
+	height: 500px;
+	border: none;
+}
+
+.dp-attachment-modal .tingle-modal-box__content {
+	padding: 1rem;
+}

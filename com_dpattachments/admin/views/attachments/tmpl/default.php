@@ -126,10 +126,10 @@ else
 			{
                         $item->max_ordering = 0;
                         $ordering = ($listOrder == 'a.ordering');
-                        $canEdit = DPAttachmentsCore::canDo('core.edit', $item->context, $item->item_id);
+                        $canEdit = \DPAttachments\Helper\Core::canDo('core.edit', $item->context, $item->item_id);
                         $canCheckin = $user->authorise('core.manage', 'com_checkin') || $item->checked_out == $userId || $item->checked_out == 0;
-                        $canEditOwn = DPAttachmentsCore::canDo('core.edit.own', $item->context, $item->item_id);
-                        $canChange = DPAttachmentsCore::canDo('core.edit.state', $item->context, $item->item_id) && $canCheckin;
+                        $canEditOwn = \DPAttachments\Helper\Core::canDo('core.edit.own', $item->context, $item->item_id);
+                        $canChange = \DPAttachments\Helper\Core::canDo('core.edit.state', $item->context, $item->item_id) && $canCheckin;
                         ?>
 				<tr class="row<?php echo $i % 2; ?>"
 					sortable-group-id="<?php echo $item->context; ?>">
@@ -174,7 +174,7 @@ else
 							} ?>
 							     <p class="small">
                                     <?php
-        							echo JText::_('COM_DPATTACHMENTS_FIELD_CONTEXT_LABEL') . ': ' . $this->escape(DPAttachmentsHelper::renderContext($item->context));
+        							echo JText::_('COM_DPATTACHMENTS_FIELD_CONTEXT_LABEL') . ': ' . $this->escape(\DPAttachments\Helper\DPAttachmentsHelper::renderContext($item->context));
         							?>
         							<br/>
                                     <?php

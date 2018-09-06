@@ -15,12 +15,11 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 	protected function allowEdit($data = array(), $key = 'id')
 	{
 		$recordId = (int)isset($data[$key]) ? $data[$key] : 0;
-		$user = JFactory::getUser();
+		$user     = JFactory::getUser();
 
 		$record = $this->getModel()->getItem($recordId);
-		if (!empty($record))
-		{
-			return DPAttachmentsCore::canDo('core.edit', $record->context, $record->item_id);
+		if (!empty($record)) {
+			return \DPAttachments\Helper\Core::canDo('core.edit', $record->context, $record->item_id);
 		}
 
 		return parent::allowEdit($data, $key);
@@ -45,31 +44,27 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 
 	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'a_id')
 	{
-		$tmpl = $this->input->get('tmpl');
+		$tmpl   = $this->input->get('tmpl');
 		$append = '';
 
-		if ($tmpl)
-		{
+		if ($tmpl) {
 			$append .= '&tmpl=' . $tmpl;
 		}
 
 		$append .= '&layout=edit';
 
-		if ($recordId)
-		{
+		if ($recordId) {
 			$append .= '&' . $urlVar . '=' . $recordId;
 		}
 
 		$itemId = $this->input->getInt('Itemid');
 		$return = $this->getReturnPage();
 
-		if ($itemId)
-		{
+		if ($itemId) {
 			$append .= '&Itemid=' . $itemId;
 		}
 
-		if ($return)
-		{
+		if ($return) {
 			$append .= '&return=' . base64_encode($return);
 		}
 
@@ -80,12 +75,9 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 	{
 		$return = $this->input->get('return', null, 'base64');
 
-		if (empty($return) || !JUri::isInternal(base64_decode($return)))
-		{
+		if (empty($return) || !JUri::isInternal(base64_decode($return))) {
 			return JUri::base();
-		}
-		else
-		{
+		} else {
 			return base64_decode($return);
 		}
 	}
@@ -100,8 +92,7 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 		$result = parent::save($key, $urlVar);
 
 		// If ok, redirect to the return page.
-		if ($result)
-		{
+		if ($result) {
 			$this->setRedirect($this->getReturnPage());
 		}
 
@@ -114,43 +105,34 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 
 		JFactory::getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR . '/components/com_dpattachments');
 
-		$data = $this->input->get('attachment', array(), 'array');
+		$data       = $this->input->get('attachment', array(), 'array');
 		$data['id'] = 0;
 
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpattachments/models', 'DPAttachmentsModel');
-		$model = $this->getModel('Attachment');
+		$model   = $this->getModel('Attachment');
 		$success = $model->upload($data);
 
-		$returnData = array(
-				'html' => ''
-		);
-		if ($success)
-		{
+		$returnData = array('html' => '', 'context' => $data['context'], 'item_id' => $data['item_id']);
+		if ($success) {
 			JFactory::getApplication()->enqueueMessage(JText::_('COM_DPATTACHMENTS_UPLOAD_SUCCESS'), 'success');
 
-			$content = JLayoutHelper::render('attachment.render',
-					array(
-							'attachment' => $model->getItem($model->getState($model->getName() . '.id'))
-					), null, array(
-							'component' => 'com_dpattachments',
-							'client' => 0
-					));
+			$content            = \DPAttachments\Helper\Core::renderLayout(
+				'attachment.render',
+				array('attachment' => $model->getItem($model->getState($model->getName() . '.id')))
+			);
 			$returnData['html'] = '<div>' . $content . '</div>';
-		}
-		else
-		{
+		} else {
 			JFactory::getApplication()->enqueueMessage(JText::sprintf('JLIB_APPLICATION_ERROR_SAVE_FAILED', $model->getError()), 'error');
 		}
 
-		DPAttachmentsHelper::sendMessage(null, !$success, $returnData);
+		\DPAttachments\Helper\DPAttachmentsHelper::sendMessage(null, !$success, $returnData);
 	}
 
 	public function download()
 	{
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpattachments/models', 'DPAttachmentsModel');
 		$attachment = $this->getModel()->getItem($this->input->get('id'));
-		if (!$attachment)
-		{
+		if (!$attachment) {
 			header('HTTP/1.0 404 Not Found');
 			exit(0);
 		}
@@ -158,34 +140,31 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 		JLoader::import('joomla.filesystem.folder');
 		JLoader::import('joomla.filesystem.file');
 
-		$filename = DPAttachmentsCore::getPath($attachment->path, $attachment->context);
-		if (!JFile::exists($filename))
-		{
+		$filename = \DPAttachments\Helper\Core::getPath($attachment->path, $attachment->context);
+		if (!JFile::exists($filename)) {
 			header('HTTP/1.0 404 Not Found');
 			exit(0);
 		}
 
 		$this->getModel()->hit($attachment->id);
 
-		$basename = @basename($filename);
-		$filesize = @filesize($filename);
+		$basename  = @basename($filename);
+		$filesize  = @filesize($filename);
 		$mime_type = 'application/octet-stream';
 
 		// Clear cache
-		while (@ob_end_clean());
+		while (@ob_end_clean()) {
+			;
+		}
 
 		// Fix IE bugs
-		if (isset($_SERVER['HTTP_USER_AGENT']) && strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
-		{
+		if (isset($_SERVER['HTTP_USER_AGENT']) && strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
 			$header_file = preg_replace('/\./', '%2e', $basename, substr_count($basename, '.') - 1);
 
-			if (ini_get('zlib.output_compression'))
-			{
+			if (ini_get('zlib.output_compression')) {
 				ini_set('zlib.output_compression', 'Off');
 			}
-		}
-		else
-		{
+		} else {
 			$header_file = $basename;
 		}
 
@@ -206,43 +185,35 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 		header('Connection: close');
 
 		error_reporting(0);
-		if (!ini_get('safe_mode'))
-		{
+		if (!ini_get('safe_mode')) {
 			set_time_limit(0);
 		}
 
 		// Support resumable downloads
 		$isResumable = false;
-		$seek_start = 0;
-		$seek_end = $filesize - 1;
-		if (isset($_SERVER['HTTP_RANGE']))
-		{
+		$seek_start  = 0;
+		$seek_end    = $filesize - 1;
+		if (isset($_SERVER['HTTP_RANGE'])) {
 			list ($size_unit, $range_orig) = explode('=', $_SERVER['HTTP_RANGE'], 2);
 
-			if ($size_unit == 'bytes')
-			{
+			if ($size_unit == 'bytes') {
 				// Multiple ranges could be specified at the same time, but for
 				// simplicity only serve the first range
 				list ($range, $extra_ranges) = explode(',', $range_orig, 2);
-			}
-			else
-			{
+			} else {
 				$range = '';
 			}
-		}
-		else
-		{
+		} else {
 			$range = '';
 		}
 
-		if ($range)
-		{
+		if ($range) {
 			// Figure out download piece from range (if set)
 			list ($seek_start, $seek_end) = explode('-', $range, 2);
 
 			// Set start and end based on range (if set), else set defaults
 			// also check for invalid ranges.
-			$seek_end = (empty($seek_end)) ? ($size - 1) : min(abs(intval($seek_end)), ($filesize - 1));
+			$seek_end   = (empty($seek_end)) ? ($size - 1) : min(abs(intval($seek_end)), ($filesize - 1));
 			$seek_start = (empty($seek_start) || $seek_end < abs(intval($seek_start))) ? 0 : max(abs(intval($seek_start)), 0);
 
 			$isResumable = true;
@@ -250,17 +221,14 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 
 		// Use 1M chunks for echoing the data to the browser
 		$chunksize = 1024 * 1024;
-		$buffer = '';
-		$handle = @fopen($filename, 'rb');
-		if ($handle !== false)
-		{
+		$buffer    = '';
+		$handle    = @fopen($filename, 'rb');
+		if ($handle !== false) {
 
-			if ($isResumable)
-			{
+			if ($isResumable) {
 				// Only send partial content header if downloading a piece of
 				// the file (IE workaround)
-				if ($seek_start > 0 || $seek_end < ($filesize - 1))
-				{
+				if ($seek_start > 0 || $seek_end < ($filesize - 1)) {
 					header('HTTP/1.1 206 Partial Content');
 				}
 
@@ -271,34 +239,26 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 
 				// Seek to start
 				fseek($handle, $seek_start);
-			}
-			else
-			{
+			} else {
 				$isResumable = false;
 
 				// Notify of filesize, if this info is available
-				if ($filesize > 0)
-				{
+				if ($filesize > 0) {
 					header('Content-Length: ' . (int)$filesize);
 				}
 			}
 			$read = 0;
-			while (!feof($handle) && ($chunksize > 0))
-			{
-				if ($isResumable)
-				{
-					if ($totalLength - $read < $chunksize)
-					{
+			while (!feof($handle) && ($chunksize > 0)) {
+				if ($isResumable) {
+					if ($totalLength - $read < $chunksize) {
 						$chunksize = $totalLength - $read;
-						if ($chunksize < 0)
-						{
+						if ($chunksize < 0) {
 							continue;
 						}
 					}
 				}
 				$buffer = fread($handle, $chunksize);
-				if ($isResumable)
-				{
+				if ($isResumable) {
 					$read += strlen($buffer);
 				}
 				echo $buffer;
@@ -306,12 +266,9 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 				flush();
 			}
 			@fclose($handle);
-		}
-		else
-		{
+		} else {
 			// Notify of filesize, if this info is available
-			if ($filesize > 0)
-			{
+			if ($filesize > 0) {
 				header('Content-Length: ' . (int)$filesize);
 			}
 			@readfile($filename);
@@ -324,17 +281,14 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 	{
 		JSession::checkToken('get') or jexit(JText::_('JINVALID_TOKEN'));
 
-		$id = $this->input->get('id');
-		$model = $this->getModel();
+		$id      = $this->input->get('id');
+		$model   = $this->getModel();
 		$success = $model->publish($id, $this->input->getInt('state'));
 
-		if ($success)
-		{
+		if ($success) {
 			$message = 'COM_DPATTACHMENTS_N_ITEMS_TRASHED';
 			$this->setMessage(JText::plural($message, 1), 'success');
-		}
-		else
-		{
+		} else {
 			$this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_SAVE_FAILED', $model->getError()));
 			$this->setMessage($this->getError(), 'error');
 		}

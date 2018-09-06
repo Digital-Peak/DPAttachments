@@ -1,0 +1,18 @@
+language: php
+
+php:
+  - 7.2
+  - 7.1
+  - 7.0
+  - 5.6
+  - 5.5
+
+script:
+  - phpunit --version
+  - phpunit --configuration tests/phpunit.xml
+
+notifications:
+  email:
+    - will.knauss@gmail.com
+  on_success: never
+  on_failure: always

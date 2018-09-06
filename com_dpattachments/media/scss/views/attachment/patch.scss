@@ -1,0 +1,46 @@
+.com-dpattachments-attachment-patch {
+	.dp-patch-file {
+		border: 1px solid #cbcbcb;
+		margin: 10px;
+
+		&__name {
+			padding: 10px 5px;
+			margin: 0;
+			background-color: #fafbfc;
+		}
+	}
+
+	.dp-patch-hunk {
+		width: 100%;
+
+		&__line {
+			border-top: 1px solid #ddd;
+
+			td {
+				padding: 4px 5px;
+			}
+
+			&_added {
+				background-color: #b4e2b4
+			}
+
+			&_removed {
+				background-color: #e9aeae
+			}
+		}
+	}
+
+	.dp-line {
+		&__original-nr, &__new-nr, &__operation {
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+
+		&__content {
+			width: 90%;
+			white-space: pre;
+		}
+	}
+}

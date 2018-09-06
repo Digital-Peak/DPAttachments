@@ -12,9 +12,7 @@ if (! JFactory::getUser()->authorise('core.manage', 'com_dpattachments'))
 	return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
 }
 
-JLoader::import('helpers.route', JPATH_COMPONENT_ADMINISTRATOR);
-
-JLoader::register('DPAttachmentsHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/dpattachments.php');
+JLoader::import('components.com_dpattachments.libraries.vendor.autoload', JPATH_ADMINISTRATOR);
 
 $controller = JControllerLegacy::getInstance('DPAttachments');
 $controller->execute(JFactory::getApplication()->input->get('task'));

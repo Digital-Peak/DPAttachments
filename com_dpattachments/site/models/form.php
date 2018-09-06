@@ -59,8 +59,8 @@ class DPAttachmentsModelForm extends DPAttachmentsModelAttachment
 		// Check edit state permission.
 		if ($itemId)
 		{
-			$value->params->set('access-edit', DPAttachmentsCore::canDo('core.edit', $value->context, $value->item_id));
-			$value->params->set('access-change', DPAttachmentsCore::canDo('core.edit.state', $value->context, $value->item_id));
+			$value->params->set('access-edit', \DPAttachments\Helper\Core::canDo('core.edit', $value->context, $value->item_id));
+			$value->params->set('access-change', \DPAttachments\Helper\Core::canDo('core.edit.state', $value->context, $value->item_id));
 		}
 
 		return $value;

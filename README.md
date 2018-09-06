@@ -21,8 +21,8 @@ If you are an extension developer you just need the following code snippet to in
 into your extension:
 
 ```php
-if (JLoader::import('components.com_dpattachments.libraries.dpattachments.core', JPATH_ADMINISTRATOR)) {
-    echo DPAttachmentsCore::render('com_demo.item', $object->id);
+if (JLoader::import('components.com_dpattachments.libraries.vendor.autoload', JPATH_ADMINISTRATOR)) {
+    echo \DPAttachments\Helper\Core::render('com_demo.item', $object->id);
 }
 ```
 

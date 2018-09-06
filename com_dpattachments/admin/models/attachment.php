@@ -24,7 +24,7 @@ class DPAttachmentsModelAttachment extends JModelAdmin
 			{
 				return false;
 			}
-			return DPAttachmentsCore::canDo('core.delete', $record->context, $record->item_id);
+			return \DPAttachments\Helper\Core::canDo('core.delete', $record->context, $record->item_id);
 		}
 		return parent::canDelete($record);
 	}
@@ -33,7 +33,7 @@ class DPAttachmentsModelAttachment extends JModelAdmin
 	{
 		if (! empty($record->id))
 		{
-			return DPAttachmentsCore::canDo('core.edit.state', $record->context, $record->item_id);
+			return \DPAttachments\Helper\Core::canDo('core.edit.state', $record->context, $record->item_id);
 		}
 		return parent::canEditState($record);
 	}
@@ -60,7 +60,7 @@ class DPAttachmentsModelAttachment extends JModelAdmin
 	{
 		$user = JFactory::getUser();
 
-		if (! DPAttachmentsCore::canDo('core.edit', $data['context'], $data['item_id']))
+		if (! \DPAttachments\Helper\Core::canDo('core.edit', $data['context'], $data['item_id']))
 		{
 			$this->setError(JText::_('COM_DPATTACHMENTS_UPLOAD_NO_PERMISSION'));
 			return false;
@@ -102,12 +102,12 @@ class DPAttachmentsModelAttachment extends JModelAdmin
 		$fileName = preg_replace("/[^\p{L}|0-9]+/u", "-", substr($fileName, 0, strlen($fileName) - strlen($uploadedFileExtension) - 1)) . '.' .
 				 $uploadedFileExtension;
 
-		$targetFile = DPAttachmentsCore::getPath($fileName, $data['context']);
+		$targetFile = \DPAttachments\Helper\Core::getPath($fileName, $data['context']);
 		JLoader::import('joomla.filesystem.file');
 		if (JFile::exists($targetFile))
 		{
 			$fileName = JFactory::getDate()->format('YmdHi') . '-' . $fileName;
-			$targetFile = DPAttachmentsCore::getPath($fileName, $data['context']);
+			$targetFile = \DPAttachments\Helper\Core::getPath($fileName, $data['context']);
 		}
 
 		if (! JFile::upload($_FILES['file']['tmp_name'], $targetFile, false, JComponentHelper::getParams('com_dpattachments')->get('allow_unsafe_uploads', 0)))

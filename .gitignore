@@ -1,2 +1,4 @@
-/tx.exe
 .idea
+/suite_build/node_modules
+/**/*.map
+/com_dpattachments/media/attachments

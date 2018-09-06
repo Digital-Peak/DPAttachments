@@ -7,17 +7,10 @@
  */
 defined('_JEXEC') or die();
 
-$input = JFactory::getApplication()->input;
-
-$content = JFile::read(DPAttachmentsCore::getPath($this->item->path, $this->item->context));
-
-if ($input->get('tmpl') != 'component')
-{
-    ?>
-<div class="page-header">
-	<h2><?php echo $this->escape($this->item->title); ?></h2>
+?>
+<div class="com-dpattachments-attachment com-dpattachments-attachment-txt">
+	<h3 class="com-dpattachments-attachment__header"><?php echo $this->escape($this->item->title); ?></h3>
+	<div class="com-dpattachments-attachment__content">
+		<?php echo nl2br(htmlentities(JFile::read(\DPAttachments\Helper\Core::getPath($this->item->path, $this->item->context)))); ?>
+	</div>
 </div>
-<?php
-}
-
-echo nl2br(htmlentities($content));

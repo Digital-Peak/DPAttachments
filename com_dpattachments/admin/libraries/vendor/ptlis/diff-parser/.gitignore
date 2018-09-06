@@ -1,0 +1,11 @@
+/build/api/
+/build/code-browser/
+/build/coverage/
+/build/logs/
+/build/pdepend/
+/build/phpdoc/
+/build/tmp/
+/vendor/
+/composer.phar
+/.idea/
+composer.lock

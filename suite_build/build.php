@@ -13,12 +13,12 @@
 class DPAttachmentsReleaseBuild
 {
 
-	public function build ()
+	public function build()
 	{
-		$root = dirname(dirname(__FILE__));
-		$buildDir = dirname(__FILE__);
+		$root      = dirname(dirname(__FILE__));
+		$buildDir  = dirname(__FILE__);
 		$dpVersion = new SimpleXMLElement(file_get_contents(dirname(__FILE__) . '/pkg_dpattachments.xml'));
-		$dpVersion = (string) $dpVersion->version;
+		$dpVersion = (string)$dpVersion->version;
 
 		echo ' Creating version: ' . $dpVersion;
 
@@ -34,14 +34,15 @@ class DPAttachmentsReleaseBuild
 
 		// Component
 		$this->createZip($buildDir . '/../com_dpattachments', $dpDir . '/com_dpattachments.zip',
-				array(
-						'com_dpattachments/admin/com_dpattachments.xml'
-				), array(
-						'com_dpattachments/admin/dpattachments.xml' => 'com_dpattachments/dpattachments.xml'
-				));
+			array(
+				'com_dpattachments/admin/com_dpattachments.xml',
+				'com_dpattachments/media/scss',
+				'com_dpattachments/media/attachments'
+			), array(
+				'com_dpattachments/admin/dpattachments.xml' => 'com_dpattachments/dpattachments.xml'
+			));
 
 		// Plugins
-		$this->createZip($buildDir . '/../plg_dpcalendar_dpattachments', $dpDir . '/plg_dpcalendar_dpattachments.zip');
 		$this->createZip($buildDir . '/../plg_content_dpattachments', $dpDir . '/plg_content_dpattachments.zip');
 
 		// Making the installable zip files
@@ -51,7 +52,7 @@ class DPAttachmentsReleaseBuild
 		$this->createZip($dpDir, $buildDir . '/dist/DPAttachments_Core_' . $dpVersion . '.zip');
 	}
 
-	private function createZip ($folder, $zipFile, $excludes = array(), $substitutes = array())
+	private function createZip($folder, $zipFile, $excludes = array(), $substitutes = array())
 	{
 		$root = dirname(dirname(__FILE__));
 
@@ -60,29 +61,24 @@ class DPAttachmentsReleaseBuild
 
 		$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($folder), RecursiveIteratorIterator::LEAVES_ONLY);
 
-		foreach ($files as $name => $file)
-		{
+		foreach ($files as $name => $file) {
 			// Get real path for current file
 			$filePath = $file->getRealPath();
 			$fileName = str_replace($root . '/', '', $filePath);
 			$fileName = str_replace('suite_build/build/DPAttachments', '', $fileName);
 
 			$ignore = false;
-			foreach ($excludes as $exclude)
-			{
-				if (strpos($fileName, $exclude) !== false)
-				{
+			foreach ($excludes as $exclude) {
+				if (strpos($fileName, $exclude) !== false) {
 					$ignore = true;
 					break;
 				}
 			}
 
-			if ($ignore || is_dir($filePath))
-			{
+			if ($ignore || is_dir($filePath)) {
 				continue;
 			}
-			if (key_exists($fileName, $substitutes))
-			{
+			if (key_exists($fileName, $substitutes)) {
 				$fileName = $substitutes[$fileName];
 			}
 
