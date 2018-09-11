@@ -1,45 +1,63 @@
+if (!Element.prototype.matches) {
+	Element.prototype.matches =
+		Element.prototype.matchesSelector ||
+		Element.prototype.mozMatchesSelector ||
+		Element.prototype.msMatchesSelector ||
+		Element.prototype.oMatchesSelector ||
+		Element.prototype.webkitMatchesSelector ||
+		function (s) {
+			var matches = (this.document || this.ownerDocument).querySelectorAll(s),
+				i = matches.length;
+			while (--i >= 0 && matches.item(i) !== this) {
+			}
+			return i > -1;
+		};
+}
+
 (function (document, Joomla) {
 	'use strict';
 
 	document.addEventListener('DOMContentLoaded', function () {
-		[].slice.call(document.querySelectorAll('.com-dpattachments-layout-attachments .dp-attachment__link')).forEach(function (link) {
-			link.addEventListener('click', function (e) {
-				e.preventDefault();
+		document.querySelector('.com-dpattachments-layout-attachments').addEventListener('click', function (e) {
+			if (!e.target.matches('.dp-attachment__link')) {
+				return true;
+			}
 
-				var modalFunction = function modalFunction(src) {
-					var modal = new tingle.modal({
-						footer: false,
-						stickyFooter: false,
-						closeMethods: ['overlay', 'button', 'escape'],
-						cssClass: ['dp-attachment-modal'],
-						closeLabel: Joomla.JText._('TMPL_DPSTRAP_CLOSE', 'Close')
-					});
+			e.preventDefault();
 
-					modal.setContent('<iframe class="dp-attachment-preview" src="' + src + '"></iframe>');
-					modal.open();
-				};
+			var modalFunction = function modalFunction(src) {
+				var modal = new tingle.modal({
+					footer: false,
+					stickyFooter: false,
+					closeMethods: ['overlay', 'button', 'escape'],
+					cssClass: ['dp-attachment-modal'],
+					closeLabel: Joomla.JText._('TMPL_DPSTRAP_CLOSE', 'Close')
+				});
 
-				if (typeof tingle === 'undefined' || !tingle) {
-					var resource = document.createElement('script');
-					resource.type = 'text/javascript';
-					resource.src = Joomla.getOptions('system.paths').root + '/media/com_dpattachments/js/tingle/tingle.min.js';
-					resource.addEventListener('load', function () {
-						modalFunction(e.target.getAttribute('href'));
-					});
-					document.head.appendChild(resource);
+				modal.setContent('<iframe class="dp-attachment-preview" src="' + src + '"></iframe>');
+				modal.open();
+			};
 
-					var l = document.createElement('link');
-					l.rel = 'stylesheet';
-					l.href = Joomla.getOptions('system.paths').root + '/media/com_dpattachments/css/tingle/tingle.min.css';
-					document.head.appendChild(l);
+			if (typeof tingle === 'undefined' || !tingle) {
+				var resource = document.createElement('script');
+				resource.type = 'text/javascript';
+				resource.src = Joomla.getOptions('system.paths').root + '/media/com_dpattachments/js/tingle/tingle.min.js';
+				resource.addEventListener('load', function () {
+					modalFunction(e.target.getAttribute('href'));
+				});
+				document.head.appendChild(resource);
 
-					return false;
-				}
-
-				modalFunction(e.target.getAttribute('href'));
+				var l = document.createElement('link');
+				l.rel = 'stylesheet';
+				l.href = Joomla.getOptions('system.paths').root + '/media/com_dpattachments/css/tingle/tingle.min.css';
+				document.head.appendChild(l);
 
 				return false;
-			});
+			}
+
+			modalFunction(e.target.getAttribute('href'));
+
+			return false;
 		});
 	});
 })(document, Joomla);
