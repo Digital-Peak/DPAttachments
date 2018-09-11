@@ -10,11 +10,8 @@ defined('_JEXEC') or die();
 
 use Joomla\Registry\Registry;
 
-$attachments = $displayData['attachments'];
-if (!$attachments) {
-	return;
-}
-$options = $displayData['options'];
+$attachments = $displayData['attachments'] ?: [];
+$options     = $displayData['options'];
 if (!$options) {
 	$options = new Registry();
 }
@@ -28,8 +25,8 @@ JHtml::_('script', 'com_dpattachments/layouts/attachments/render.min.js', ['rela
 ?>
 <div class="com-dpattachments-layout-attachments">
 	<h4 class="com-dpattachments-layout-attachments__header"><?php echo JText::_('COM_DPATTACHMENTS_ATTACHMENTS'); ?></h4>
-	<div class="com-dpattachments-layout-attachments__attachments" data-context="<?php echo $attachments['0']->context; ?>"
-		 data-item="<?php echo $attachments['0']->item_id; ?>">
+	<div class="com-dpattachments-layout-attachments__attachments" data-context="<?php echo $displayData['context']; ?>"
+		 data-item="<?php echo $displayData['itemid']; ?>">
 		<?php foreach ($attachments as $attachment) { ?>
 			<?php echo \DPAttachments\Helper\Core::renderLayout('attachment.render', ['attachment' => $attachment]); ?>
 		<?php } ?>
