@@ -18,6 +18,7 @@
 
 			td {
 				padding: 4px 5px;
+				vertical-align: top;
 			}
 
 			&_added {
@@ -40,7 +41,12 @@
 
 		&__content {
 			width: 90%;
-			white-space: pre;
+			white-space: pre-wrap;
+			overflow-wrap: break-word;
+			word-wrap: break-word;
+			-ms-word-break: break-all;
+			word-break: break-all;
+			word-break: break-word;
 		}
 	}
 }
