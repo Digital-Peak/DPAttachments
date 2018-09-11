@@ -43,7 +43,7 @@ function compress(relativeFile, type, root) {
 
 	var code = '';
 	if (type == 'js') {
-		code = uglifyJS.minify(content).code
+		code = uglifyJS.minify(content).code + '\n';
 	} else if (type == 'css') {
 		code = sass.renderSync({data: content, includePaths: [root], outputStyle: 'compressed'}).css;
 	}
@@ -68,6 +68,6 @@ function compileSass(relativeFile, root, outputPath) {
 		sourceMap: true
 	});
 
-	fs.writeFileSync(outputPath, result.css);
+	fs.writeFileSync(outputPath, result.css + '\n');
 	fs.writeFileSync(outputPath + '.map', result.map);
 }
