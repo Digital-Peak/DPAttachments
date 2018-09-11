@@ -40,11 +40,32 @@
 	flex-wrap: wrap;
 }
 
+@supports (display: grid) {
+	.com-dpattachments-layout-attachments__attachments {
+		display: grid;
+		grid-gap: 10px;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	}
+	@media (max-width: 400px) {
+		.com-dpattachments-layout-attachments__attachments {
+			display: block;
+		}
+	}
+}
+
 .com-dpattachments-layout-attachments__attachments .dp-attachment {
 	flex: 1 0 40%;
 	padding: 10px;
-	margin: 5px;
 	border: 1px solid #cbcbcb;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+	word-break: break-all;
+}
+
+@media (max-width: 400px) {
+	.com-dpattachments-layout-attachments__attachments .dp-attachment {
+		margin: 5px 0;
+	}
 }
 
 .dp-attachment-preview {

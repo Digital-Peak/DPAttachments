@@ -6,11 +6,27 @@
 		display: flex;
 		flex-wrap: wrap;
 
+		@supports (display: grid) {
+			display: grid;
+			grid-gap: 10px;
+			grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+			@media (max-width: 400px) {
+				display: block;
+			}
+		}
+
 		.dp-attachment {
 			flex: 1 0 40%;
 			padding: 10px;
-			margin: 5px;
 			border: 1px solid #cbcbcb;
+			overflow-wrap: break-word;
+			word-wrap: break-word;
+			word-break: break-all;
+
+			@media (max-width: 400px) {
+				margin: 5px 0;
+			}
 		}
 	}
 }
