@@ -73,13 +73,16 @@ class Core
 			return '';
 		}
 
-		$buffer = self::renderLayout('attachments.render', array('attachments' => $attachments, 'options' => $options));
+		$buffer = self::renderLayout(
+			'attachments.render',
+			['context' => $context, 'itemid' => $itemId, 'attachments' => $attachments, 'options' => $options]
+		);
 
 		if (!$canEdit) {
 			return $buffer;
 		}
 
-		$buffer .= self::renderLayout('attachment.form', array('itemId' => $itemId, 'context' => $context));
+		$buffer .= self::renderLayout('attachment.form', ['itemId' => $itemId, 'context' => $context]);
 
 		return $buffer;
 	}
