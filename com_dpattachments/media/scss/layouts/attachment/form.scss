@@ -3,12 +3,17 @@
 	margin: 5px 0;
 	border: 1px solid #cbcbcb;
 
+	&_drag {
+		border: 5px dashed #007bff;
+	}
+
 	.dp-form {
 		margin: 0;
 	}
 
 	.dp-form__progress {
 		display: none;
+		width: 100%;
 	}
 
 	.dp-input {

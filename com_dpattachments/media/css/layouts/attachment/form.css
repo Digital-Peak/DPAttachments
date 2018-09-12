@@ -4,12 +4,17 @@
 	border: 1px solid #cbcbcb;
 }
 
+.com-dpattachments-layout-form_drag {
+	border: 5px dashed #007bff;
+}
+
 .com-dpattachments-layout-form .dp-form {
 	margin: 0;
 }
 
 .com-dpattachments-layout-form .dp-form__progress {
 	display: none;
+	width: 100%;
 }
 
 .com-dpattachments-layout-form .dp-input {
