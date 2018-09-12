@@ -1,3 +1,10 @@
+.com-dpattachments-attachment {
+	&__header {
+		padding-bottom: 10px;
+		border-bottom: 1px solid #cbcbcb;
+	}
+}
+
 .com-dpattachments-attachment-csv {
 	@import "../../block/table";
 }

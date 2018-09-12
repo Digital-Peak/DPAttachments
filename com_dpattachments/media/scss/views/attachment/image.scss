@@ -1,4 +1,9 @@
 .com-dpattachments-attachment {
+	&__header {
+		padding-bottom: 10px;
+		border-bottom: 1px solid #cbcbcb;
+	}
+
 	&__content {
 		text-align: center;
 	}

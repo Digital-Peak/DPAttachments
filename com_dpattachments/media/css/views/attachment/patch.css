@@ -1,3 +1,8 @@
+.com-dpattachments-attachment__header {
+	padding-bottom: 10px;
+	border-bottom: 1px solid #cbcbcb;
+}
+
 .com-dpattachments-attachment-patch .dp-patch-file {
 	border: 1px solid #cbcbcb;
 	margin: 10px;
