@@ -11,6 +11,8 @@ compileSass('views/attachment/patch', '../com_dpattachments/media/', 'views/atta
 compress('css/views/attachment/patch', 'css');
 compileSass('views/attachment/image', '../com_dpattachments/media/', 'views/attachment/image.css');
 compress('css/views/attachment/image', 'css');
+compileSass('views/attachment/txt', '../com_dpattachments/media/', 'views/attachment/txt.css');
+compress('css/views/attachment/txt', 'css');
 compileSass('views/form/edit', '../com_dpattachments/media/', 'views/form/edit.css');
 compress('css/views/form/edit', 'css');
 compress('js/views/form/edit', 'js');
