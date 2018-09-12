@@ -84,6 +84,60 @@
 					}
 				}, false);
 			}
+
+			[].slice.call(document.querySelectorAll('.com-dpattachments-layout-form')).forEach(function (form) {
+				// Copied from https://github.com/bgrins/filereader.js
+				var initializedOnBody = false;
+
+				// Bind drag events to the form to add the class while dragging, and accept the drop data transfer
+				form.addEventListener('dragenter', function (e) {
+					if (initializedOnBody) {
+						return;
+					}
+					e.stopPropagation();
+					e.preventDefault();
+					form.classList.add('com-dpattachments-layout-form_drag');
+				}, false);
+				form.addEventListener('dragleave', function (e) {
+					if (initializedOnBody) {
+						return;
+					}
+					e.stopPropagation();
+					e.preventDefault();
+					form.classList.remove('com-dpattachments-layout-form_drag');
+				}, false);
+				form.addEventListener('dragover', function (e) {
+					if (initializedOnBody) {
+						return;
+					}
+					e.stopPropagation();
+					e.preventDefault();
+					form.classList.add('com-dpattachments-layout-form_drag');
+				}, false);
+				form.addEventListener('drop', function (e) {
+					if (initializedOnBody) {
+						return;
+					}
+					e.stopPropagation();
+					e.preventDefault();
+					form.classList.remove('com-dpattachments-layout-form_drag');
+					processFileList(form.querySelector('.dp-input__file'), e.dataTransfer.files);
+				}, false);
+
+				// Bind to body to prevent the form events from firing when it was initialized on the page
+				document.body.addEventListener('dragstart', function (e) {
+					initializedOnBody = true;
+				}, true);
+				document.body.addEventListener('dragend', function (e) {
+					initializedOnBody = false;
+				}, true);
+				document.body.addEventListener('drop', function (e) {
+					if (e.dataTransfer.files && e.dataTransfer.files.length) {
+						e.stopPropagation();
+						e.preventDefault();
+					}
+				}, false);
+			});
 		});
 	});
 })(document, Joomla);
