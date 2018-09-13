@@ -35,6 +35,10 @@
 	vertical-align: -2px;
 }
 
+.com-dpattachments-layout-attachments_empty {
+	display: none;
+}
+
 .com-dpattachments-layout-attachments__attachments {
 	display: flex;
 	flex-wrap: wrap;

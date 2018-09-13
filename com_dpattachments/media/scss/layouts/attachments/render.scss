@@ -2,6 +2,10 @@
 	@import "../../block/button";
 	@import "../../block/icon";
 
+	&_empty {
+		display: none;
+	}
+
 	&__attachments {
 		display: flex;
 		flex-wrap: wrap;
