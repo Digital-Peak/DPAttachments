@@ -26,7 +26,11 @@
 				if (xhr.status === 200) {
 					var json = JSON.parse(xhr.responseText);
 					Joomla.renderMessages(json.messages);
-					document.querySelector('.com-dpattachments-layout-attachments__attachments[data-context="' + json.data.context + '"][data-item="' + json.data.item_id + '"]').innerHTML += json.data.html;
+
+					var container = document.querySelector('.com-dpattachments-layout-attachments__attachments[data-context="' + json.data.context + '"][data-item="' + json.data.item_id + '"]');
+					container.parentElement.classList.remove('com-dpattachments-layout-attachments_empty');
+					container.innerHTML += json.data.html;
+
 					input.value = '';
 				}
 			};
