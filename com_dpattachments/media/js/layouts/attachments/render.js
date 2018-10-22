@@ -31,7 +31,11 @@ if (!Element.prototype.matches) {
 					stickyFooter: false,
 					closeMethods: ['overlay', 'button', 'escape'],
 					cssClass: ['dp-attachment-modal'],
-					closeLabel: Joomla.JText._('TMPL_DPSTRAP_CLOSE', 'Close')
+					closeLabel: Joomla.JText._('TMPL_DPSTRAP_CLOSE', 'Close'),
+					beforeOpen: function () {
+						// Workaround for https://github.com/robinparisi/tingle/issues
+						document.getSelection().removeAllRanges();
+					}
 				});
 
 				modal.setContent('<iframe class="dp-attachment-preview" src="' + src + '"></iframe>');
