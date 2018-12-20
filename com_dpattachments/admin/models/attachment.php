@@ -16,63 +16,59 @@ class DPAttachmentsModelAttachment extends JModelAdmin
 
 	protected $text_prefix = 'COM_DPATTACHMENTS';
 
-	protected function canDelete ($record)
+	protected function canDelete($record)
 	{
-		if (! empty($record->id))
-		{
-			if ($record->state != - 2)
-			{
+		if (!empty($record->id)) {
+			if ($record->state != -2) {
 				return false;
 			}
+
 			return \DPAttachments\Helper\Core::canDo('core.delete', $record->context, $record->item_id);
 		}
+
 		return parent::canDelete($record);
 	}
 
-	protected function canEditState ($record)
+	protected function canEditState($record)
 	{
-		if (! empty($record->id))
-		{
+		if (!empty($record->id)) {
 			return \DPAttachments\Helper\Core::canDo('core.edit.state', $record->context, $record->item_id);
 		}
+
 		return parent::canEditState($record);
 	}
 
-	protected function prepareTable ($table)
+	protected function prepareTable($table)
 	{
 		// Set the publish date to now
 		$db = $this->getDbo();
-		if ($table->state == 1 && (int) $table->publish_up == 0)
-		{
+		if ($table->state == 1 && (int)$table->publish_up == 0) {
 			$table->publish_up = JFactory::getDate()->toSql();
 		}
 
-		if ($table->state == 1 && intval($table->publish_down) == 0)
-		{
+		if ($table->state == 1 && intval($table->publish_down) == 0) {
 			$table->publish_down = $db->getNullDate();
 		}
 
 		// Increment the content version number.
-		$table->version ++;
+		$table->version++;
 	}
 
-	public function upload ($data)
+	public function upload($data)
 	{
 		$user = JFactory::getUser();
 
-		if (! \DPAttachments\Helper\Core::canDo('core.edit', $data['context'], $data['item_id']))
-		{
+		if (!\DPAttachments\Helper\Core::canDo('core.edit', $data['context'], $data['item_id'])) {
 			$this->setError(JText::_('COM_DPATTACHMENTS_UPLOAD_NO_PERMISSION'));
+
 			return false;
 		}
 
 		$fileName = $_FILES['file']['name'];
 
-		if ($fileName == 'blob')
-		{
+		if ($fileName == 'blob') {
 			$extension = explode('/', $_FILES['file']['type']);
-			if (count($extension) > 1)
-			{
+			if (count($extension) > 1) {
 				$fileName = 'clipboard.' . $extension[1];
 			}
 		}
@@ -81,38 +77,36 @@ class DPAttachmentsModelAttachment extends JModelAdmin
 		$uploadedFileExtension = array_pop($uploadedFileNameParts);
 
 		$validFileExts = explode(',',
-				JComponentHelper::getParams('com_dpattachments')->get('attachment_extensions', 'gif,jpg,jpeg,png,zip,rar,csv,txt,pdf'));
+			JComponentHelper::getParams('com_dpattachments')->get('attachment_extensions', 'gif,jpg,jpeg,png,zip,rar,csv,txt,pdf'));
 
 		$extOk = false;
 
-		foreach ($validFileExts as $key => $value)
-		{
-			if (preg_match("/$value/i", $uploadedFileExtension))
-			{
+		foreach ($validFileExts as $key => $value) {
+			if (preg_match("/$value/i", $uploadedFileExtension)) {
 				$extOk = true;
 			}
 		}
 
-		if ($extOk == false)
-		{
+		if ($extOk == false) {
 			$this->setError(JText::sprintf('COM_DPATTACHMENTS_UPLOAD_INVALID_EXTENSION', implode(',', $validFileExts)));
+
 			return false;
 		}
 
 		$fileName = preg_replace("/[^\p{L}|0-9]+/u", "-", substr($fileName, 0, strlen($fileName) - strlen($uploadedFileExtension) - 1)) . '.' .
-				 $uploadedFileExtension;
+			$uploadedFileExtension;
 
 		$targetFile = \DPAttachments\Helper\Core::getPath($fileName, $data['context']);
 		JLoader::import('joomla.filesystem.file');
-		if (JFile::exists($targetFile))
-		{
-			$fileName = JFactory::getDate()->format('YmdHi') . '-' . $fileName;
+		if (JFile::exists($targetFile)) {
+			$fileName   = JFactory::getDate()->format('YmdHi') . '-' . $fileName;
 			$targetFile = \DPAttachments\Helper\Core::getPath($fileName, $data['context']);
 		}
 
-		if (! JFile::upload($_FILES['file']['tmp_name'], $targetFile, false, JComponentHelper::getParams('com_dpattachments')->get('allow_unsafe_uploads', 0)))
-		{
+		if (!JFile::upload($_FILES['file']['tmp_name'], $targetFile, false,
+			JComponentHelper::getParams('com_dpattachments')->get('allow_unsafe_uploads', 0))) {
 			$this->setError(JText::_('COM_DPATTACHMENTS_UPLOAD_ERROR'));
+
 			return false;
 		}
 
@@ -122,39 +116,34 @@ class DPAttachmentsModelAttachment extends JModelAdmin
 		return parent::save($data);
 	}
 
-	public function getTable ($type = 'Attachment', $prefix = 'DPAttachmentsTable', $config = array())
+	public function getTable($type = 'Attachment', $prefix = 'DPAttachmentsTable', $config = array())
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
 
-	public function getForm ($data = array(), $loadData = true)
+	public function getForm($data = array(), $loadData = true)
 	{
 		// Get the form.
 		JForm::addFormPath(JPATH_COMPONENT_ADMINISTRATOR . '/models/forms');
 		JForm::addFieldPath(JPATH_COMPONENT_ADMINISTRATOR . '/models/fields');
 		$form = $this->loadForm('com_dpattachments.attachment', 'attachment', array(
-				'control' => 'jform',
-				'load_data' => $loadData
+			'control'   => 'jform',
+			'load_data' => $loadData
 		));
-		if (empty($form))
-		{
+		if (empty($form)) {
 			return false;
 		}
 		$jinput = JFactory::getApplication()->input;
 
 		// The front end calls this model and uses a_id to avoid id clashes so
 		// we need to check for that first.
-		if ($jinput->get('a_id'))
-		{
+		if ($jinput->get('a_id')) {
 			$id = $jinput->get('a_id', 0);
-		}
-		else
-		{
+		} else {
 			$id = $jinput->get('id', 0);
 		}
 		// Determine correct permissions to check.
-		if ($this->getState('attachment.id'))
-		{
+		if ($this->getState('attachment.id')) {
 			$id = $this->getState('attachment.id');
 		}
 
@@ -162,8 +151,7 @@ class DPAttachmentsModelAttachment extends JModelAdmin
 
 		// Check for existing dpattachment.
 		// Modify the form based on Edit State access controls.
-		if (! $user->authorise('core.edit.state', 'com_dpattachments'))
-		{
+		if (!$user->authorise('core.edit.state', 'com_dpattachments')) {
 			// Disable fields for display.
 			$form->setFieldAttribute('publish_up', 'disabled', 'true');
 			$form->setFieldAttribute('publish_down', 'disabled', 'true');
@@ -179,19 +167,17 @@ class DPAttachmentsModelAttachment extends JModelAdmin
 		return $form;
 	}
 
-	protected function loadFormData ()
+	protected function loadFormData()
 	{
 		// Check the session for previously entered form data.
-		$app = JFactory::getApplication();
+		$app  = JFactory::getApplication();
 		$data = $app->getUserState('com_dpattachments.edit.attachment.data', array());
 
-		if (empty($data))
-		{
+		if (empty($data)) {
 			$data = $this->getItem();
 
 			// Prime some default values.
-			if ($this->getState('attachment.id') == 0)
-			{
+			if ($this->getState('attachment.id') == 0) {
 				$data->set('itemid', $app->input->getInt('itemid', $app->getUserState('com_dpattachments.item.filter.itemid')));
 			}
 		}
@@ -201,30 +187,28 @@ class DPAttachmentsModelAttachment extends JModelAdmin
 		return $data;
 	}
 
-	public function hit ($pk = 0)
+	public function hit($pk = 0)
 	{
-		$input = JFactory::getApplication()->input;
+		$input    = JFactory::getApplication()->input;
 		$hitcount = $input->getInt('hitcount', 1);
 
-		if ($hitcount)
-		{
-			$pk = (! empty($pk)) ? $pk : (int) $this->getState('case.id');
+		if ($hitcount) {
+			$pk = (!empty($pk)) ? $pk : (int)$this->getState('case.id');
 			$db = $this->getDbo();
 
 			$db->setQuery(
 
-			'UPDATE #__dpattachments' . ' SET hits = hits + 1' . ' WHERE id = ' . (int) $pk);
+				'UPDATE #__dpattachments' . ' SET hits = hits + 1' . ' WHERE id = ' . (int)$pk);
 
-			try
-			{
+			try {
 				$db->execute();
-			}
-			catch (RuntimeException $e)
-			{
+			} catch (RuntimeException $e) {
 				$this->setError($e->getMessage());
+
 				return false;
 			}
 		}
+
 		return true;
 	}
 }
