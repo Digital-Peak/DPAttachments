@@ -11,7 +11,7 @@
     "tingle.js": "^0.13.2"
   },
   "devDependencies": {
-    "node-sass": "^4.9.0",
+    "node-sass": "^4.11.0",
     "uglify-js": "^3.4.2"
   }
 }
