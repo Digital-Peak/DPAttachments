@@ -13,6 +13,8 @@ class DPAttachmentsTableAttachment extends JTable
 	public function __construct (&$db)
 	{
 		parent::__construct('#__dpattachments', 'id', $db);
+
+		$this->setColumnAlias('published', 'state');
 	}
 
 	public function check ()
