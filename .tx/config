@@ -21,18 +21,6 @@ source_file = com_dpattachments/site/language/en-GB/en-GB.com_dpattachments.ini
 source_lang = en_GB
 minimum_perc = 1
 
-[DPAttachments.plg_dpcalendar_dpattachments]
-file_filter = plg_dpcalendar_dpattachments/language/<lang>/<lang>.plg_dpcalendar_dpattachments.ini
-source_file = plg_dpcalendar_dpattachments/language/en-GB/en-GB.plg_dpcalendar_dpattachments.ini
-source_lang = en_GB
-minimum_perc = 1
-
-[DPAttachments.plg_dpcalendar_dpattachments-sys]
-file_filter = plg_dpcalendar_dpattachments/language/<lang>/<lang>.plg_dpcalendar_dpattachments.sys.ini
-source_file = plg_dpcalendar_dpattachments/language/en-GB/en-GB.plg_dpcalendar_dpattachments.sys.ini
-source_lang = en_GB
-minimum_perc = 1
-
 [DPAttachments.plg_content_dpattachments]
 file_filter = plg_content_dpattachments/language/<lang>/<lang>.plg_content_dpattachments.ini
 source_file = plg_content_dpattachments/language/en-GB/en-GB.plg_content_dpattachments.ini
