@@ -12,7 +12,7 @@ JLoader::import('components.com_dpattachments.models.attachment', JPATH_ADMINIST
 class DPAttachmentsModelForm extends DPAttachmentsModelAttachment
 {
 
-	protected function populateState ()
+	protected function populateState()
 	{
 		$app = JFactory::getApplication();
 
@@ -30,9 +30,9 @@ class DPAttachmentsModelForm extends DPAttachmentsModelAttachment
 		$this->setState('layout', $app->input->get('layout'));
 	}
 
-	public function getItem ($itemId = null)
+	public function getItem($itemId = null)
 	{
-		$itemId = (int) (! empty($itemId)) ? $itemId : $this->getState('attachment.id');
+		$itemId = (int)(!empty($itemId)) ? $itemId : $this->getState('attachment.id');
 
 		// Get a row instance.
 		$table = $this->getTable();
@@ -41,14 +41,14 @@ class DPAttachmentsModelForm extends DPAttachmentsModelAttachment
 		$return = $table->load($itemId);
 
 		// Check for a table object error.
-		if ($return === false && $table->getError())
-		{
+		if ($return === false && $table->getError()) {
 			$this->setError($table->getError());
+
 			return false;
 		}
 
 		$properties = $table->getProperties(1);
-		$value = JArrayHelper::toObject($properties, 'JObject');
+		$value      = JArrayHelper::toObject($properties, 'JObject');
 
 		// Convert attrib field to Registry.
 		$value->params = new JRegistry();
@@ -57,8 +57,7 @@ class DPAttachmentsModelForm extends DPAttachmentsModelAttachment
 		$user = JFactory::getUser();
 
 		// Check edit state permission.
-		if ($itemId)
-		{
+		if ($itemId) {
 			$value->params->set('access-edit', \DPAttachments\Helper\Core::canDo('core.edit', $value->context, $value->item_id));
 			$value->params->set('access-change', \DPAttachments\Helper\Core::canDo('core.edit.state', $value->context, $value->item_id));
 		}
@@ -66,7 +65,7 @@ class DPAttachmentsModelForm extends DPAttachmentsModelAttachment
 		return $value;
 	}
 
-	public function getReturnPage ()
+	public function getReturnPage()
 	{
 		return base64_encode($this->getState('return_page'));
 	}

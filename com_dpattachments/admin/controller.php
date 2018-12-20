@@ -12,15 +12,14 @@ class DPAttachmentsController extends JControllerLegacy
 
 	protected $default_view = 'attachments';
 
-	public function display ($cachable = false, $urlparams = false)
+	public function display($cachable = false, $urlparams = false)
 	{
-		$view = $this->input->get('view', 'attachments');
+		$view   = $this->input->get('view', 'attachments');
 		$layout = $this->input->get('layout', 'attachments');
-		$id = $this->input->getInt('id');
+		$id     = $this->input->getInt('id');
 
 		// Check for edit form.
-		if ($view == 'attachment' && $layout == 'edit' && ! $this->checkEditId('com_dpattachments.edit.attachment', $id))
-		{
+		if ($view == 'attachment' && $layout == 'edit' && !$this->checkEditId('com_dpattachments.edit.attachment', $id)) {
 			// Somehow the person just went to the form - we don't allow that.
 			$this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
 			$this->setMessage($this->getError(), 'error');
