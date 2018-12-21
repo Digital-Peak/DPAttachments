@@ -1,11 +1,10 @@
 <?php
 /**
- * @package    DPCases
+ * @package    DPAttachments
  * @author     Digital Peak http://www.digital-peak.com
  * @copyright  Copyright (C) 2012 - 2018 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
-
 defined('_JEXEC') or die();
 
 $path = JPATH_ROOT . '/templates/' . JFactory::getApplication()->getTemplate() . '/images/com_dpattachments/icons/' . $displayData['icon'] . '.svg';
