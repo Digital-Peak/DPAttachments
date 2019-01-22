@@ -6,9 +6,9 @@ or DPCases cases, basically every component which triggers an onContentAfterDisp
 
 PREREQUISITS
 ------------
-- Joomla 3.1
+- Joomla 3.8
 - mysql >= 5.0.0
-- PHP >= 5.3.0
+- PHP >= 5.5.0
 
 INSTALLATION
 ------------
