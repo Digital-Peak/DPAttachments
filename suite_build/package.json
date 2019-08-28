@@ -1,6 +1,6 @@
 {
   "name": "DPAttachments",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "engines": {
     "node": "8.x"
   },
@@ -8,10 +8,10 @@
     "build": "node build.js"
   },
   "dependencies": {
-    "tingle.js": "^0.13.2"
+    "tingle.js": "^0.15.1"
   },
   "devDependencies": {
-    "node-sass": "^4.11.0",
-    "uglify-js": "^3.4.2"
+    "node-sass": "^4.12.0",
+    "uglify-js": "^3.6.0"
   }
 }
