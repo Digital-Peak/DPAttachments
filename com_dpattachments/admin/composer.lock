@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "53ce751cd4b658d060a4eebe1203c77b",
+    "content-hash": "2b2e3f5577780cbb66c26c285dcd746a",
     "packages": [
         {
             "name": "parsecsv/php-parsecsv",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/parsecsv/parsecsv-for-php.git",
-                "reference": "c7375dea8e91582958a3a0df3c5d4f4fce91e3c5"
+                "reference": "65566adcd3383da4820cd3bca27e51fe3fbaf15c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/parsecsv/parsecsv-for-php/zipball/c7375dea8e91582958a3a0df3c5d4f4fce91e3c5",
-                "reference": "c7375dea8e91582958a3a0df3c5d4f4fce91e3c5",
+                "url": "https://api.github.com/repos/parsecsv/parsecsv-for-php/zipball/65566adcd3383da4820cd3bca27e51fe3fbaf15c",
+                "reference": "65566adcd3383da4820cd3bca27e51fe3fbaf15c",
                 "shasum": ""
             },
             "require": {
@@ -59,7 +59,7 @@
                 }
             ],
             "description": "CSV data parser for PHP",
-            "time": "2018-08-09T11:48:06+00:00"
+            "time": "2019-02-02T19:40:45+00:00"
         },
         {
             "name": "ptlis/diff-parser",
@@ -121,6 +121,6 @@
     "platform": [],
     "platform-dev": [],
     "platform-overrides": {
-        "php": "5.5.9"
+        "php": "5.6.0"
     }
 }

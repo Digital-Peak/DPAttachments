@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 
 use Joomla\Registry\Registry;
 
-JLoader::import('components.com_dpattachments.libraries.vendor.autoload', JPATH_ADMINISTRATOR);
+JLoader::import('components.com_dpattachments.vendor.autoload', JPATH_ADMINISTRATOR);
 
 // If the component is not installed we fail here and no error is thrown
 if (!class_exists('\DPAttachments\Helper\Core')) {

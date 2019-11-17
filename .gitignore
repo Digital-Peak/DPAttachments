@@ -1,4 +1,6 @@
 .idea
-/suite_build/node_modules
-/**/*.map
+/**/node_modules
+/**/css
+/**/js
+/**/vendor
 /com_dpattachments/media/attachments

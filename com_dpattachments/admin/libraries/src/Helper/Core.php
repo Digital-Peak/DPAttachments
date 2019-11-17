@@ -23,7 +23,7 @@ use Joomla\Registry\Registry;
  * To include attachment support use the following code in your
  * view (default.php) file:
  *
- * JLoader::import('components.com_dpattachments.libraries.vendor.autoload', JPATH_ADMINISTRATOR);
+ * JLoader::import('components.com_dpattachments.vendor.autoload', JPATH_ADMINISTRATOR);
  * if (class_exists('\DPAttachments\Helper\Core')) {
  *     echo DPAttachments\Helper\\DPAttachments\Helper\Core::render('com_foo.bar', $item->id);
  * }

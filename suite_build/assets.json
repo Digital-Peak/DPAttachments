@@ -1,0 +1,26 @@
+{
+  "local": [
+    {
+      "src": "com_dpattachments/resources/scss/views",
+      "dest": "com_dpattachments/media/css/views"
+    },
+    {
+      "src": "com_dpattachments/resources/scss/layouts",
+      "dest": "com_dpattachments/media/css/layouts"
+    },
+    {
+      "src": "com_dpattachments/resources/js",
+      "dest": "com_dpattachments/media/js"
+    }
+  ],
+  "vendor": [
+    {
+      "src": "tingle.js/dist/tingle.js",
+      "dest": "com_dpattachments/media/js/tingle/tingle.js"
+    },
+    {
+      "src": "tingle.js/dist/tingle.css",
+      "dest": "com_dpattachments/media/css/tingle/tingle.css"
+    }
+  ]
+}

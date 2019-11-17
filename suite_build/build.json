@@ -1,0 +1,27 @@
+{
+  "packages": [
+    {
+      "name": "DPAttachments-Core",
+      "originalManifestFileName": "pkg_dpattachments",
+      "substituteManifestFileName": "pkg_dpattachments",
+      "extensions": [
+        {
+          "name": "com_dpattachments",
+          "excludes": [
+            "media/attachments"
+          ],
+          "substitutes": [
+            {
+              "original": "admin/dpattachments.xml",
+              "replace": "dpattachments.xml"
+            },
+            {
+              "original": "admin/script.php",
+              "replace": "script.php"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
