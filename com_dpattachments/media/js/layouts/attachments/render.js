@@ -1,13 +1,33 @@
-(function (document, Joomla) {
+if (!Element.prototype.matches) {
+	Element.prototype.matches =
+		Element.prototype.matchesSelector ||
+		Element.prototype.mozMatchesSelector ||
+		Element.prototype.msMatchesSelector ||
+		Element.prototype.oMatchesSelector ||
+		Element.prototype.webkitMatchesSelector ||
+		function (s) {
+			let matches = (this.document || this.ownerDocument).querySelectorAll(s),
+				i = matches.length;
+			while (--i >= 0 && matches.item(i) !== this) {
+			}
+			return i > -1;
+		};
+}
+
+((document, Joomla) => {
 	'use strict';
 
-	document.addEventListener('DOMContentLoaded', function () {
-		[].slice.call(document.querySelectorAll('.com-dpattachments-layout-attachments .dp-attachment__link')).forEach(function (link) {
-			link.addEventListener('click', function (e) {
+	document.addEventListener('DOMContentLoaded', () => {
+		[].slice.call(document.querySelectorAll('.com-dpattachments-layout-attachments .dp-attachment__link')).forEach((link) => {
+			link.addEventListener('click', e => {
+				if (!e.target.matches('.dp-attachment__link')) {
+					return true;
+				}
+
 				e.preventDefault();
 
-				var modalFunction = function modalFunction(src) {
-					var modal = new tingle.modal({
+				const modalFunction = function modalFunction(src) {
+					const modal = new tingle.modal({
 						footer: false,
 						stickyFooter: false,
 						closeMethods: ['overlay', 'button', 'escape'],
@@ -20,15 +40,15 @@
 				};
 
 				if (typeof tingle === 'undefined' || !tingle) {
-					var resource = document.createElement('script');
+					const resource = document.createElement('script');
 					resource.type = 'text/javascript';
 					resource.src = Joomla.getOptions('system.paths').root + '/media/com_dpattachments/js/tingle/tingle.min.js';
-					resource.addEventListener('load', function () {
+					resource.addEventListener('load', () => {
 						modalFunction(e.target.getAttribute('href'));
 					});
 					document.head.appendChild(resource);
 
-					var l = document.createElement('link');
+					const l = document.createElement('link');
 					l.rel = 'stylesheet';
 					l.href = Joomla.getOptions('system.paths').root + '/media/com_dpattachments/css/tingle/tingle.min.css';
 					document.head.appendChild(l);
