@@ -4,6 +4,6 @@
     "node": "12.x"
   },
   "dependencies": {
-    "tingle.js": "^0.13.2"
+    "tingle.js": "^0.15.2"
   }
 }
