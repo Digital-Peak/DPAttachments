@@ -35,7 +35,7 @@ foreach (JFolder::files(JPATH_SITE . '/components/com_dpattachments/views/attach
 		<?php echo \DPAttachments\Helper\Core::renderLayout('block.icon', ['icon' => 'download']); ?>
 	</a>
 	<div class="dp-attachment__date">
-		<?php $author = $attachment->created_by_alias ?: isset($attachment->author_name) ? $attachment->author_name : $attachment->created_by; ?>
+		<?php $author = $attachment->created_by_alias ?: (isset($attachment->author_name) ? $attachment->author_name : $attachment->created_by); ?>
 		<?php echo JText::sprintf('COM_DPATTACHMENTS_TEXT_UPLOADED_LABEL', JHtmlDate::relative($attachment->created), $author); ?>
 	</div>
 	<div class="dp-attachment__actions">
