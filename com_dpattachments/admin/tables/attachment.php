@@ -27,11 +27,11 @@ class DPAttachmentsTableAttachment extends JTable
 		}
 
 		if (empty($this->title)) {
-			$this->title = str_replace(array(
+			$this->title = str_replace([
 				'_',
 				'-',
 				':'
-			), ' ', $this->path);
+			], ' ', $this->path);
 		}
 
 		$this->path = basename($this->path);
@@ -77,9 +77,9 @@ class DPAttachmentsTableAttachment extends JTable
 		// set.
 		if (empty($pks)) {
 			if ($this->$k) {
-				$pks = array(
+				$pks = [
 					$this->$k
-				);
+				];
 			} else {
 				$this->setError(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
 

@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 class DPAttachmentsControllerAttachment extends JControllerForm
 {
 
-	protected function allowEdit($data = array(), $key = 'id')
+	protected function allowEdit($data = [], $key = 'id')
 	{
 		$recordId = (int)isset($data[$key]) ? $data[$key] : 0;
 		$user     = JFactory::getUser();

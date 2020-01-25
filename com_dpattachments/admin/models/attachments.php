@@ -10,10 +10,10 @@ defined('_JEXEC') or die();
 class DPAttachmentsModelAttachments extends JModelList
 {
 
-	public function __construct($config = array())
+	public function __construct($config = [])
 	{
 		if (empty($config['filter_fields'])) {
-			$config['filter_fields'] = array(
+			$config['filter_fields'] = [
 				'id',
 				'a.id',
 				'title',
@@ -39,7 +39,7 @@ class DPAttachmentsModelAttachments extends JModelList
 				'a.publish_up',
 				'publish_down',
 				'a.publish_down'
-			);
+			];
 		}
 
 		parent::__construct($config);
@@ -103,9 +103,12 @@ class DPAttachmentsModelAttachments extends JModelList
 
 		// Select the required fields from the table.
 		$query->select(
-			$this->getState('list.select',
+			$this->getState(
+				'list.select',
 				'a.id, a.title, a.description, a.path, a.size, a.checked_out, a.checked_out_time, a.context, a.item_id' .
-				', a.state, a.access, a.created, a.created_by, a.created_by_alias, a.modified, a.publish_up, a.publish_down, a.hits'));
+				', a.state, a.access, a.created, a.created_by, a.created_by_alias, a.modified, a.publish_up, a.publish_down, a.hits'
+			)
+		);
 		$query->from('#__dpattachments AS a');
 
 		// Join over the users for the checked out user.
@@ -115,8 +118,10 @@ class DPAttachmentsModelAttachments extends JModelList
 		$query->select('ag.title AS access_level')->join('LEFT', '#__viewlevels AS ag ON ag.id = a.access');
 
 		// Join over the users for the author.
-		$query->select('ua.id as author_id, ua.name AS author_name, ua.email as author_email')->join('LEFT',
-			'#__users AS ua ON ua.id = a.created_by');
+		$query->select('ua.id as author_id, ua.name AS author_name, ua.email as author_email')->join(
+			'LEFT',
+			'#__users AS ua ON ua.id = a.created_by'
+		);
 
 		// Get contact id
 		$subQuery = $db->getQuery(true)
@@ -128,7 +133,8 @@ class DPAttachmentsModelAttachments extends JModelList
 		// Filter by language
 		if ($this->getState('filter.language')) {
 			$subQuery->where(
-				'(contact.language in (' . $db->quote(JFactory::getLanguage()->getTag()) . ',' . $db->quote('*') . ') OR contact.language IS NULL)');
+				'(contact.language in (' . $db->quote(JFactory::getLanguage()->getTag()) . ',' . $db->quote('*') . ') OR contact.language IS NULL)'
+			);
 		}
 		$query->select('(' . $subQuery . ') as contactid');
 

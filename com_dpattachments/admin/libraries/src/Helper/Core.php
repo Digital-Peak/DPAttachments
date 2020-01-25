@@ -35,7 +35,7 @@ class Core
 	 *
 	 * @var array
 	 */
-	private static $itemCache = array();
+	private static $itemCache = [];
 
 	/**
 	 * The render function which takes care to render the HTML
@@ -99,7 +99,7 @@ class Core
 	 */
 	public static function delete($context, $itemId)
 	{
-		$ids = array();
+		$ids = [];
 		foreach (self::getAttachments($context, $itemId) as $attachment) {
 			\JFile::delete(self::getPath($attachment->path, $attachment->context));
 			$ids[] = (int)$attachment->id;
@@ -270,8 +270,12 @@ class Core
 	 */
 	public static function renderLayout($name, $data)
 	{
-		return \JLayoutHelper::render($name, $data, null,
-			['component' => 'com_dpattachments', 'client' => 0]);
+		return \JLayoutHelper::render(
+			$name,
+			$data,
+			null,
+			['component' => 'com_dpattachments', 'client' => 0]
+		);
 	}
 
 	/**
@@ -289,7 +293,7 @@ class Core
 		$menuItems = $params->get('menuitems');
 		if (!empty($menuItems)) {
 			if (!is_array($menuItems)) {
-				$menuItems = array($menuItems);
+				$menuItems = [$menuItems];
 			}
 
 			if (!in_array($input->getInt('Itemid'), $menuItems)) {
@@ -300,7 +304,7 @@ class Core
 		$menuItems = $params->get('menuitems_exclude');
 		if (!empty($menuItems)) {
 			if (!is_array($menuItems)) {
-				$menuItems = array($menuItems);
+				$menuItems = [$menuItems];
 			}
 
 			if (in_array($input->getInt('Itemid'), $menuItems)) {
@@ -312,7 +316,7 @@ class Core
 		$components = $params->get('components');
 		if (!empty($components)) {
 			if (!is_array($components)) {
-				$components = array($components);
+				$components = [$components];
 			}
 
 			if (!in_array($input->getCmd('option'), $components)) {
@@ -323,7 +327,7 @@ class Core
 		$components = $params->get('components_exclude');
 		if (!empty($components)) {
 			if (!is_array($components)) {
-				$components = array($components);
+				$components = [$components];
 			}
 
 			if (in_array($input->getCmd('option'), $components)) {

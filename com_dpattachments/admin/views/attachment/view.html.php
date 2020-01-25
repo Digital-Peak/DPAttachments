@@ -40,7 +40,8 @@ class DPAttachmentsViewAttachment extends JViewLegacy
 		$checkedOut = !($this->item->checked_out == 0 || $this->item->checked_out == $userId);
 		$canDo      = \DPAttachments\Helper\DPAttachmentsHelper::getActions();
 		JToolbarHelper::title(
-			JText::_('COM_DPATTACHMENTS_VIEW_ATTACHMENT_' . ($checkedOut ? 'ATTACHMENT' : ($isNew ? 'ADD_ATTACHMENT' : 'EDIT_ATTACHMENT'))));
+			JText::_('COM_DPATTACHMENTS_VIEW_ATTACHMENT_' . ($checkedOut ? 'ATTACHMENT' : ($isNew ? 'ADD_ATTACHMENT' : 'EDIT_ATTACHMENT')))
+		);
 
 		// Built the actions for new and existing records.
 

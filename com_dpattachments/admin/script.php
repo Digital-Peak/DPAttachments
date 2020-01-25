@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 class Com_DPAttachmentsInstallerScript
 {
 
-	public function install ($parent)
+	public function install($parent)
 	{
 		$this->run("update #__extensions set enabled=1 where type = 'plugin' and element = 'dpattachments'");
 
@@ -25,23 +25,23 @@ allow from all
 		JFile::write($folder . '.htaccess', $content);
 	}
 
-	public function update ($parent)
+	public function update($parent)
 	{
 	}
 
-	public function uninstall ($parent)
+	public function uninstall($parent)
 	{
 	}
 
-	public function preflight ($type, $parent)
+	public function preflight($type, $parent)
 	{
 	}
 
-	public function postflight ($type, $parent)
+	public function postflight($type, $parent)
 	{
 	}
 
-	private function run ($query)
+	private function run($query)
 	{
 		$db = JFactory::getDBO();
 		$db->setQuery($query);

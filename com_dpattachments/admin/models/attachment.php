@@ -76,8 +76,10 @@ class DPAttachmentsModelAttachment extends JModelAdmin
 		$uploadedFileNameParts = explode('.', $fileName);
 		$uploadedFileExtension = array_pop($uploadedFileNameParts);
 
-		$validFileExts = explode(',',
-			JComponentHelper::getParams('com_dpattachments')->get('attachment_extensions', 'gif,jpg,jpeg,png,zip,rar,csv,txt,pdf'));
+		$validFileExts = explode(
+			',',
+			JComponentHelper::getParams('com_dpattachments')->get('attachment_extensions', 'gif,jpg,jpeg,png,zip,rar,csv,txt,pdf')
+		);
 
 		$extOk = false;
 
@@ -103,8 +105,12 @@ class DPAttachmentsModelAttachment extends JModelAdmin
 			$targetFile = \DPAttachments\Helper\Core::getPath($fileName, $data['context']);
 		}
 
-		if (!JFile::upload($_FILES['file']['tmp_name'], $targetFile, false,
-			JComponentHelper::getParams('com_dpattachments')->get('allow_unsafe_uploads', 0))) {
+		if (!JFile::upload(
+			$_FILES['file']['tmp_name'],
+			$targetFile,
+			false,
+			JComponentHelper::getParams('com_dpattachments')->get('allow_unsafe_uploads', 0)
+		)) {
 			$this->setError(JText::_('COM_DPATTACHMENTS_UPLOAD_ERROR'));
 
 			return false;
@@ -116,20 +122,20 @@ class DPAttachmentsModelAttachment extends JModelAdmin
 		return parent::save($data);
 	}
 
-	public function getTable($type = 'Attachment', $prefix = 'DPAttachmentsTable', $config = array())
+	public function getTable($type = 'Attachment', $prefix = 'DPAttachmentsTable', $config = [])
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
 
-	public function getForm($data = array(), $loadData = true)
+	public function getForm($data = [], $loadData = true)
 	{
 		// Get the form.
 		JForm::addFormPath(JPATH_COMPONENT_ADMINISTRATOR . '/models/forms');
 		JForm::addFieldPath(JPATH_COMPONENT_ADMINISTRATOR . '/models/fields');
-		$form = $this->loadForm('com_dpattachments.attachment', 'attachment', array(
+		$form = $this->loadForm('com_dpattachments.attachment', 'attachment', [
 			'control'   => 'jform',
 			'load_data' => $loadData
-		));
+		]);
 		if (empty($form)) {
 			return false;
 		}
@@ -171,7 +177,7 @@ class DPAttachmentsModelAttachment extends JModelAdmin
 	{
 		// Check the session for previously entered form data.
 		$app  = JFactory::getApplication();
-		$data = $app->getUserState('com_dpattachments.edit.attachment.data', array());
+		$data = $app->getUserState('com_dpattachments.edit.attachment.data', []);
 
 		if (empty($data)) {
 			$data = $this->getItem();
@@ -197,8 +203,8 @@ class DPAttachmentsModelAttachment extends JModelAdmin
 			$db = $this->getDbo();
 
 			$db->setQuery(
-
-				'UPDATE #__dpattachments' . ' SET hits = hits + 1' . ' WHERE id = ' . (int)$pk);
+				'UPDATE #__dpattachments' . ' SET hits = hits + 1' . ' WHERE id = ' . (int)$pk
+			);
 
 			try {
 				$db->execute();

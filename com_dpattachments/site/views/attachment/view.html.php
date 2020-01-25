@@ -49,7 +49,7 @@ class DPAttachmentsViewAttachment extends JViewLegacy
 				// menu item)
 				if (isset($active->query['layout'])) {
 					$this->setLayout($active->query['layout']);
-				} elseif ($layout = $item->params->get('case_layout')) {
+				} else if ($layout = $item->params->get('case_layout')) {
 					$this->setLayout($layout);
 				}
 

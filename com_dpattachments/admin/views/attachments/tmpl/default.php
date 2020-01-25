@@ -26,18 +26,15 @@ $sortFields = $this->getSortFields();
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_dpattachments&view=attachments'); ?>" method="post" name="adminForm" id="adminForm">
-<?php if (!empty( $this->sidebar))
-{ ?>
+<?php if (!empty($this->sidebar)) { ?>
 	<div id="j-sidebar-container" class="span2">
 		<?php echo $this->sidebar; ?>
 	</div>
 	<div id="j-main-container" class="span10">
-<?php
-}
-else
-{ ?>
+	<?php
+} else { ?>
 	<div id="j-main-container">
-<?php
+	<?php
 }?>
 		<div id="filter-bar" class="btn-toolbar">
 				<div class="filter-search btn-group pull-left">
@@ -105,10 +102,10 @@ else
 						<?php echo JHtml::_('grid.sort', 'JGLOBAL_TITLE', 'a.title', $listDirn, $listOrder); ?>
 					</th>
 					<th width="10%" class="nowrap hidden-phone">
-						<?php echo JHtml::_('grid.sort',  'JGRID_HEADING_ACCESS', 'a.access', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ACCESS', 'a.access', $listDirn, $listOrder); ?>
 					</th>
 					<th width="10%" class="nowrap hidden-phone">
-						<?php echo JHtml::_('grid.sort',  'JAUTHOR', 'a.created_by', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort', 'JAUTHOR', 'a.created_by', $listDirn, $listOrder); ?>
 					</th>
 					<th width="10%" class="nowrap hidden-phone">
 						<?php echo JHtml::_('grid.sort', 'JDATE', 'a.created', $listDirn, $listOrder); ?>
@@ -122,25 +119,23 @@ else
 					</tr>
 				</thead>
 				<tbody>
-			<?php foreach ( $this->items as $i => $item )
-			{
-                        $item->max_ordering = 0;
-                        $ordering = ($listOrder == 'a.ordering');
-                        $canEdit = \DPAttachments\Helper\Core::canDo('core.edit', $item->context, $item->item_id);
-                        $canCheckin = $user->authorise('core.manage', 'com_checkin') || $item->checked_out == $userId || $item->checked_out == 0;
-                        $canEditOwn = \DPAttachments\Helper\Core::canDo('core.edit.own', $item->context, $item->item_id);
-                        $canChange = \DPAttachments\Helper\Core::canDo('core.edit.state', $item->context, $item->item_id) && $canCheckin;
-                        ?>
+			<?php foreach ($this->items as $i => $item) {
+						$item->max_ordering = 0;
+						$ordering = ($listOrder == 'a.ordering');
+						$canEdit = \DPAttachments\Helper\Core::canDo('core.edit', $item->context, $item->item_id);
+						$canCheckin = $user->authorise('core.manage', 'com_checkin') || $item->checked_out == $userId || $item->checked_out == 0;
+						$canEditOwn = \DPAttachments\Helper\Core::canDo('core.edit.own', $item->context, $item->item_id);
+						$canChange = \DPAttachments\Helper\Core::canDo('core.edit.state', $item->context, $item->item_id) && $canCheckin;
+				?>
 				<tr class="row<?php echo $i % 2; ?>"
 					sortable-group-id="<?php echo $item->context; ?>">
-				    <td class="order nowrap center hidden-phone">
+					<td class="order nowrap center hidden-phone">
 						<?php
-                        $iconClass = '';
-                        if (! $canChange)
-                        {
-                            $iconClass = ' inactive';
-                        }
-                        ?>
+						$iconClass = '';
+						if (! $canChange) {
+							$iconClass = ' inactive';
+						}
+						?>
 					</td>
 						<td class="center hidden-phone">
 						<?php echo JHtml::_('grid.id', $i, $item->id); ?>
@@ -152,77 +147,63 @@ else
 						</td>
 						<td class="nowrap has-context">
 							<div class="pull-left">
-							<?php if ($item->checked_out)
-							{
+							<?php if ($item->checked_out) {
 								echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'dpattachments.', $canCheckin);
 							}
-							if ($canEdit || $canEditOwn)
-							{ ?>
+							if ($canEdit || $canEditOwn) { ?>
 								<a
 									href="<?php echo JRoute::_('index.php?option=com_dpattachments&task=attachment.edit&id=' . $item->id); ?>"
 									title="<?php echo JText::_('JACTION_EDIT'); ?>">
 									<?php echo $this->escape($item->title); ?></a>
-							<?php
-							}
-							else
-							{ ?>
+								<?php
+							} else { ?>
 								<span
 									title="<?php echo JText::sprintf('JFIELD_ALIAS_LABEL', $this->escape($item->alias)); ?>">
 									<?php echo $this->escape($item->title); ?>
 								</span>
-							<?php
+								<?php
 							} ?>
-							     <p class="small">
-                                    <?php
-        							echo JText::_('COM_DPATTACHMENTS_FIELD_CONTEXT_LABEL') . ': ' . $this->escape(\DPAttachments\Helper\DPAttachmentsHelper::renderContext($item->context));
-        							?>
-        							<br/>
-                                    <?php
-        							echo JText::_('COM_DPATTACHMENTS_FIELD_ITEM_ID_LABEL') . ': ' . $this->escape($item->item_id);
-        							?>
-    							 </p>
+								 <p class="small">
+									<?php
+									echo JText::_('COM_DPATTACHMENTS_FIELD_CONTEXT_LABEL') . ': ' . $this->escape(\DPAttachments\Helper\DPAttachmentsHelper::renderContext($item->context));
+									?>
+									<br/>
+									<?php
+									echo JText::_('COM_DPATTACHMENTS_FIELD_ITEM_ID_LABEL') . ': ' . $this->escape($item->item_id);
+									?>
+								 </p>
 							</div>
 							<div class="pull-left">
 							<?php
-						    // Create dropdown items
-						    JHtml::_('dropdown.edit', $item->id, 'attachment');
-						    JHtml::_('dropdown.divider');
-						    if ($item->state)
-						    {
-						        JHtml::_('dropdown.unpublish', 'cb' . $i, 'attachments.');
-						    }
-						    else
-						    {
-						        JHtml::_('dropdown.publish', 'cb' . $i, 'attachments.');
-						    }
+							// Create dropdown items
+							JHtml::_('dropdown.edit', $item->id, 'attachment');
+							JHtml::_('dropdown.divider');
+							if ($item->state) {
+								JHtml::_('dropdown.unpublish', 'cb' . $i, 'attachments.');
+							} else {
+								JHtml::_('dropdown.publish', 'cb' . $i, 'attachments.');
+							}
 
-						    JHtml::_('dropdown.divider');
+							JHtml::_('dropdown.divider');
 
-						    if ($archived)
-						    {
-						        JHtml::_('dropdown.unarchive', 'cb' . $i, 'attachments.');
-						    }
-						    else
-						    {
-						        JHtml::_('dropdown.archive', 'cb' . $i, 'attachments.');
-						    }
+							if ($archived) {
+								JHtml::_('dropdown.unarchive', 'cb' . $i, 'attachments.');
+							} else {
+								JHtml::_('dropdown.archive', 'cb' . $i, 'attachments.');
+							}
 
-						    if ($item->checked_out)
-						    {
-						        JHtml::_('dropdown.checkin', 'cb' . $i, 'attachments.');
-						    }
+							if ($item->checked_out) {
+								JHtml::_('dropdown.checkin', 'cb' . $i, 'attachments.');
+							}
 
-						    if ($trashed)
-						    {
-						        JHtml::_('dropdown.untrash', 'cb' . $i, 'attachments.');
-						    }
-						    else
-						    {
-						        JHtml::_('dropdown.trash', 'cb' . $i, 'attachments.');
-						    }
+							if ($trashed) {
+								JHtml::_('dropdown.untrash', 'cb' . $i, 'attachments.');
+							} else {
+								JHtml::_('dropdown.trash', 'cb' . $i, 'attachments.');
+							}
 
-						    echo JHtml::_('dropdown.render');
-						    ?>
+							echo JHtml::_('dropdown.render');
+							?>
 						</div>
 						</td>
 						<td class="small hidden-phone">
@@ -245,7 +226,7 @@ else
 					</td>
 					</tr>
 				<?php
-				} ?>
+			} ?>
 			</tbody>
 			</table>
 		<?php echo $this->pagination->getListFooter(); ?>

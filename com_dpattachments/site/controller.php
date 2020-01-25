@@ -24,7 +24,7 @@ class DPAttachmentsController extends JControllerLegacy
 			$cachable = false;
 		}
 
-		$safeurlparams = array(
+		$safeurlparams = [
 			'id'               => 'INT',
 			'cid'              => 'ARRAY',
 			'year'             => 'INT',
@@ -40,7 +40,7 @@ class DPAttachmentsController extends JControllerLegacy
 			'print'            => 'BOOLEAN',
 			'lang'             => 'CMD',
 			'Itemid'           => 'INT'
-		);
+		];
 
 		// Check for edit form.
 		if ($vName == 'form' && !$this->checkEditId('com_dpattachments.edit.attachment', $id)) {

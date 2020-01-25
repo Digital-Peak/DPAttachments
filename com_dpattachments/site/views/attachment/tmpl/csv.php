@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 $content        = JFile::read(\DPAttachments\Helper\Core::getPath($this->item->path, $this->item->context));
 $delimiter      = ',';
 $delimiterCount = 0;
-foreach (array(',', ';', "\t") as $char) {
+foreach ([',', ';', "\t"] as $char) {
 	$tmp = substr_count($content, $char);
 	if ($tmp > $delimiterCount) {
 		$delimiter      = $char;

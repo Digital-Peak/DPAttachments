@@ -32,14 +32,13 @@ $published = $this->state->get('filter.published');
 				<?php echo JHtml::_('batch.language'); ?>
 			</div>
 		</div>
-		<?php if ($published >= 0)
-		{ ?>
+		<?php if ($published >= 0) { ?>
 		<div class="control-group">
 			<div class="controls">
 				<?php echo JHtml::_('batch.item', 'com_dpattachments');?>
 			</div>
 		</div>
-		<?php
+			<?php
 		} ?>
 	</div>
 	<div class="modal-footer">

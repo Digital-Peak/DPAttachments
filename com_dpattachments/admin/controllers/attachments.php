@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 class DPAttachmentsControllerAttachments extends JControllerAdmin
 {
 
-	public function getModel($name = 'Attachment', $prefix = 'DPAttachmentsModel', $config = array('ignore_request' => true))
+	public function getModel($name = 'Attachment', $prefix = 'DPAttachmentsModel', $config = ['ignore_request' => true])
 	{
 		return parent::getModel($name, $prefix, $config);
 	}

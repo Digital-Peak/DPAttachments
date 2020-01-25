@@ -12,7 +12,7 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 
 	protected $view_item = 'form';
 
-	protected function allowEdit($data = array(), $key = 'id')
+	protected function allowEdit($data = [], $key = 'id')
 	{
 		$recordId = (int)isset($data[$key]) ? $data[$key] : 0;
 		$user     = JFactory::getUser();
@@ -37,7 +37,7 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 		return parent::edit($key, $urlVar);
 	}
 
-	public function getModel($name = 'form', $prefix = '', $config = array('ignore_request' => true))
+	public function getModel($name = 'form', $prefix = '', $config = ['ignore_request' => true])
 	{
 		return parent::getModel($name, $prefix, $config);
 	}
@@ -82,7 +82,7 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 		}
 	}
 
-	protected function postSaveHook(JModelLegacy $model, $validData = array())
+	protected function postSaveHook(JModelLegacy $model, $validData = [])
 	{
 		return;
 	}
@@ -105,20 +105,20 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 
 		JFactory::getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR . '/components/com_dpattachments');
 
-		$data       = $this->input->get('attachment', array(), 'array');
+		$data       = $this->input->get('attachment', [], 'array');
 		$data['id'] = 0;
 
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpattachments/models', 'DPAttachmentsModel');
 		$model   = $this->getModel('Attachment');
 		$success = $model->upload($data);
 
-		$returnData = array('html' => '', 'context' => $data['context'], 'item_id' => $data['item_id']);
+		$returnData = ['html' => '', 'context' => $data['context'], 'item_id' => $data['item_id']];
 		if ($success) {
 			JFactory::getApplication()->enqueueMessage(JText::_('COM_DPATTACHMENTS_UPLOAD_SUCCESS'), 'success');
 
 			$content            = \DPAttachments\Helper\Core::renderLayout(
 				'attachment.render',
-				array('attachment' => $model->getItem($model->getState($model->getName() . '.id')))
+				['attachment' => $model->getItem($model->getState($model->getName() . '.id'))]
 			);
 			$returnData['html'] = '<div>' . $content . '</div>';
 		} else {
@@ -224,7 +224,6 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 		$buffer    = '';
 		$handle    = @fopen($filename, 'rb');
 		if ($handle !== false) {
-
 			if ($isResumable) {
 				// Only send partial content header if downloading a piece of
 				// the file (IE workaround)

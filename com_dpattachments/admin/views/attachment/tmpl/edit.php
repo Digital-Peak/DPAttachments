@@ -39,7 +39,7 @@ $input = $app->input;
 
 	<div class="row-fluid">
 		<div class="span10 form-horizontal">
-			<?php echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'general')); ?>
+			<?php echo JHtml::_('bootstrap.startTabSet', 'myTab', ['active' => 'general']); ?>
 			<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'general', JText::_('COM_DPATTACHMENTS_VIEW_ATTACHMENT_DETAILS', true)); ?>
 			<fieldset class="adminform">
 				<div class="control-group">
@@ -127,8 +127,7 @@ $input = $app->input;
 							<?php echo $this->form->getInput('publish_down'); ?>
 						</div>
 					</div>
-					<?php if ($this->item->modified_by)
-					{?>
+					<?php if ($this->item->modified_by) {?>
 						<div class="control-group">
 							<?php echo $this->form->getLabel('modified_by'); ?>
 							<div class="controls">
@@ -141,31 +140,29 @@ $input = $app->input;
 								<?php echo $this->form->getInput('modified'); ?>
 							</div>
 					   </div>
-					<?php
+						<?php
 					}?>
 
-					<?php if ($this->item->version)
-					{ ?>
+					<?php if ($this->item->version) { ?>
 						<div class="control-group">
 							<?php echo $this->form->getLabel('version'); ?>
 							<div class="controls">
 								<?php echo $this->form->getInput('version'); ?>
 							</div>
-					    </div>
-					<?php
+						</div>
+						<?php
 					}?>
 
-					<?php if ($this->item->hits)
-					{ ?>
+					<?php if ($this->item->hits) { ?>
 						<div class="control-group">
-						    <div class="control-label">
+							<div class="control-label">
 							 <?php echo $this->form->getLabel('hits'); ?>
-    						</div>
-    						<div class="controls">
-    							<?php echo $this->form->getInput('hits'); ?>
-    						</div>
+							</div>
+							<div class="controls">
+								<?php echo $this->form->getInput('hits'); ?>
+							</div>
 					   </div>
-				    <?php
+						<?php
 					}?>
 				</div>
 			</div>

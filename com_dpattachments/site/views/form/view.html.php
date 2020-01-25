@@ -80,7 +80,7 @@ class DPAttachmentsViewForm extends JViewLegacy
 		$title = $this->params->def('page_title', JText::_('COM_DPATTACHMENTS_FORM_EDIT_ATTACHMENT'));
 		if ($app->getCfg('sitename_pagetitles', 0) == 1) {
 			$title = JText::sprintf('JPAGETITLE', $app->getCfg('sitename'), $title);
-		} elseif ($app->getCfg('sitename_pagetitles', 0) == 2) {
+		} else if ($app->getCfg('sitename_pagetitles', 0) == 2) {
 			$title = JText::sprintf('JPAGETITLE', $title, $app->getCfg('sitename'));
 		}
 		$this->document->setTitle($title);

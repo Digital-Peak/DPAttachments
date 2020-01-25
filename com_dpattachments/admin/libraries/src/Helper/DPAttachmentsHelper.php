@@ -42,7 +42,7 @@ class DPAttachmentsHelper
 
 		$assetName = 'com_dpattachments';
 
-		$actions = array(
+		$actions = [
 			'core.admin',
 			'core.manage',
 			'core.create',
@@ -50,7 +50,7 @@ class DPAttachmentsHelper
 			'core.edit.own',
 			'core.edit.state',
 			'core.delete'
-		);
+		];
 
 		foreach ($actions as $action) {
 			$result->set($action, $user->authorise($action, $assetName));
@@ -59,7 +59,7 @@ class DPAttachmentsHelper
 		return $result;
 	}
 
-	public static function sendMessage($message, $error = false, array $data = array())
+	public static function sendMessage($message, $error = false, array $data = [])
 	{
 		ob_clean();
 

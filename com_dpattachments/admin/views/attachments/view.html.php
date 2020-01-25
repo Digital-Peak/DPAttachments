@@ -62,7 +62,7 @@ class DPAttachmentsViewAttachments extends JViewLegacy
 
 		if ($this->state->get('filter.published') == -2 && $canDo->get('core.delete')) {
 			JToolbarHelper::deleteList('', 'attachments.delete', 'JTOOLBAR_EMPTY_TRASH');
-		} elseif ($canDo->get('core.edit.state')) {
+		} else if ($canDo->get('core.edit.state')) {
 			JToolbarHelper::trash('attachments.trash');
 		}
 
@@ -76,9 +76,9 @@ class DPAttachmentsViewAttachments extends JViewLegacy
 			// button
 			$layout = new JLayoutFile('joomla.toolbar.batch');
 
-			$dhtml = $layout->render(array(
+			$dhtml = $layout->render([
 				'title' => $title
-			));
+			]);
 			$bar->appendButton('Custom', $dhtml, 'batch');
 		}
 
@@ -88,17 +88,26 @@ class DPAttachmentsViewAttachments extends JViewLegacy
 
 		JHtmlSidebar::setAction('index.php?option=com_dpattachments&view=attachments');
 
-		JHtmlSidebar::addFilter(JText::_('JOPTION_SELECT_PUBLISHED'), 'filter_published',
-			JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), 'value', 'text', $this->state->get('filter.published'), true));
-		JHtmlSidebar::addFilter(JText::_('JOPTION_SELECT_ACCESS'), 'filter_access',
-			JHtml::_('select.options', JHtml::_('access.assetgroups'), 'value', 'text', $this->state->get('filter.access')));
-		JHtmlSidebar::addFilter(JText::_('JOPTION_SELECT_AUTHOR'), 'filter_author_id',
-			JHtml::_('select.options', $this->authors, 'value', 'text', $this->state->get('filter.author_id')));
+		JHtmlSidebar::addFilter(
+			JText::_('JOPTION_SELECT_PUBLISHED'),
+			'filter_published',
+			JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), 'value', 'text', $this->state->get('filter.published'), true)
+		);
+		JHtmlSidebar::addFilter(
+			JText::_('JOPTION_SELECT_ACCESS'),
+			'filter_access',
+			JHtml::_('select.options', JHtml::_('access.assetgroups'), 'value', 'text', $this->state->get('filter.access'))
+		);
+		JHtmlSidebar::addFilter(
+			JText::_('JOPTION_SELECT_AUTHOR'),
+			'filter_author_id',
+			JHtml::_('select.options', $this->authors, 'value', 'text', $this->state->get('filter.author_id'))
+		);
 	}
 
 	protected function getSortFields()
 	{
-		return array(
+		return [
 			'a.ordering'     => JText::_('JGRID_HEADING_ORDERING'),
 			'a.state'        => JText::_('JSTATUS'),
 			'a.title'        => JText::_('JGLOBAL_TITLE'),
@@ -109,6 +118,6 @@ class DPAttachmentsViewAttachments extends JViewLegacy
 			'a.created'      => JText::_('JDATE'),
 			'a.id'           => JText::_('JGRID_HEADING_ID'),
 			'a.featured'     => JText::_('JFEATURED')
-		);
+		];
 	}
 }
