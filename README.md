@@ -57,5 +57,8 @@ Start a web server with DPAttachments installed.
 
 `DPDocker/webserver/run.sh`
 
+## Notes
+License GPL v3
+
 Have fun
 The Digital Peak team
