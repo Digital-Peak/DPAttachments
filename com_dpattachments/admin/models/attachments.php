@@ -73,7 +73,7 @@ class DPAttachmentsModelAttachments extends JModelList
 		$this->setState('filter.published', $published);
 
 		$params = JComponentHelper::getParams('com_dpattachments');
-		if ($app->isSite()) {
+		if ($app->isClient('site')) {
 			$params = $app->getParams();
 		}
 		$this->setState('params', $params);
@@ -190,7 +190,7 @@ class DPAttachmentsModelAttachments extends JModelList
 			$query->where('a.context = ' . $db->quote($context));
 		}
 
-		if ($app->isSite()) {
+		if ($app->isClient('site')) {
 			// Filter by start and end dates.
 			$nullDate = $db->quote($db->getNullDate());
 			$nowDate  = $db->quote(JFactory::getDate()->toSql());
