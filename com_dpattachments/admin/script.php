@@ -45,6 +45,6 @@ allow from all
 	{
 		$db = JFactory::getDBO();
 		$db->setQuery($query);
-		$db->query();
+		$db->execute();
 	}
 }
