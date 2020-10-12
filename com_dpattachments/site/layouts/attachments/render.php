@@ -3,7 +3,7 @@
  *
  * @package   DPAttachments
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2012 - 2020 Digital Peak. All rights reserved.
+ * @copyright (C) 2016 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
