@@ -22,5 +22,6 @@
       "src": "tingle.js/dist/tingle.css",
       "dest": "com_dpattachments/media/css/tingle/tingle.css"
     }
-  ]
+  ],
+  "docBlock": "/**\n * @package    DPAttachments\n * @copyright  (C) Digital Peak GmbH. <https://www.digital-peak.com>\n * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL\n */"
 }
