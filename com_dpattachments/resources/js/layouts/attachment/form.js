@@ -1,14 +1,11 @@
 /**
- *
  * @package   DPAttachments
  * @author    Digital Peak http://www.digital-peak.com
  * @copyright Copyright (C) 2012 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-((document, Joomla) => {
-	'use strict';
-
+document.addEventListener('DOMContentLoaded', () => {
 	const processFileList = function (input, files) {
 		if (!files.length) {
 			return;
@@ -23,7 +20,7 @@
 			const xhr = new XMLHttpRequest();
 			xhr.open('post', input.form.getAttribute('action'), true);
 			xhr.setRequestHeader('X-CSRF-Token', Joomla.getOptions('csrf.token', ''));
-			xhr.onreadystatechange = function () {
+			xhr.onreadystatechange = () => {
 				// Request not finished
 				if (xhr.readyState !== 4) {
 					return;
@@ -35,7 +32,7 @@
 					const json = JSON.parse(xhr.responseText);
 					Joomla.renderMessages(json.messages);
 
-					var container = document.querySelector('.com-dpattachments-layout-attachments__attachments[data-context="' + json.data.context + '"][data-item="' + json.data.item_id + '"]');
+					const container = document.querySelector('.com-dpattachments-layout-attachments__attachments[data-context="' + json.data.context + '"][data-item="' + json.data.item_id + '"]');
 					container.parentElement.classList.remove('com-dpattachments-layout-attachments_empty');
 					container.innerHTML += json.data.html;
 
@@ -55,101 +52,93 @@
 		});
 	};
 
-	document.addEventListener('DOMContentLoaded', () => {
-		[].slice.call(document.querySelectorAll('.com-dpattachments-layout-form .dp-input__file')).forEach((input, index) => {
-			input.addEventListener('change', (e) => {
-				processFileList(input, input.files);
+	[].slice.call(document.querySelectorAll('.com-dpattachments-layout-form .dp-input__file')).forEach((input, index) => {
+		input.addEventListener('change', (e) => processFileList(input, input.files), false);
+		input.addEventListener('drop', (e) => {
+			e.stopPropagation();
+			e.preventDefault();
+			processFileList(input, e.dataTransfer.files);
+		}, false);
+
+		if (index == 0) {
+			document.querySelector('body').addEventListener('paste', (e) => {
+				const files = [];
+				const clipboardData = e.clipboardData || {};
+				const items = clipboardData.items || [];
+
+				for (let i = 0; i < items.length; i++) {
+					const file = items[i].getAsFile();
+
+					if (!file) {
+						continue;
+					}
+
+					// Create a fake file name for images from clipboard, since this data doesn't get sent
+					const matches = new RegExp("/\(.*\)").exec(file.type);
+					if (!file.name && matches) {
+						const extension = matches[1];
+						file.name = "clipboard" + i + "." + extension;
+					}
+
+					files.push(file);
+				}
+
+				if (files.length) {
+					processFileList(input, files);
+					e.preventDefault();
+					e.stopPropagation();
+				}
 			}, false);
-			input.addEventListener('drop', (e) => {
+		}
+
+		[].slice.call(document.querySelectorAll('.com-dpattachments-layout-form')).forEach((form) => {
+			// Copied from https://github.com/bgrins/filereader.js
+			const initializedOnBody = false;
+
+			// Bind drag events to the form to add the class while dragging, and accept the drop data transfer
+			form.addEventListener('dragenter', (e) => {
+				if (initializedOnBody) {
+					return;
+				}
 				e.stopPropagation();
 				e.preventDefault();
-				processFileList(input, e.dataTransfer.files);
+				form.classList.add('com-dpattachments-layout-form_drag');
+			}, false);
+			form.addEventListener('dragleave', (e) => {
+				if (initializedOnBody) {
+					return;
+				}
+				e.stopPropagation();
+				e.preventDefault();
+				form.classList.remove('com-dpattachments-layout-form_drag');
+			}, false);
+			form.addEventListener('dragover', (e) => {
+				if (initializedOnBody) {
+					return;
+				}
+				e.stopPropagation();
+				e.preventDefault();
+				form.classList.add('com-dpattachments-layout-form_drag');
+			}, false);
+			form.addEventListener('drop', (e) => {
+				if (initializedOnBody) {
+					return;
+				}
+				e.stopPropagation();
+				e.preventDefault();
+				form.classList.remove('com-dpattachments-layout-form_drag');
+				processFileList(form.querySelector('.dp-input__file'), e.dataTransfer.files);
 			}, false);
 
-			if (index == 0) {
-				document.querySelector('body').addEventListener('paste', (e) => {
-					const files = [];
-					const clipboardData = e.clipboardData || {};
-					const items = clipboardData.items || [];
-
-					for (let i = 0; i < items.length; i++) {
-						const file = items[i].getAsFile();
-
-						if (!file) {
-							continue;
-						}
-
-						// Create a fake file name for images from clipboard, since this data doesn't get sent
-						const matches = new RegExp("/\(.*\)").exec(file.type);
-						if (!file.name && matches) {
-							const extension = matches[1];
-							file.name = "clipboard" + i + "." + extension;
-						}
-
-						files.push(file);
-					}
-
-					if (files.length) {
-						processFileList(input, files);
-						e.preventDefault();
-						e.stopPropagation();
-					}
-				}, false);
-			}
-
-			[].slice.call(document.querySelectorAll('.com-dpattachments-layout-form')).forEach(function (form) {
-				// Copied from https://github.com/bgrins/filereader.js
-				var initializedOnBody = false;
-
-				// Bind drag events to the form to add the class while dragging, and accept the drop data transfer
-				form.addEventListener('dragenter', function (e) {
-					if (initializedOnBody) {
-						return;
-					}
+			// Bind to body to prevent the form events from firing when it was initialized on the page
+			document.body.addEventListener('dragstart', (e) => initializedOnBody = true, true);
+			document.body.addEventListener('dragend', (e) => initializedOnBody = false, true);
+			document.body.addEventListener('drop', (e) => {
+				if (e.dataTransfer.files && e.dataTransfer.files.length) {
 					e.stopPropagation();
 					e.preventDefault();
-					form.classList.add('com-dpattachments-layout-form_drag');
-				}, false);
-				form.addEventListener('dragleave', function (e) {
-					if (initializedOnBody) {
-						return;
-					}
-					e.stopPropagation();
-					e.preventDefault();
-					form.classList.remove('com-dpattachments-layout-form_drag');
-				}, false);
-				form.addEventListener('dragover', function (e) {
-					if (initializedOnBody) {
-						return;
-					}
-					e.stopPropagation();
-					e.preventDefault();
-					form.classList.add('com-dpattachments-layout-form_drag');
-				}, false);
-				form.addEventListener('drop', function (e) {
-					if (initializedOnBody) {
-						return;
-					}
-					e.stopPropagation();
-					e.preventDefault();
-					form.classList.remove('com-dpattachments-layout-form_drag');
-					processFileList(form.querySelector('.dp-input__file'), e.dataTransfer.files);
-				}, false);
-
-				// Bind to body to prevent the form events from firing when it was initialized on the page
-				document.body.addEventListener('dragstart', function (e) {
-					initializedOnBody = true;
-				}, true);
-				document.body.addEventListener('dragend', function (e) {
-					initializedOnBody = false;
-				}, true);
-				document.body.addEventListener('drop', function (e) {
-					if (e.dataTransfer.files && e.dataTransfer.files.length) {
-						e.stopPropagation();
-						e.preventDefault();
-					}
-				}, false);
-			});
+				}
+			}, false);
 		});
 	});
-})(document, Joomla);
+});
