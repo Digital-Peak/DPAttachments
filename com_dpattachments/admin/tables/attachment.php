@@ -35,6 +35,10 @@ class DPAttachmentsTableAttachment extends JTable
 
 		$this->path = basename($this->path);
 
+		if ($this->description === null) {
+			$this->description = '';
+		}
+
 		return true;
 	}
 

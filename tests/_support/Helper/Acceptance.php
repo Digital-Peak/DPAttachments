@@ -35,6 +35,12 @@ class Acceptance extends \Codeception\Module
 			if (strpos($log['message'], $this->getModule('JoomlaBrowser')->_getConfig()['url']) !== 0) {
 				continue;
 			}
+
+			// J4 throws some CORS warnings
+			if (strpos($log['message'], 'The Cross-Origin-Opener-Policy header has been ignored') !== 0) {
+				continue;
+			}
+
 			$this->assertNotEquals('SEVERE', $log['level'], 'Some error in JavaScript: ' . json_encode($log));
 		}
 	}

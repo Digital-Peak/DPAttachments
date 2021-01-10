@@ -31,6 +31,7 @@ class Article extends \AcceptanceTester
 		$article = [
 			'catid'        => 2,
 			'title'        => 'Test article',
+			'alias'        => 'test-article',
 			'introtext'    => 'Test description.',
 			'featured'     => 1,
 			'state'        => 1,
@@ -41,12 +42,22 @@ class Article extends \AcceptanceTester
 			'created_by'   => $this->user->getLoggedInUserId()
 		];
 
+
+		if ($I->getConfiguration('joomla_version') == 4) {
+			$article['publish_up']   = null;
+			$article['publish_down'] = null;
+		}
+
 		if (is_array($data)) {
 			$article = array_merge($article, $data);
 		}
 
 		$article['id'] = $I->haveInDatabase('content', $article);
 		$I->haveInDatabase('content_frontpage', ['content_id' => $article['id'], 'ordering' => 1]);
+
+		if ($I->getConfiguration('joomla_version') == 4) {
+			$I->haveInDatabase('workflow_associations', ['item_id' => $article['id'], 'stage_id' => 1, 'extension' => 'com_content.article']);
+		}
 
 		return $article;
 	}
