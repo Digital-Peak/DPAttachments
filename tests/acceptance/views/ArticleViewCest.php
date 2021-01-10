@@ -14,7 +14,7 @@ class ArticleViewCest extends \BasicDPAttachmentsCestClass
 	{
 		$I->wantToTest('that the upload form is displayed in an article.');
 
-		$I->createArticle(['title' => 'Test title']);
+		$article=$I->createArticle(['title' => 'Test title']);
 
 		$I->doFrontEndLogin();
 		$I->amOnPage('');

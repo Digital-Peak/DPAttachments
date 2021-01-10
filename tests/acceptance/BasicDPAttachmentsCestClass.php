@@ -13,6 +13,10 @@ class BasicDPAttachmentsCestClass
 		$I->deleteFromDatabase('content', []);
 		$I->deleteFromDatabase('content_frontpage', []);
 		$I->deleteFromDatabase('dpattachments', []);
+
+		if ($I->getConfiguration('joomla_version') == 4) {
+			$I->deleteFromDatabase('workflow_associations', []);
+		}
 	}
 
 	public function _after(\AcceptanceTester $I)
