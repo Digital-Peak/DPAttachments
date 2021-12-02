@@ -50,7 +50,7 @@ Installs the PHP dependencies.
 ### Run system tests
 Runs the system tests.
 
-`DPDocker/tests/run-system-tests.sh DPAttachments`
+`DPDocker/tests/run-system-tests.sh -e DPAttachments`
 
 ### Start a web server
 Start a web server with DPAttachments installed.
