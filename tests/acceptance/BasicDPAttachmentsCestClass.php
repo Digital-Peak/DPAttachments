@@ -9,6 +9,9 @@ class BasicDPAttachmentsCestClass
 {
 	public function _before(\AcceptanceTester $I)
 	{
+		$I->updateInDatabase('extensions', ['params' => '{}'], ['name like' => '%dpattachments%']);
+
+		$I->deleteFromDatabase('categories', ['id >' => 7]);
 		$I->deleteFromDatabase('content', []);
 		$I->deleteFromDatabase('content_frontpage', []);
 		$I->deleteFromDatabase('dpattachments', []);

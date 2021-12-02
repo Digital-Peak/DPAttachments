@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<extension type="plugin" version="3.1" group="content" method="upgrade">
+<extension type="plugin" version="3.9" group="content" method="upgrade">
 	<name>plg_content_dpattachments</name>
 	<author>Digital Peak</author>
 	<creationDate>DP_DEPLOY_DATE</creationDate>
@@ -16,8 +16,11 @@
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
-				<field name="cat-ids" type="category" description="JGLOBAL_CHOOSE_CATEGORY_DESC"
-				       extension="com_content" label="JGLOBAL_CHOOSE_CATEGORY_LABEL" multiple="true"/>
+				<field name="cat_ids" type="sql" multiple="true" translate="true"
+						query="SELECT id, concat(title, ' [', extension, ']') as title FROM `#__categories` WHERE `published` = 1 and id > 1"
+						key_field="id" value_field="title"
+						label="JGLOBAL_CHOOSE_CATEGORY_LABEL"
+						description="JGLOBAL_CHOOSE_CATEGORY_DESC"/>
 			</fieldset>
 		</fields>
 	</config>

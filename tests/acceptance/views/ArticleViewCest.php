@@ -31,7 +31,44 @@ class ArticleViewCest extends \BasicDPAttachmentsCestClass
 		$I->amOnPage('');
 
 		$I->see('Test title');
-		$I->cantSeeElement('.com-dpattachments-layout-form');
+		$I->dontSeeElement('.com-dpattachments-layout-form');
+	}
+
+	public function canSeeUploadFormInArticleForSpecificCategory(Article $I)
+	{
+		$I->wantToTest('that the upload form is displayed in an article for a specific category.');
+
+		$category = $I->createCat('Test cat');
+		$I->setExtensionParam('cat_ids', [$category], 'plg_content_dpattachments');
+
+		$I->createArticle(['title' => 'Test title', 'catid' => $category]);
+
+		$I->doFrontEndLogin();
+		$I->amOnPage('');
+
+		$I->see('Test title');
+		$I->seeElement('.com-dpattachments-layout-form');
+	}
+
+	public function cantSeeUploadFormInArticleForSpecificCategory(Article $I)
+	{
+		$I->wantToTest('that the upload form is displayed in an article for a specific category.');
+
+		$category = $I->createCat('Test cat');
+
+		$I->setExtensionParam(
+			'cat_ids',
+			[$I->grabFromDatabase('categories', 'id', ['title' => 'Uncategorised', 'extension' => 'com_content'])],
+			'plg_content_dpattachments'
+		);
+
+		$I->createArticle(['title' => 'Test title', 'catid' => $category]);
+
+		$I->doFrontEndLogin();
+		$I->amOnPage('');
+
+		$I->see('Test title');
+		$I->dontSeeElement('.com-dpattachments-layout-form');
 	}
 
 	public function canUploadAttachment(Article $I)

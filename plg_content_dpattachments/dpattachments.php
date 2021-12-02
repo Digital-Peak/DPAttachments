@@ -7,6 +7,8 @@
 
 defined('_JEXEC') or die();
 
+use DPAttachments\Helper\Core;
+use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\Registry\Registry;
 
 JLoader::import('components.com_dpattachments.vendor.autoload', JPATH_ADMINISTRATOR);
@@ -16,7 +18,7 @@ if (!class_exists('\DPAttachments\Helper\Core')) {
 	return;
 }
 
-class PlgContentDPAttachments extends JPlugin
+class PlgContentDPAttachments extends CMSPlugin
 {
 	public function onContentAfterDisplay($context, $item, $params)
 	{
@@ -24,16 +26,16 @@ class PlgContentDPAttachments extends JPlugin
 			return '';
 		}
 
-		$catIds = $this->params->get('cat-ids');
+		$catIds = $this->params->get('cat_ids');
 		if (isset($item->catid) && !empty($catIds) && !in_array($item->catid, $catIds)) {
 			return '';
 		}
 
-		return \DPAttachments\Helper\Core::render($context, (int)$item->id, new Registry(['render.columns' => $this->params->get('column_count', 2)]));
+		return Core::render($context, (int)$item->id, new Registry(['render.columns' => $this->params->get('column_count', 2)]));
 	}
 
 	public function onContentAfterDelete($context, $item)
 	{
-		return \DPAttachments\Helper\Core::delete($context, (int)$item->id);
+		return Core::delete($context, (int)$item->id);
 	}
 }
