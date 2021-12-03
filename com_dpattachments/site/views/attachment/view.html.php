@@ -4,9 +4,15 @@
  * @copyright  Copyright (C) 2013 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-class DPAttachmentsViewAttachment extends JViewLegacy
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\Registry\Registry;
+
+class DPAttachmentsViewAttachment extends HtmlView
 {
 	protected $item;
 	protected $params;
@@ -15,22 +21,18 @@ class DPAttachmentsViewAttachment extends JViewLegacy
 
 	public function display($tpl = null)
 	{
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpattachments/models', 'DPAttachmentsModel');
-		$this->setModel(JModelLegacy::getInstance('Attachment', 'DPAttachmentsModel'), true);
-		$app  = JFactory::getApplication();
-		$user = JFactory::getUser();
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpattachments/models', 'DPAttachmentsModel');
+		$this->setModel(BaseDatabaseModel::getInstance('Attachment', 'DPAttachmentsModel'), true);
+		$app        = Factory::getApplication();
+		$this->user = Factory::getUser();
 
 		$this->input = $app->input;
 		$this->item  = $this->get('Item');
-		$item        = $this->item;
 		$this->state = $this->get('State');
-		$this->user  = $user;
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
-			JError::raiseWarning(500, implode("\n", $errors));
-
-			return false;
+			throw new Exception(implode('\n', $errors));
 		}
 
 		$this->params = $this->state->get('params');
@@ -43,21 +45,21 @@ class DPAttachmentsViewAttachment extends JViewLegacy
 
 			// If the current view is the active item and an dpcase view for
 			// this dpcase, then the menu item params take priority
-			if (strpos($currentLink, 'view=case') && (strpos($currentLink, '&id=' . (string)$item->id))) {
+			if (strpos($currentLink, 'view=case') && (strpos($currentLink, '&id=' . (string)$this->item->id))) {
 				// Load layout from active query (in case it is an alternative
 				// menu item)
 				if (isset($active->query['layout'])) {
 					$this->setLayout($active->query['layout']);
-				} else if ($layout = $item->params->get('case_layout')) {
+				} elseif ($layout = $this->item->params->get('case_layout')) {
 					$this->setLayout($layout);
 				}
 
-				$item->params->merge($temp);
+				$this->item->params->merge($temp);
 			} else {
-				$temp->merge($item->params);
-				$item->params = $temp;
+				$temp->merge(!empty($this->item->params) ?: new Registry());
+				$this->item->params = $temp;
 
-				if ($layout = $item->params->get('case_layout')) {
+				if ($layout = $this->item->params->get('case_layout')) {
 					$this->setLayout($layout);
 				}
 			}
@@ -65,8 +67,8 @@ class DPAttachmentsViewAttachment extends JViewLegacy
 
 		// Increment the hit counter of the attachment.
 		$model = $this->getModel();
-		$model->hit($item->id);
-		$this->setLayout(strtolower(JFile::getExt($this->item->path)));
+		$model->hit($this->item->id);
+		$this->setLayout(strtolower(pathinfo($this->item->path, PATHINFO_EXTENSION)));
 
 		parent::display($tpl);
 	}

@@ -4,11 +4,18 @@
  * @copyright  Copyright (C) 2013 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-JHtml::_('stylesheet', 'com_dpattachments/views/attachment/patch.min.css', ['relative' => true]);
-$parser  = new \ptlis\DiffParser\Parser();
-$changes = $parser->parseFile(\DPAttachments\Helper\Core::getPath($this->item->path, $this->item->context));
+use DPAttachments\Helper\Core;
+use Joomla\CMS\HTML\HTMLHelper;
+use ptlis\DiffParser\Line;
+use ptlis\DiffParser\Parser;
+
+HTMLHelper::_('stylesheet', 'com_dpattachments/views/attachment/patch.min.css', ['relative' => true]);
+
+$parser  = new Parser();
+$changes = $parser->parseFile(Core::getPath($this->item->path, $this->item->context));
 ?>
 <div class="com-dpattachments-attachment com-dpattachments-attachment-patch">
 	<h3 class="com-dpattachments-attachment__header"><?php echo $this->escape($this->item->title); ?></h3>
@@ -24,8 +31,8 @@ $changes = $parser->parseFile(\DPAttachments\Helper\Core::getPath($this->item->p
 								<td class="dp-line__original-nr"><?php echo $line->getOriginalLineNo() != -1 ? $line->getOriginalLineNo() : ''; ?></td>
 								<td class="dp-line__new-nr"><?php echo $line->getNewLineNo() != -1 ? $line->getNewLineNo() : ''; ?></td>
 								<td class="dp-line__operation">
-									<?php echo $line->getOperation() == \ptlis\DiffParser\Line::ADDED ? '+ ' : ''; ?>
-									<?php echo $line->getOperation() == \ptlis\DiffParser\Line::REMOVED ? '- ' : ''; ?>
+									<?php echo $line->getOperation() == Line::ADDED ? '+ ' : ''; ?>
+									<?php echo $line->getOperation() == Line::REMOVED ? '- ' : ''; ?>
 								</td>
 								<td class="dp-line__content"><?php echo htmlentities($line->getContent()); ?></td>
 							</tr>

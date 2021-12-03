@@ -4,11 +4,14 @@
  * @copyright  Copyright (C) 2013 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-JHtml::_('stylesheet', 'com_dpattachments/views/attachment/image.min.css', ['relative' => true]);
+use Joomla\CMS\HTML\HTMLHelper;
 
-$path = JComponentHelper::getParams('com_dpattachments')->get('attachment_path', 'media/com_dpattachments/attachments/');
+HTMLHelper::_('stylesheet', 'com_dpattachments/views/attachment/image.min.css', ['relative' => true]);
+
+$path = $this->params->get('attachment_path', 'media/com_dpattachments/attachments/');
 $path = trim($path, '/') . '/' . $this->item->context . '/' . $this->item->path;
 ?>
 <div class="com-dpattachments-attachment__content">

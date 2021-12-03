@@ -1,0 +1,22 @@
+From abc Mon Sep 17 00:00:00 2001
+From: dev
+Date: Thu, 2 Dec 2021 23:03:03 +0100
+Subject: Test patch
+
+---
+ .../test.php       | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/test.php b/test.php
+index 12..23 100644
+--- a/test.php
++++ b/test.php
+@@ -89,7 +89,7 @@ class test
+ 	protected $new = 'hello';
+
+ 	/**
+-	 * Old content
++	 * Test content
+ 	 *
+ 	 * @var boolean true
+ 	 *
