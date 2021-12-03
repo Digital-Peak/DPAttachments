@@ -1,5 +1,4 @@
 /**
- *
  * @package   DPAttachments
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
@@ -59,15 +58,17 @@
 		background-color: #f2f2f2;
 	}
 
-	& td, & th {
+	& td,
+	& th {
 		border-bottom: 1px solid #cbcbcb;
 	}
 
-	& tbody > tr:last-child {
+	& tbody>tr:last-child {
 		border-bottom-width: 0;
 	}
 
 	@media screen and (max-width: 767px) {
+
 		&,
 		thead,
 		tbody,
@@ -108,7 +109,7 @@
 			border-bottom: 0;
 			text-align: left !important;
 
-			> div {
+			>div {
 				text-align: left;
 			}
 		}

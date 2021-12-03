@@ -1,5 +1,4 @@
 /**
- *
  * @package   DPAttachments
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
@@ -30,13 +29,18 @@
 
 @media screen and (max-width: 640px) {
 	.dp-control {
-		&__label, &__input {
+
+		&__label,
+		&__input {
 			width: 100%;
 			margin-left: 0;
 		}
 	}
+
 	.control-group {
-		control-label, controls {
+
+		control-label,
+		controls {
 			width: 100%;
 			margin-left: 0;
 		}

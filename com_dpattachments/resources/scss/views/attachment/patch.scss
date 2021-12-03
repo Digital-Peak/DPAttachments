@@ -1,5 +1,4 @@
 /**
- *
  * @package   DPAttachments
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
@@ -46,7 +45,10 @@
 	}
 
 	.dp-line {
-		&__original-nr, &__new-nr, &__operation {
+
+		&__original-nr,
+		&__new-nr,
+		&__operation {
 			-webkit-user-select: none;
 			-moz-user-select: none;
 			-ms-user-select: none;
