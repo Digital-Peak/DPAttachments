@@ -81,8 +81,8 @@ class ArticleViewCest extends \BasicDPAttachmentsCestClass
 		$I->amOnPage('');
 
 		$I->attachFile('.com-dpattachments-layout-form__form .dp-input__file', 'test.txt');
-
 		$I->waitForElement('.dp-attachment');
+
 		$I->see('test.txt');
 		$I->seeElement('.dp-attachment__link');
 	}

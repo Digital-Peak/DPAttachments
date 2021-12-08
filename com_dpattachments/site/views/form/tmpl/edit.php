@@ -7,14 +7,16 @@
 
 defined('_JEXEC') or die();
 
-JHtml::_('stylesheet', 'com_dpattachments/views/form/edit.min.css', ['relative' => true]);
+use Joomla\CMS\HTML\HTMLHelper;
 
-JHtml::_('behavior.core');
-JHtml::_('behavior.keepalive');
-JHtml::_('behavior.formvalidation');
-JHtml::_('script', 'com_dpattachments/views/form/edit.min.js', ['relative' => true], ['defer' => true]);
+HTMLHelper::_('stylesheet', 'com_dpattachments/views/form/edit.min.css', ['relative' => true]);
+
+HTMLHelper::_('behavior.core');
+HTMLHelper::_('behavior.keepalive');
+HTMLHelper::_('behavior.formvalidator');
+HTMLHelper::_('script', 'com_dpattachments/views/form/edit.min.js', ['relative' => true, 'version' => 'auto'], ['defer' => true]);
 ?>
-<div class="com-dpattachments-form-edit<?php echo $this->pageclass_sfx ? ' com-dpattachments-form-edit-' . $this->pageclass_sfx : ''; ?>">
+<div class="com-dpattachments-attachment-form<?php echo $this->pageclass_sfx ? ' com-dpattachments-attachment-form-' . $this->pageclass_sfx : ''; ?>">
 	<?php echo $this->loadtemplate('heading'); ?>
 	<?php echo $this->loadtemplate('actions'); ?>
 	<?php echo $this->loadtemplate('form'); ?>

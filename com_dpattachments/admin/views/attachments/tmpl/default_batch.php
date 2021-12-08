@@ -4,7 +4,12 @@
  * @copyright  Copyright (C) 2013 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
+
+if (version_compare(JVERSION, '4', '>=')) {
+	return false;
+}
 
 $published = $this->state->get('filter.published');
 ?>

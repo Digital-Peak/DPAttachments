@@ -4,11 +4,14 @@
  * @copyright  Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Router\Route;
 ?>
-<div class="com-dpattachments-form-edit__form">
-	<form action="<?php echo JRoute::_('index.php?option=com_dpattachments&a_id=' . (int)$this->item->id); ?>"
+<div class="com-dpattachments-attachment-form__form">
+	<form action="<?php echo Route::_('index.php?option=com_dpattachments&a_id=' . (int)$this->item->id); ?>"
 		  method="post" name="adminForm" class="dp-form form-validate">
 		<fieldset class="dp-form__basic">
 			<?php echo $this->form->renderField('title'); ?>
@@ -26,6 +29,6 @@ defined('_JEXEC') or die();
 		<input type="hidden" name="task" value=""/>
 		<input type="hidden" name="return" value="<?php echo $this->return_page; ?>"/>
 		<?php echo $this->form->getInput('case_id'); ?>
-		<?php echo JHtml::_('form.token'); ?>
+		<?php echo HTMLHelper::_('form.token'); ?>
 	</form>
 </div>

@@ -4,9 +4,16 @@
  * @copyright  Copyright (C) 2013 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-class DPAttachmentsViewAttachment extends JViewLegacy
+use DPAttachments\Helper\DPAttachmentsHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
+class DPAttachmentsViewAttachment extends HtmlView
 {
 	protected $form;
 	protected $item;
@@ -17,13 +24,11 @@ class DPAttachmentsViewAttachment extends JViewLegacy
 		$this->form  = $this->get('Form');
 		$this->item  = $this->get('Item');
 		$this->state = $this->get('State');
-		$this->canDo = \DPAttachments\Helper\DPAttachmentsHelper::getActions();
+		$this->canDo = DPAttachmentsHelper::getActions();
 
 		// Check for errors.
-		if (count($errors = $this->get('Errors'))) {
-			JError::raiseError(500, implode("\n", $errors));
-
-			return false;
+		if ($errors = $this->get('Errors')) {
+			throw new Exception($errors);
 		}
 
 		$this->addToolbar();
@@ -32,47 +37,48 @@ class DPAttachmentsViewAttachment extends JViewLegacy
 
 	protected function addToolbar()
 	{
-		JFactory::getApplication()->input->set('hidemainmenu', true);
-		$user       = JFactory::getUser();
-		$userId     = $user->get('id');
+		Factory::getApplication()->input->set('hidemainmenu', true);
+		$user       = Factory::getUser();
 		$isNew      = ($this->item->id == 0);
-		$checkedOut = !($this->item->checked_out == 0 || $this->item->checked_out == $userId);
-		$canDo      = \DPAttachments\Helper\DPAttachmentsHelper::getActions();
-		JToolbarHelper::title(
-			JText::_('COM_DPATTACHMENTS_VIEW_ATTACHMENT_' . ($checkedOut ? 'ATTACHMENT' : ($isNew ? 'ADD_ATTACHMENT' : 'EDIT_ATTACHMENT')))
+		$checkedOut = !($this->item->checked_out == 0 || $this->item->checked_out == $user->id);
+		$canDo      = DPAttachmentsHelper::getActions();
+		ToolbarHelper::title(
+			Text::_('COM_DPATTACHMENTS_VIEW_ATTACHMENT_' . ($checkedOut ? 'ATTACHMENT' : ($isNew ? 'ADD_ATTACHMENT' : 'EDIT_ATTACHMENT')))
 		);
 
 		// Built the actions for new and existing records.
 
 		// For new records, check the create permission.
 		if ($isNew && (count($user->getAuthorisedCategories('com_dpattachments', 'core.create')) > 0)) {
-			JToolbarHelper::apply('attachment.apply');
-			JToolbarHelper::save('attachment.save');
-			JToolbarHelper::save2new('attachment.save2new');
-			JToolbarHelper::cancel('attachment.cancel');
-		} else {
-			// Can't save the record if it's checked out.
-			if (!$checkedOut) {
-				// Since it's an existing record, check the edit permission, or
-				// fall back to edit own if the owner.
-				if ($canDo->get('core.edit') || ($canDo->get('core.edit.own') && $this->item->created_by == $userId)) {
-					JToolbarHelper::apply('attachment.apply');
-					JToolbarHelper::save('attachment.save');
+			ToolbarHelper::apply('attachment.apply');
+			ToolbarHelper::save('attachment.save');
+			ToolbarHelper::save2new('attachment.save2new');
+			ToolbarHelper::cancel('attachment.cancel');
 
-					// We can save this record, but check the create permission
-					// to see if we can return to make a new one.
-					if ($canDo->get('core.create')) {
-						JToolbarHelper::save2new('attachment.save2new');
-					}
+			return;
+		}
+
+		// Can't save the record if it's checked out.
+		if (!$checkedOut) {
+			// Since it's an existing record, check the edit permission, or
+			// fall back to edit own if the owner.
+			if ($canDo->get('core.edit') || ($canDo->get('core.edit.own') && $this->item->created_by == $user->id)) {
+				ToolbarHelper::apply('attachment.apply');
+				ToolbarHelper::save('attachment.save');
+
+				// We can save this record, but check the create permission
+				// to see if we can return to make a new one.
+				if ($canDo->get('core.create')) {
+					ToolbarHelper::save2new('attachment.save2new');
 				}
 			}
-
-			// If checked out, we can still save
-			if ($canDo->get('core.create')) {
-				JToolbarHelper::save2copy('attachment.save2copy');
-			}
-
-			JToolbarHelper::cancel('attachment.cancel', 'JTOOLBAR_CLOSE');
 		}
+
+		// If checked out, we can still save
+		if ($canDo->get('core.create')) {
+			ToolbarHelper::save2copy('attachment.save2copy');
+		}
+
+		ToolbarHelper::cancel('attachment.cancel', 'JTOOLBAR_CLOSE');
 	}
 }

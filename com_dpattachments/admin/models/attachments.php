@@ -4,11 +4,15 @@
  * @copyright  Copyright (C) 2013 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-class DPAttachmentsModelAttachments extends JModelList
-{
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\ListModel;
 
+class DPAttachmentsModelAttachments extends ListModel
+{
 	public function __construct($config = [])
 	{
 		if (empty($config['filter_fields'])) {
@@ -46,7 +50,7 @@ class DPAttachmentsModelAttachments extends JModelList
 
 	protected function populateState($ordering = null, $direction = null)
 	{
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		// Adjust the context to support modal layouts.
 		if ($layout = $app->input->get('layout')) {
@@ -62,7 +66,7 @@ class DPAttachmentsModelAttachments extends JModelList
 		$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
 		$this->setState('filter.search', $search);
 
-		$access = $this->getUserStateFromRequest($this->context . '.filter.access', 'filter_access', 0, 'int');
+		$access = $this->getUserStateFromRequest($this->context . '.filter.access', 'filter_access', null, 'int');
 		$this->setState('filter.access', $access);
 
 		$authorId = $app->getUserStateFromRequest($this->context . '.filter.author_id', 'filter_author_id');
@@ -71,7 +75,7 @@ class DPAttachmentsModelAttachments extends JModelList
 		$published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
 		$this->setState('filter.published', $published);
 
-		$params = JComponentHelper::getParams('com_dpattachments');
+		$params = ComponentHelper::getParams('com_dpattachments');
 		if ($app->isClient('site')) {
 			$params = $app->getParams();
 		}
@@ -97,8 +101,8 @@ class DPAttachmentsModelAttachments extends JModelList
 		// Create a new query object.
 		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
-		$user  = JFactory::getUser();
-		$app   = JFactory::getApplication();
+		$user  = Factory::getUser();
+		$app   = Factory::getApplication();
 
 		// Select the required fields from the table.
 		$query->select(
@@ -132,7 +136,7 @@ class DPAttachmentsModelAttachments extends JModelList
 		// Filter by language
 		if ($this->getState('filter.language')) {
 			$subQuery->where(
-				'(contact.language in (' . $db->quote(JFactory::getLanguage()->getTag()) . ',' . $db->quote('*') . ') OR contact.language IS NULL)'
+				'(contact.language in (' . $db->quote(Factory::getLanguage()->getTag()) . ',' . $db->quote('*') . ') OR contact.language IS NULL)'
 			);
 		}
 		$query->select('(' . $subQuery . ') as contactid');
@@ -153,9 +157,9 @@ class DPAttachmentsModelAttachments extends JModelList
 		if (is_array($published)) {
 			JArrayHelper::toInteger($published);
 			$query->where('a.state in (' . implode(',', $published) . ')');
-		} else if (is_numeric($published)) {
+		} elseif (is_numeric($published)) {
 			$query->where('a.state = ' . (int)$published);
-		} else if ($published === '') {
+		} elseif ($published === '') {
 			$query->where('a.state = 1');
 		}
 
@@ -171,7 +175,7 @@ class DPAttachmentsModelAttachments extends JModelList
 		if (!empty($search)) {
 			if (stripos($search, 'id:') === 0) {
 				$query->where('a.id = ' . (int)substr($search, 3));
-			} else if (stripos($search, 'author:') === 0) {
+			} elseif (stripos($search, 'author:') === 0) {
 				$search = $db->quote('%' . $db->escape(substr($search, 7), true) . '%');
 				$query->where('(ua.name LIKE ' . $search . ' OR ua.username LIKE ' . $search . ')');
 			} else {
@@ -192,7 +196,7 @@ class DPAttachmentsModelAttachments extends JModelList
 		if ($app->isClient('site')) {
 			// Filter by start and end dates.
 			$nullDate = $db->quote($db->getNullDate());
-			$nowDate  = $db->quote(JFactory::getDate()->toSql());
+			$nowDate  = $db->quote(Factory::getDate()->toSql());
 
 			$query->where('(a.publish_up = ' . $nullDate . ' OR a.publish_up <= ' . $nowDate . ')');
 			$query->where('(a.publish_down = ' . $nullDate . ' OR a.publish_down >= ' . $nowDate . ')');
@@ -233,11 +237,8 @@ class DPAttachmentsModelAttachments extends JModelList
 
 	public function getItems()
 	{
-		$items  = parent::getItems();
-		$user   = JFactory::getUser();
-		$userId = $user->get('id');
-		$guest  = $user->get('guest');
-		$groups = $user->getAuthorisedViewLevels();
+		$items = parent::getItems();
+		$user  = Factory::getUser();
 
 		foreach ($items as $comment) {
 			$comment->params = clone $this->getState('params');

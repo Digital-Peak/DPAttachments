@@ -4,16 +4,20 @@
  * @copyright  Copyright (C) 2013 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
+
+use Joomla\CMS\Factory;
+use Joomla\Registry\Registry;
+use Joomla\Utilities\ArrayHelper;
 
 JLoader::import('components.com_dpattachments.models.attachment', JPATH_ADMINISTRATOR);
 
 class DPAttachmentsModelForm extends DPAttachmentsModelAttachment
 {
-
 	protected function populateState()
 	{
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		// Load state from the request.
 		$pk = $app->input->getInt('a_id');
@@ -47,13 +51,13 @@ class DPAttachmentsModelForm extends DPAttachmentsModelAttachment
 		}
 
 		$properties = $table->getProperties(1);
-		$value      = JArrayHelper::toObject($properties, 'JObject');
+		$value      = ArrayHelper::toObject($properties, 'JObject');
 
 		// Convert attrib field to Registry.
-		$value->params = new JRegistry();
+		$value->params = new Registry();
 
 		// Compute selected asset permissions.
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 
 		// Check edit state permission.
 		if ($itemId) {

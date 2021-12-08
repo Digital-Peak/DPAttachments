@@ -7,15 +7,19 @@
 
 namespace Step\Acceptance;
 
+use DateTime;
+
 class Attachment extends \AcceptanceTester
 {
 	public const ATTACHMENT_DIR = '/images/com_content.article/';
 
-	private $user = null;
+	private $user    = null;
+	private $article = null;
 
-	public function _inject(User $user)
+	public function _inject(User $user, Article $article)
 	{
-		$this->user = $user;
+		$this->user    = $user;
+		$this->article = $article;
 	}
 
 	/**
@@ -36,6 +40,7 @@ class Attachment extends \AcceptanceTester
 			'access'       => 1,
 			'publish_up'   => '0000-00-00 00:00:00',
 			'publish_down' => '0000-00-00 00:00:00',
+			'created'      => (new DateTime())->format('Y-m-d H:i:s'),
 			'created_by'   => $this->user->getLoggedInUserId()
 		];
 
@@ -45,6 +50,10 @@ class Attachment extends \AcceptanceTester
 
 		if (empty($attachment['title']) && !empty($attachment['path'])) {
 			$attachment['title'] = $attachment['path'];
+		}
+
+		if (empty($attachment['item_id'])) {
+			$attachment['item_id'] = $this->article->createArticle(['title' => 'Test title'])['id'];
 		}
 
 		copy(codecept_data_dir($attachment['path']), $I->getConfiguration('home_dir') . self::ATTACHMENT_DIR . $attachment['path']);

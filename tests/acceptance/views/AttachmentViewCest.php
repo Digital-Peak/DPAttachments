@@ -6,40 +6,20 @@
  */
 
 use Codeception\Example;
-use Step\Acceptance\Article;
 use Step\Acceptance\Attachment;
 
 class AttachmentViewCest extends \BasicDPAttachmentsCestClass
 {
 	private $url = '/index.php?option=com_dpattachments&view=attachment&id=';
 
-	public function _before(AcceptanceTester $I)
-	{
-		parent::_before($I);
-
-		$I->setExtensionParam('attachment_path', 'images');
-
-		$I->getModule('Filesystem')->deleteDir($I->getConfiguration('home_dir') . Attachment::ATTACHMENT_DIR);
-
-		mkdir($I->getConfiguration('home_dir') . Attachment::ATTACHMENT_DIR, 0777, true);
-	}
-
-	public function _after(AcceptanceTester $I)
-	{
-		parent::_after($I);
-
-		$I->getModule('Filesystem')->deleteDir($I->getConfiguration('home_dir') . Attachment::ATTACHMENT_DIR);
-	}
-
 	/**
 	 * @dataProvider getImageFiles
 	 */
-	public function canOpenImageAttachmentDetailsPage(Attachment $I, Article $IA, Example $provider)
+	public function canOpenImageAttachmentDetailsPage(Attachment $I, Example $provider)
 	{
 		$I->wantToTest('that an image attachment can be displayed.');
 
-		$article    = $IA->createArticle(['title' => 'Test title']);
-		$attachment = $I->createAttachment(['item_id' => $article['id'], 'path' => 'test.' . $provider['extension']]);
+		$attachment = $I->createAttachment(['path' => 'test.' . $provider['extension']]);
 
 		$I->amOnPage($this->url . $attachment['id']);
 
@@ -52,12 +32,11 @@ class AttachmentViewCest extends \BasicDPAttachmentsCestClass
 	/**
 	 * @dataProvider getTextFiles
 	 */
-	public function canOpenTextAttachmentDetailsPage(Attachment $I, Article $IA, Example $provider)
+	public function canOpenTextAttachmentDetailsPage(Attachment $I, Example $provider)
 	{
 		$I->wantToTest('that a text attachment can be displayed.');
 
-		$article    = $IA->createArticle(['title' => 'Test title']);
-		$attachment = $I->createAttachment(['item_id' => $article['id'], 'path' => 'test.' . $provider['extension']]);
+		$attachment = $I->createAttachment(['path' => 'test.' . $provider['extension']]);
 
 		$I->amOnPage($this->url . $attachment['id']);
 

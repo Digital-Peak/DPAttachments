@@ -4,22 +4,6 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-if (!Element.prototype.matches) {
-	Element.prototype.matches =
-		Element.prototype.matchesSelector ||
-		Element.prototype.mozMatchesSelector ||
-		Element.prototype.msMatchesSelector ||
-		Element.prototype.oMatchesSelector ||
-		Element.prototype.webkitMatchesSelector ||
-		function (s) {
-			let matches = (this.document || this.ownerDocument).querySelectorAll(s),
-				i = matches.length;
-			while (--i >= 0 && matches.item(i) !== this) {
-			}
-			return i > -1;
-		};
-}
-
 document.addEventListener('DOMContentLoaded', () => {
 	[].slice.call(document.querySelectorAll('.com-dpattachments-layout-attachments .dp-attachment__link')).forEach((link) => {
 		link.addEventListener('click', e => {
@@ -46,9 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				const resource = document.createElement('script');
 				resource.type = 'text/javascript';
 				resource.src = Joomla.getOptions('system.paths').root + '/media/com_dpattachments/js/tingle/tingle.min.js';
-				resource.addEventListener('load', () => {
-					modalFunction(e.target.getAttribute('href'));
-				});
+				resource.addEventListener('load', () => modalFunction(e.target.getAttribute('href')));
 				document.head.appendChild(resource);
 
 				const l = document.createElement('link');

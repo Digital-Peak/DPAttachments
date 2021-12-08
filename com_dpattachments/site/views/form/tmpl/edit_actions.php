@@ -4,18 +4,21 @@
  * @copyright  Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\LayoutHelper;
 ?>
-<div class="com-dpattachments-form-edit__actions">
+<div class="com-dpattachments-attachment-form__actions">
 	<div class="dp-button-group">
 		<button type="button" class="dp-button dp-button-save" data-task="save">
-			<?php echo JLayoutHelper::render('block.icon', ['icon' => 'check']); ?>
-			<?php echo JText::_('JSAVE'); ?>
+			<?php echo LayoutHelper::render('block.icon', ['icon' => 'check']); ?>
+			<?php echo Text::_('JSAVE'); ?>
 		</button>
 		<button type="button" class="dp-button dp-button-cancel" data-task="cancel">
-			<?php echo JLayoutHelper::render('block.icon', ['icon' => 'ban']); ?>
-			<?php echo JText::_('JCANCEL'); ?>
+			<?php echo LayoutHelper::render('block.icon', ['icon' => 'ban']); ?>
+			<?php echo Text::_('JCANCEL'); ?>
 		</button>
 	</div>
 </div>

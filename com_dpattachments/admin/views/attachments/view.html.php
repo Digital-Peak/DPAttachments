@@ -4,9 +4,19 @@
  * @copyright  Copyright (C) 2013 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-class DPAttachmentsViewAttachments extends JViewLegacy
+use DPAttachments\Helper\DPAttachmentsHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\FileLayout;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Toolbar\Toolbar;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
+class DPAttachmentsViewAttachments extends HtmlView
 {
 	protected $items;
 	protected $pagination;
@@ -14,7 +24,7 @@ class DPAttachmentsViewAttachments extends JViewLegacy
 
 	public function display($tpl = null)
 	{
-		\DPAttachments\Helper\DPAttachmentsHelper::addSubmenu('attachments');
+		DPAttachmentsHelper::addSubmenu('attachments');
 
 		$this->items      = $this->get('Items');
 		$this->pagination = $this->get('Pagination');
@@ -22,101 +32,65 @@ class DPAttachmentsViewAttachments extends JViewLegacy
 		$this->authors    = $this->get('Authors');
 
 		// Check for errors.
-		if (count($errors = $this->get('Errors'))) {
-			JError::raiseError(500, implode("\n", $errors));
-
-			return false;
+		if ($errors = $this->get('Errors')) {
+			throw new Exception(implode('\n', $errors));
 		}
 
 		$this->addToolbar();
-		$this->sidebar = JHtmlSidebar::render();
 
 		parent::display($tpl);
 	}
 
 	protected function addToolbar()
 	{
-		$canDo = \DPAttachments\Helper\DPAttachmentsHelper::getActions();
-		$user  = JFactory::getUser();
+		$canDo = DPAttachmentsHelper::getActions();
+		$user  = Factory::getUser();
 
 		// Get the toolbar object instance
-		$bar = JToolBar::getInstance('toolbar');
+		$bar = Toolbar::getInstance('toolbar');
 
-		JToolbarHelper::title(JText::_('COM_DPATTACHMENTS_VIEW_ATTACHMENTS_TITLE'));
+		ToolbarHelper::title(Text::_('COM_DPATTACHMENTS_VIEW_ATTACHMENTS_TITLE'));
 
-		if ($canDo->get('core.create')) {
-			JToolbarHelper::addNew('attachment.add');
-		}
-
-		if (($canDo->get('core.edit')) || ($canDo->get('core.edit.own'))) {
-			JToolbarHelper::editList('attachment.edit');
+		if ($canDo->get('core.edit') || $canDo->get('core.edit.own')) {
+			ToolbarHelper::editList('attachment.edit');
 		}
 
 		if ($canDo->get('core.edit.state')) {
-			JToolbarHelper::publish('attachments.publish', 'JTOOLBAR_PUBLISH', true);
-			JToolbarHelper::unpublish('attachments.unpublish', 'JTOOLBAR_UNPUBLISH', true);
-			JToolbarHelper::archiveList('attachments.archive');
-			JToolbarHelper::checkin('attachments.checkin');
+			ToolbarHelper::publish('attachments.publish', 'JTOOLBAR_PUBLISH', true);
+			ToolbarHelper::unpublish('attachments.unpublish', 'JTOOLBAR_UNPUBLISH', true);
+			ToolbarHelper::archiveList('attachments.archive');
+			ToolbarHelper::checkin('attachments.checkin');
 		}
 
 		if ($this->state->get('filter.published') == -2 && $canDo->get('core.delete')) {
-			JToolbarHelper::deleteList('', 'attachments.delete', 'JTOOLBAR_EMPTY_TRASH');
-		} else if ($canDo->get('core.edit.state')) {
-			JToolbarHelper::trash('attachments.trash');
+			ToolbarHelper::deleteList('', 'attachments.delete', 'JTOOLBAR_EMPTY_TRASH');
+		} elseif ($canDo->get('core.edit.state')) {
+			ToolbarHelper::trash('attachments.trash');
 		}
 
 		// Add a batch button
 		$asset = 'com_dpattachments';
-		if ($user->authorise('core.create', $asset) && $user->authorise('core.edit', $asset) && $user->authorise('core.edit.state', $asset)) {
-			JHtml::_('bootstrap.modal', 'collapseModal');
-			$title = JText::_('JTOOLBAR_BATCH');
+		if ($user->authorise('core.create', $asset) && $user->authorise('core.edit', $asset) && $user->authorise('core.edit.state', $asset) && version_compare(JVERSION, '4', '<')) {
+			HTMLHelper::_('bootstrap.modal', 'collapseModal');
+			$title = Text::_('JTOOLBAR_BATCH');
 
-			// Instantiate a new JLayoutFile instance and render the batch
-			// button
-			$layout = new JLayoutFile('joomla.toolbar.batch');
+			// Instantiate a new JLayoutFile instance and render the batch button
+			$layout = new FileLayout('joomla.toolbar.batch');
 
-			$dhtml = $layout->render([
-				'title' => $title
-			]);
-			$bar->appendButton('Custom', $dhtml, 'batch');
+			$bar->appendButton('Custom', $layout->render(['title' => $title]), 'batch');
 		}
 
 		if ($canDo->get('core.admin')) {
-			JToolbarHelper::preferences('com_dpattachments');
+			ToolbarHelper::preferences('com_dpattachments');
 		}
 
-		JHtmlSidebar::setAction('index.php?option=com_dpattachments&view=attachments');
-
-		JHtmlSidebar::addFilter(
-			JText::_('JOPTION_SELECT_PUBLISHED'),
-			'filter_published',
-			JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), 'value', 'text', $this->state->get('filter.published'), true)
-		);
-		JHtmlSidebar::addFilter(
-			JText::_('JOPTION_SELECT_ACCESS'),
-			'filter_access',
-			JHtml::_('select.options', JHtml::_('access.assetgroups'), 'value', 'text', $this->state->get('filter.access'))
-		);
-		JHtmlSidebar::addFilter(
-			JText::_('JOPTION_SELECT_AUTHOR'),
-			'filter_author_id',
-			JHtml::_('select.options', $this->authors, 'value', 'text', $this->state->get('filter.author_id'))
-		);
-	}
-
-	protected function getSortFields()
-	{
-		return [
-			'a.ordering'     => JText::_('JGRID_HEADING_ORDERING'),
-			'a.state'        => JText::_('JSTATUS'),
-			'a.title'        => JText::_('JGLOBAL_TITLE'),
-			'category_title' => JText::_('JCATEGORY'),
-			'access_level'   => JText::_('JGRID_HEADING_ACCESS'),
-			'a.created_by'   => JText::_('JAUTHOR'),
-			'language'       => JText::_('JGRID_HEADING_LANGUAGE'),
-			'a.created'      => JText::_('JDATE'),
-			'a.id'           => JText::_('JGRID_HEADING_ID'),
-			'a.featured'     => JText::_('JFEATURED')
-		];
+		// Only render the sidebar when we are not editing a form, modal or Joomla 4
+		if (version_compare(JVERSION, '4', '<')) {
+			$this->sidebar = \JHtmlSidebar::render();
+		} else {
+			$this->sidebar = null;
+		}
+		$this->filterForm    = $this->get('FilterForm');
+		$this->activeFilters = $this->get('ActiveFilters');
 	}
 }
