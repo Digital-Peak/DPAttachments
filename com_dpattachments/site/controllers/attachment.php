@@ -4,21 +4,29 @@
  * @copyright  Copyright (C) 2013 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-class DPAttachmentsControllerAttachment extends JControllerForm
-{
+use DPAttachments\Helper\Core;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\FormController;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Session\Session;
+use Joomla\CMS\Uri\Uri;
 
+class DPAttachmentsControllerAttachment extends FormController
+{
 	protected $view_item = 'form';
 
 	protected function allowEdit($data = [], $key = 'id')
 	{
 		$recordId = (int)isset($data[$key]) ? $data[$key] : 0;
-		$user     = JFactory::getUser();
+		$user     = Factory::getUser();
 
 		$record = $this->getModel()->getItem($recordId);
 		if (!empty($record)) {
-			return \DPAttachments\Helper\Core::canDo('core.edit', $record->context, $record->item_id);
+			return Core::canDo('core.edit', $record->context, $record->item_id);
 		}
 
 		return parent::allowEdit($data, $key);
@@ -36,6 +44,9 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 		return parent::edit($key, $urlVar);
 	}
 
+	/**
+	 * @return DPAttachmentsModelForm
+	 */
 	public function getModel($name = 'form', $prefix = '', $config = ['ignore_request' => true])
 	{
 		return parent::getModel($name, $prefix, $config);
@@ -73,17 +84,11 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 	protected function getReturnPage()
 	{
 		$return = $this->input->get('return', null, 'base64');
-
-		if (empty($return) || !JUri::isInternal(base64_decode($return))) {
-			return JUri::base();
-		} else {
-			return base64_decode($return);
+		if (empty($return) || !Uri::isInternal(base64_decode($return))) {
+			return Uri::base();
 		}
-	}
 
-	protected function postSaveHook(JModelLegacy $model, $validData = [])
-	{
-		return;
+		return base64_decode($return);
 	}
 
 	public function save($key = null, $urlVar = 'a_id')
@@ -100,28 +105,29 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 
 	public function upload()
 	{
-		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
-		JFactory::getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR . '/components/com_dpattachments');
+		Factory::getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR . '/components/com_dpattachments');
 
 		$data       = $this->input->get('attachment', [], 'array');
 		$data['id'] = 0;
 
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpattachments/models', 'DPAttachmentsModel');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpattachments/models', 'DPAttachmentsModel');
+
 		$model   = $this->getModel('Attachment');
 		$success = $model->upload($data);
 
 		$returnData = ['html' => '', 'context' => $data['context'], 'item_id' => $data['item_id']];
 		if ($success) {
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_DPATTACHMENTS_UPLOAD_SUCCESS'), 'success');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_DPATTACHMENTS_UPLOAD_SUCCESS'), 'success');
 
-			$content            = \DPAttachments\Helper\Core::renderLayout(
+			$content = Core::renderLayout(
 				'attachment.render',
 				['attachment' => $model->getItem($model->getState($model->getName() . '.id'))]
 			);
 			$returnData['html'] = '<div>' . $content . '</div>';
 		} else {
-			JFactory::getApplication()->enqueueMessage(JText::sprintf('JLIB_APPLICATION_ERROR_SAVE_FAILED', $model->getError()), 'error');
+			Factory::getApplication()->enqueueMessage(Text::sprintf('JLIB_APPLICATION_ERROR_SAVE_FAILED', $model->getError()), 'error');
 		}
 
 		\DPAttachments\Helper\DPAttachmentsHelper::sendMessage(null, !$success, $returnData);
@@ -129,7 +135,7 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 
 	public function download()
 	{
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpattachments/models', 'DPAttachmentsModel');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpattachments/models', 'DPAttachmentsModel');
 		$attachment = $this->getModel()->getItem($this->input->get('id'));
 		if (!$attachment) {
 			header('HTTP/1.0 404 Not Found');
@@ -193,12 +199,12 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 		$seek_start  = 0;
 		$seek_end    = $filesize - 1;
 		if (isset($_SERVER['HTTP_RANGE'])) {
-			list ($size_unit, $range_orig) = explode('=', $_SERVER['HTTP_RANGE'], 2);
+			list($size_unit, $range_orig) = explode('=', $_SERVER['HTTP_RANGE'], 2);
 
 			if ($size_unit == 'bytes') {
 				// Multiple ranges could be specified at the same time, but for
 				// simplicity only serve the first range
-				list ($range, $extra_ranges) = explode(',', $range_orig, 2);
+				list($range, $extra_ranges) = explode(',', $range_orig, 2);
 			} else {
 				$range = '';
 			}
@@ -208,11 +214,10 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 
 		if ($range) {
 			// Figure out download piece from range (if set)
-			list ($seek_start, $seek_end) = explode('-', $range, 2);
+			list($seek_start, $seek_end) = explode('-', $range, 2);
 
-			// Set start and end based on range (if set), else set defaults
-			// also check for invalid ranges.
-			$seek_end   = (empty($seek_end)) ? ($size - 1) : min(abs(intval($seek_end)), ($filesize - 1));
+			// Set start and end based on range (if set), else set defaults also check for invalid ranges
+			$seek_end   = (empty($seek_end)) ? -1 : min(abs(intval($seek_end)), ($filesize - 1));
 			$seek_start = (empty($seek_start) || $seek_end < abs(intval($seek_start))) ? 0 : max(abs(intval($seek_start)), 0);
 
 			$isResumable = true;
@@ -272,24 +277,23 @@ class DPAttachmentsControllerAttachment extends JControllerForm
 			@readfile($filename);
 		}
 
-		JFactory::getApplication()->close();
+		Factory::getApplication()->close();
 	}
 
 	public function publish()
 	{
-		JSession::checkToken('get') or jexit(JText::_('JINVALID_TOKEN'));
+		Session::checkToken('get') or jexit(Text::_('JINVALID_TOKEN'));
 
 		$id      = $this->input->get('id');
 		$model   = $this->getModel();
 		$success = $model->publish($id, $this->input->getInt('state'));
 
-		if ($success) {
-			$message = 'COM_DPATTACHMENTS_N_ITEMS_TRASHED';
-			$this->setMessage(JText::plural($message, 1), 'success');
-		} else {
-			$this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_SAVE_FAILED', $model->getError()));
-			$this->setMessage($this->getError(), 'error');
+		if (!$success) {
+			throw new Exception(Text::sprintf('JLIB_APPLICATION_ERROR_SAVE_FAILED', $model->getError()));
 		}
+
+		$message = 'COM_DPATTACHMENTS_N_ITEMS_TRASHED';
+		$this->setMessage(Text::plural($message, 1), 'success');
 
 		$this->setRedirect($this->getReturnPage($this->input->getInt('id')));
 	}

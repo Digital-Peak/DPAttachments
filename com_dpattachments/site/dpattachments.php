@@ -7,9 +7,12 @@
 
 defined('_JEXEC') or die();
 
-JFactory::getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR . '/components/com_dpattachments');
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Controller\BaseController;
+
+Factory::getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR . '/components/com_dpattachments');
 JLoader::import('components.com_dpattachments.vendor.autoload', JPATH_ADMINISTRATOR);
 
-$controller = JControllerLegacy::getInstance('DPAttachments');
-$controller->execute(JFactory::getApplication()->input->get('task'));
+$controller = BaseController::getInstance('DPAttachments');
+$controller->execute(Factory::getApplication()->input->get('task'));
 $controller->redirect();

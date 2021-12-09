@@ -9,6 +9,11 @@ namespace DPAttachments\Helper;
 
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Object\CMSObject;
+use Joomla\CMS\Response\JsonResponse;
+
 class DPAttachmentsHelper
 {
 	public static $extension = 'com_dpattachments';
@@ -28,7 +33,7 @@ class DPAttachmentsHelper
 	public static function addSubmenu($vName)
 	{
 		\JHtmlSidebar::addEntry(
-			\JText::_('COM_DPATTACHMENTS_ATTACHMENTS'),
+			Text::_('COM_DPATTACHMENTS_ATTACHMENTS'),
 			'index.php?option=com_dpattachments&view=attachments',
 			$vName == 'attachments'
 		);
@@ -36,8 +41,8 @@ class DPAttachmentsHelper
 
 	public static function getActions()
 	{
-		$user   = \JFactory::getUser();
-		$result = new \JObject();
+		$user   = Factory::getUser();
+		$result = new CMSObject();
 
 		$assetName = 'com_dpattachments';
 
@@ -63,13 +68,13 @@ class DPAttachmentsHelper
 		ob_clean();
 
 		if (!$error) {
-			\JFactory::getApplication()->enqueueMessage($message);
-			echo new \JResponseJson($data);
+			Factory::getApplication()->enqueueMessage($message);
+			echo new JsonResponse($data);
 		} else {
-			\JFactory::getApplication()->enqueueMessage($message, 'error');
-			echo new \JResponseJson($data, '', true);
+			Factory::getApplication()->enqueueMessage($message, 'error');
+			echo new JsonResponse($data, '', true);
 		}
 
-		\JFactory::getApplication()->close();
+		Factory::getApplication()->close();
 	}
 }

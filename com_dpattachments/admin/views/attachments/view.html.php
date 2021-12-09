@@ -62,7 +62,7 @@ class DPAttachmentsViewAttachments extends HtmlView
 			ToolbarHelper::checkin('attachments.checkin');
 		}
 
-		if ($this->state->get('filter.published') == -2 && $canDo->get('core.delete')) {
+		if ($this->state->get('filter.state') == -2 && $canDo->get('core.delete')) {
 			ToolbarHelper::deleteList('', 'attachments.delete', 'JTOOLBAR_EMPTY_TRASH');
 		} elseif ($canDo->get('core.edit.state')) {
 			ToolbarHelper::trash('attachments.trash');

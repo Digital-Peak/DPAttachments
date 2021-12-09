@@ -10,6 +10,7 @@ defined('_JEXEC') or die();
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\Utilities\ArrayHelper;
 
 class DPAttachmentsModelAttachments extends ListModel
 {
@@ -72,8 +73,8 @@ class DPAttachmentsModelAttachments extends ListModel
 		$authorId = $app->getUserStateFromRequest($this->context . '.filter.author_id', 'filter_author_id');
 		$this->setState('filter.author_id', $authorId);
 
-		$published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
-		$this->setState('filter.published', $published);
+		$state = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '');
+		$this->setState('filter.state', $state);
 
 		$params = ComponentHelper::getParams('com_dpattachments');
 		if ($app->isClient('site')) {
@@ -90,7 +91,7 @@ class DPAttachmentsModelAttachments extends ListModel
 		// Compile the store id.
 		$id .= ':' . $this->getState('filter.search');
 		$id .= ':' . $this->getState('filter.access');
-		$id .= ':' . $this->getState('filter.published');
+		$id .= ':' . $this->getState('filter.state');
 		$id .= ':' . $this->getState('filter.author_id');
 
 		return parent::getStoreId($id);
@@ -152,15 +153,15 @@ class DPAttachmentsModelAttachments extends ListModel
 			$query->where('a.access IN (' . $groups . ')');
 		}
 
-		// Filter by published state
-		$published = $this->getState('filter.published');
-		if (is_array($published)) {
-			JArrayHelper::toInteger($published);
-			$query->where('a.state in (' . implode(',', $published) . ')');
-		} elseif (is_numeric($published)) {
-			$query->where('a.state = ' . (int)$published);
-		} elseif ($published === '') {
-			$query->where('a.state = 1');
+		// Filter by state state
+		$state = $this->getState('filter.state');
+		if (is_array($state)) {
+			$state = ArrayHelper::toInteger($state);
+			$query->where('a.state in (' . implode(',', $state) . ')');
+		} elseif (is_numeric($state)) {
+			$query->where('a.state = ' . (int)$state);
+		} elseif ($state === '') {
+			$query->where('a.state in (0,1,2)');
 		}
 
 		// Filter by author
@@ -233,35 +234,5 @@ class DPAttachmentsModelAttachments extends ListModel
 
 		// Return the result
 		return $db->loadObjectList();
-	}
-
-	public function getItems()
-	{
-		$items = parent::getItems();
-		$user  = Factory::getUser();
-
-		foreach ($items as $comment) {
-			$comment->params = clone $this->getState('params');
-			if ($comment->modified == $this->getDbo()->getNullDate()) {
-				$comment->modified = $comment->created;
-			}
-			// Get display date
-			switch ($comment->params->get('list_show_date')) {
-				case 'modified':
-					$comment->displayDate = $comment->modified;
-					break;
-
-				case 'published':
-					$comment->displayDate = ($comment->publish_up == 0) ? $comment->created : $comment->publish_up;
-					break;
-
-				default:
-				case 'created':
-					$comment->displayDate = $comment->created;
-					break;
-			}
-		}
-
-		return $items;
 	}
 }

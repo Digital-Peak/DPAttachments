@@ -4,9 +4,15 @@
  * @copyright  Copyright (C) 2013 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-class DPAttachmentsViewForm extends JViewLegacy
+use Joomla\CMS\Factory;
+use Joomla\CMS\Helper\TagsHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\View\HtmlView;
+
+class DPAttachmentsViewForm extends HtmlView
 {
 	protected $form;
 	protected $item;
@@ -15,7 +21,7 @@ class DPAttachmentsViewForm extends JViewLegacy
 
 	public function display($tpl = null)
 	{
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 
 		// Get model data.
 		$this->state       = $this->get('State');
@@ -30,24 +36,20 @@ class DPAttachmentsViewForm extends JViewLegacy
 		}
 
 		if ($authorised !== true) {
-			JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
-
-			return false;
+			throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'));
 		}
 
-		$this->item->tags = new JHelperTags();
+		$this->item->tags = new TagsHelper();
 		if (!empty($this->item->id)) {
 			$this->item->tags->getItemTags('com_dpattachments.attachment.', $this->item->id);
 		}
 
-		// Check for errors.
-		if (count($errors = $this->get('Errors'))) {
-			JError::raiseWarning(500, implode("\n", $errors));
-
-			return false;
+		// Check for errors
+		if ($errors = $this->get('Errors')) {
+			throw new Exception(implode('\n', $errors));
 		}
 
-		// Create a shortcut to the parameters.
+		// Create a shortcut to the parameters
 		$params = &$this->state->params;
 
 		// Escape strings for HTML output
@@ -58,12 +60,13 @@ class DPAttachmentsViewForm extends JViewLegacy
 
 		$this->form->setFieldAttribute('tags', 'mode', 'nested');
 		$this->_prepareDocument();
+
 		parent::display($tpl);
 	}
 
 	protected function _prepareDocument()
 	{
-		$app   = JFactory::getApplication();
+		$app   = Factory::getApplication();
 		$menus = $app->getMenu();
 		$title = null;
 
@@ -73,14 +76,14 @@ class DPAttachmentsViewForm extends JViewLegacy
 		if ($menu) {
 			$this->params->def('page_heading', $this->params->get('page_title', $menu->title));
 		} else {
-			$this->params->def('page_heading', JText::_('COM_DPATTACHMENTS_FORM_EDIT_ATTACHMENT'));
+			$this->params->def('page_heading', Text::_('COM_DPATTACHMENTS_FORM_EDIT_ATTACHMENT'));
 		}
 
-		$title = $this->params->def('page_title', JText::_('COM_DPATTACHMENTS_FORM_EDIT_ATTACHMENT'));
-		if ($app->getCfg('sitename_pagetitles', 0) == 1) {
-			$title = JText::sprintf('JPAGETITLE', $app->getCfg('sitename'), $title);
-		} else if ($app->getCfg('sitename_pagetitles', 0) == 2) {
-			$title = JText::sprintf('JPAGETITLE', $title, $app->getCfg('sitename'));
+		$title = $this->params->def('page_title', Text::_('COM_DPATTACHMENTS_FORM_EDIT_ATTACHMENT'));
+		if ($app->get('sitename_pagetitles', 0) == 1) {
+			$title = JText::sprintf('JPAGETITLE', $app->get('sitename'), $title);
+		} elseif ($app->get('sitename_pagetitles', 0) == 2) {
+			$title = JText::sprintf('JPAGETITLE', $title, $app->get('sitename'));
 		}
 		$this->document->setTitle($title);
 

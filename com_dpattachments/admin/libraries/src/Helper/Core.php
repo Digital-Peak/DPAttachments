@@ -9,9 +9,13 @@ namespace DPAttachments\Helper;
 
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
-
-\JLoader::import('joomla.filesystem.file');
 
 /**
  * Public DPAttachments API class.
@@ -108,7 +112,7 @@ class Core
 			return true;
 		}
 
-		$db    = \JFactory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->delete('#__dpattachments');
 		$query->where('id in (' . implode(',', $ids) . ')');
@@ -141,7 +145,7 @@ class Core
 	{
 		$key = $context . '.' . $itemId;
 
-		list ($component, $modelName) = explode('.', $context);
+		list($component, $modelName) = explode('.', $context);
 		if (!key_exists($key, self::$itemCache)) {
 			// Load the model to get the item
 			$tableName = ucfirst($modelName);
@@ -159,10 +163,10 @@ class Core
 				$tableName = 'Category';
 			}
 
-			\JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/' . $component . '/tables');
+			Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/' . $component . '/tables');
 			$table = false;
-			if (\JFile::exists(JPATH_ADMINISTRATOR . '/components/' . $component . '/tables/' . strtolower($tableName) . '.php')) {
-				$table = \JTable::getInstance($tableName, $prefix);
+			if (file_exists(JPATH_ADMINISTRATOR . '/components/' . $component . '/tables/' . strtolower($tableName) . '.php')) {
+				$table = Table::getInstance($tableName, $prefix);
 			}
 
 			if ($table) {
@@ -172,7 +176,7 @@ class Core
 			self::$itemCache[$key] = $table;
 		}
 
-		$user = \JFactory::getUser();
+		$user = Factory::getUser();
 
 		$item = self::$itemCache[$key];
 
@@ -184,7 +188,7 @@ class Core
 		$asset = $component;
 		if (isset($item->asset_id)) {
 			$asset = $item->asset_id;
-		} else if (isset($item->catid)) {
+		} elseif (isset($item->catid)) {
 			$asset = $component . '.category.' . $item->catid;
 		}
 
@@ -194,18 +198,13 @@ class Core
 		}
 
 		// If the edit action is requestd we check for edit.own
-		if ($action == 'core.edit' && isset($item->created_by)) {
-			if ($user->authorise('core.edit.own', $asset) && $item->created_by == $user->id) {
-				return true;
-			}
+		if ($action == 'core.edit' && isset($item->created_by) && $user->authorise('core.edit.own', $asset) && $item->created_by == $user->id) {
+			return true;
 		}
 
-		// The creator will always have the edit state permissions to trsah
-		// attachments
-		if ($action == 'core.edit.state' && isset($item->created_by)) {
-			if ($item->created_by == $user->id) {
-				return true;
-			}
+		// The creator will always have the edit state permissions to trash attachments
+		if ($action == 'core.edit.state' && isset($item->created_by) && $item->created_by == $user->id) {
+			return true;
 		}
 
 		// Fallback to the DPAttachments permissions
@@ -223,7 +222,7 @@ class Core
 	 */
 	public static function getPath($attachmentPath, $context)
 	{
-		$folder = \JComponentHelper::getParams('com_dpattachments')->get('attachment_path', 'media/com_dpattachments/attachments/');
+		$folder = ComponentHelper::getParams('com_dpattachments')->get('attachment_path', 'media/com_dpattachments/attachments/');
 		$folder = trim($folder, '/');
 
 		return JPATH_ROOT . '/' . $folder . '/' . $context . '/' . $attachmentPath;
@@ -241,7 +240,7 @@ class Core
 	{
 		// Size in bytes
 		if ($size <= 1024) {
-			return $size . \JText::_('COM_DPATTACHMENTS_BYTE_SHORT');
+			return $size . Text::_('COM_DPATTACHMENTS_BYTE_SHORT');
 		}
 
 		// Size in kilo bytes
@@ -249,14 +248,14 @@ class Core
 		if ($filekb <= 1024) {
 			$flieinkb = round($filekb, 2);
 
-			return $flieinkb . \JText::_('COM_DPATTACHMENTS_KILOBYTE_SHORT');
+			return $flieinkb . Text::_('COM_DPATTACHMENTS_KILOBYTE_SHORT');
 		}
 
 		// Size in mega bytes
 		$filemb   = $filekb / 1024;
 		$fileinmb = round($filemb, 2);
 
-		return $fileinmb . \JText::_('COM_DPATTACHMENTS_MEGA_BYTE_SHORT');
+		return $fileinmb . Text::_('COM_DPATTACHMENTS_MEGA_BYTE_SHORT');
 	}
 
 	/**
@@ -269,7 +268,7 @@ class Core
 	 */
 	public static function renderLayout($name, $data)
 	{
-		return \JLayoutHelper::render(
+		return LayoutHelper::render(
 			$name,
 			$data,
 			null,
@@ -285,8 +284,8 @@ class Core
 	 */
 	private static function isEnabled()
 	{
-		$input  = \JFactory::getApplication()->input;
-		$params = \JComponentHelper::getParams('com_dpattachments');
+		$input  = Factory::getApplication()->input;
+		$params = ComponentHelper::getParams('com_dpattachments');
 
 		// Check for menu items to include
 		$menuItems = $params->get('menuitems');
@@ -348,11 +347,12 @@ class Core
 	 */
 	private static function getAttachments($context, $itemId)
 	{
-		\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpattachments/models', 'DPAttachmentsModel');
-		$model = \JModelLegacy::getInstance('Attachments', 'DPAttachmentsModel');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpattachments/models', 'DPAttachmentsModel');
+		$model = BaseDatabaseModel::getInstance('Attachments', 'DPAttachmentsModel', ['ignore_request' => true]);
 		$model->getState();
 		$model->setState('filter.item', $itemId);
 		$model->setState('filter.context', $context);
+		$model->setState('filter.state', 1);
 		$model->setState('list.limit', 1000);
 		$model->setState('list.start', 0);
 

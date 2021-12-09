@@ -11,7 +11,7 @@ if (version_compare(JVERSION, '4', '>=')) {
 	return false;
 }
 
-$published = $this->state->get('filter.published');
+$published = $this->state->get('filter.state');
 ?>
 <div class="modal hide fade" id="collapseModal">
 	<div class="modal-header">

@@ -4,11 +4,16 @@
  * @copyright  Copyright (C) 2013 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-class DPAttachmentsTableAttachment extends JTable
-{
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+use Joomla\Utilities\ArrayHelper;
 
+class DPAttachmentsTableAttachment extends Table
+{
 	public function __construct(&$db)
 	{
 		parent::__construct('#__dpattachments', 'id', $db);
@@ -44,8 +49,8 @@ class DPAttachmentsTableAttachment extends JTable
 
 	public function store($updateNulls = false)
 	{
-		$date = JFactory::getDate();
-		$user = JFactory::getUser();
+		$date = Factory::getDate();
+		$user = Factory::getUser();
 
 		if ($this->id) {
 			// Existing item
@@ -72,64 +77,50 @@ class DPAttachmentsTableAttachment extends JTable
 		$k = $this->_tbl_key;
 
 		// Sanitize input.
-		JArrayHelper::toInteger($pks);
+		$pks    = ArrayHelper::toInteger($pks);
 		$userId = (int)$userId;
 		$state  = (int)$state;
 
-		// If there are no primary keys set check to see if the instance key is
-		// set.
+		// If there are no primary keys set check to see if the instance key is set
 		if (empty($pks)) {
 			if ($this->$k) {
-				$pks = [
-					$this->$k
-				];
+				$pks = [$this->$k];
 			} else {
-				$this->setError(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
-
-				return false;
+				throw new Exception(Text::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
 			}
 		}
 
-		// Build the WHERE clause for the primary keys.
+		// Build the WHERE clause for the primary keys
 		$where = $k . '=' . implode(' OR ' . $k . '=', $pks);
 
-		// Determine if there is checkin support for the table.
+		// Determine if there is checkin support for the table
 		if (!property_exists($this, 'checked_out') || !property_exists($this, 'checked_out_time')) {
 			$checkin = '';
 		} else {
 			$checkin = ' AND (checked_out = 0 OR checked_out = ' . (int)$userId . ')';
 		}
 
-		// Update the publishing state for rows with the given primary keys.
+		// Update the publishing state for rows with the given primary keys
 		$query = $this->_db->getQuery(true)
 			->update($this->_db->quoteName($this->_tbl))
 			->set($this->_db->quoteName('state') . ' = ' . (int)$state)
 			->where('(' . $where . ')' . $checkin);
 		$this->_db->setQuery($query);
 
-		try {
 			$this->_db->execute();
-		} catch (RuntimeException $e) {
-			$this->setError($e->getMessage());
 
-			return false;
-		}
-
-		// If checkin is supported and all rows were adjusted, check them in.
+		// If checkin is supported and all rows were adjusted, check them in
 		if ($checkin && (count($pks) == $this->_db->getAffectedRows())) {
-			// Checkin the rows.
+			// Checkin the rows
 			foreach ($pks as $pk) {
 				$this->checkin($pk);
 			}
 		}
 
-		// If the JTable instance value is in the list of primary keys that were
-		// set, set the instance.
+		// If the JTable instance value is in the list of primary keys that were set, set the instance
 		if (in_array($this->$k, $pks)) {
 			$this->state = $state;
 		}
-
-		$this->setError('');
 
 		return true;
 	}
