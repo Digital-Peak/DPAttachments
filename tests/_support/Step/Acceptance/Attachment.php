@@ -7,8 +7,6 @@
 
 namespace Step\Acceptance;
 
-use DateTime;
-
 class Attachment extends \AcceptanceTester
 {
 	public const ATTACHMENT_DIR = '/images/com_content.article/';
@@ -40,7 +38,7 @@ class Attachment extends \AcceptanceTester
 			'access'       => 1,
 			'publish_up'   => '0000-00-00 00:00:00',
 			'publish_down' => '0000-00-00 00:00:00',
-			'created'      => (new DateTime())->format('Y-m-d H:i:s'),
+			'created'      => (new \DateTime())->format('Y-m-d H:i:s'),
 			'created_by'   => $this->user->getLoggedInUserId()
 		];
 
