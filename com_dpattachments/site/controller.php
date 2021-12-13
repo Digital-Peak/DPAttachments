@@ -48,7 +48,7 @@ class DPAttachmentsController extends BaseController
 		// Check for edit form.
 		if ($vName == 'form' && !$this->checkEditId('com_dpattachments.edit.attachment', $id)) {
 			// Somehow the person just went to the form - we don't allow that.
-			return throw new Exception(Text::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id), 403);
+			throw new Exception(Text::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id), 403);
 		}
 
 		parent::display($cachable, $safeurlparams);
