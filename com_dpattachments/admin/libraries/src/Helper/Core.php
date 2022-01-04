@@ -10,6 +10,7 @@ namespace DPAttachments\Helper;
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Extension\MVCComponent;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
@@ -164,9 +165,13 @@ class Core
 			}
 
 			Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/' . $component . '/tables');
-			$table = false;
-			if (file_exists(JPATH_ADMINISTRATOR . '/components/' . $component . '/tables/' . strtolower($tableName) . '.php')) {
-				$table = Table::getInstance($tableName, $prefix);
+			$table = Table::getInstance($tableName, $prefix);
+
+			if (!$table && version_compare(4, JVERSION, '<=')) {
+				$instance = Factory::getApplication()->bootComponent($component);
+				if ($instance instanceof MVCComponent) {
+					$table = $instance->getMVCFactory()->createTable($tableName, 'Administrator');
+				}
 			}
 
 			if ($table) {

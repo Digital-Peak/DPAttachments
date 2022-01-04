@@ -9,20 +9,46 @@ use Step\Acceptance\Article;
 
 class ArticleViewCest extends \BasicDPAttachmentsCestClass
 {
-	public function canSeeUploadFormInArticle(Article $I)
+	public function canSeeUploadFormInArticleWhenAdmin(Article $I)
 	{
 		$I->wantToTest('that the upload form is displayed in an article.');
 
 		$I->createArticle(['title' => 'Test title']);
 
-		$I->doFrontEndLogin();
+		$I->doFrontEndLogin('admin', 'admin');
 		$I->amOnPage('');
 
 		$I->see('Test title');
 		$I->seeElement('.com-dpattachments-layout-form');
 	}
 
-	public function cantSeeUploadFormInArticle(Article $I)
+	public function canSeeUploadFormInArticleWhenUser(Article $I)
+	{
+		$I->wantToTest('that the upload form is displayed in an article when regular user.');
+
+		$I->createArticle(['title' => 'Test title']);
+
+		$I->doFrontEndLogin('manager', 'manager');
+		$I->amOnPage('');
+
+		$I->see('Test title');
+		$I->seeElement('.com-dpattachments-layout-form');
+	}
+
+	public function cantSeeUploadFormInArticleWhenUser(Article $I)
+	{
+		$I->wantToTest('that the upload form is not displayed in an article when regular user.');
+
+		$I->createArticle(['title' => 'Test title']);
+
+		$I->doFrontEndLogin('user', 'user');
+		$I->amOnPage('');
+
+		$I->see('Test title');
+		$I->dontSeeElement('.com-dpattachments-layout-form');
+	}
+
+	public function cantSeeUploadFormInArticleWhenGuest(Article $I)
 	{
 		$I->wantToTest('that the upload form is not displayed in an article.');
 

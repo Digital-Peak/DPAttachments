@@ -124,7 +124,7 @@ class DPAttachmentsModelAttachment extends AdminModel
 
 	public function getTable($type = 'Attachment', $prefix = 'DPAttachmentsTable', $config = [])
 	{
-		return Table::getInstance($type, $prefix, $config);
+		return parent::getTable($type, $prefix, $config);
 	}
 
 	public function getForm($data = [], $loadData = true)
@@ -132,10 +132,7 @@ class DPAttachmentsModelAttachment extends AdminModel
 		// Get the form.
 		Form::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpattachments/models/forms');
 		Form::addFieldPath(JPATH_ADMINISTRATOR . '/components/com_dpattachments/models/fields');
-		$form = $this->loadForm('com_dpattachments.attachment', 'attachment', [
-			'control'   => 'jform',
-			'load_data' => $loadData
-		]);
+		$form = $this->loadForm('com_dpattachments.attachment', 'attachment', ['control' => 'jform', 'load_data' => $loadData]);
 		if (empty($form)) {
 			return false;
 		}
