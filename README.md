@@ -14,7 +14,7 @@ If you are an extension developer you just need the following code snippet to in
 
 ```php
 if (JLoader::import('components.com_dpattachments.vendor.autoload', JPATH_ADMINISTRATOR)) {
-    echo \DPAttachments\Helper\Core::render('com_demo.item', $object->id);
+    echo \DigitalPeak\Component\DPAttachments\Administrator\Helper\Core::render('com_demo.item', $object->id);
 }
 ```
 

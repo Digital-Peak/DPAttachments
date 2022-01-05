@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-use DPAttachments\Helper\Core;
+use DigitalPeak\Component\DPAttachments\Administrator\Helper\Core;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
@@ -25,7 +25,7 @@ if (!$attachment) {
 Factory::getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR . '/components/com_dpattachments');
 
 $previewExtensions = [];
-foreach (Folder::files(JPATH_SITE . '/components/com_dpattachments/views/attachment/tmpl') as $file) {
+foreach (Folder::files(JPATH_SITE . '/components/com_dpattachments/tmpl/attachment') as $file) {
 	$previewExtensions[] = File::stripExt($file);
 }
 ?>

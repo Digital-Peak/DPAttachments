@@ -7,10 +7,5 @@
 	"require": {
 		"parsecsv/php-parsecsv": "^1.3",
 		"ptlis/diff-parser": "^1.0"
-	},
-	"autoload": {
-		"psr-4": {
-			"DPAttachments\\": "libraries/src"
-		}
 	}
 }

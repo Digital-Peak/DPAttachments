@@ -8,7 +8,7 @@
 
 defined('_JEXEC') or die();
 
-use DPAttachments\Helper\Core;
+use DigitalPeak\Component\DPAttachments\Administrator\Helper\Core;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\Registry\Registry;

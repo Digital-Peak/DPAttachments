@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<extension type="plugin" version="3.9" group="content" method="upgrade">
+<extension type="plugin" version="4.0" group="content" method="upgrade">
 	<name>plg_content_dpattachments</name>
 	<author>Digital Peak</author>
 	<creationDate>DP_DEPLOY_DATE</creationDate>
@@ -9,9 +9,11 @@
 	<authorUrl>joomla.digital-peak.com</authorUrl>
 	<version>DP_DEPLOY_VERSION</version>
 	<description>PLG_CONTENT_DPATTACHMENTS_XML_DESCRIPTION</description>
+	<namespace path="src">DigitalPeak\Plugin\Content\DPAttachments</namespace>
 	<files>
-		<filename plugin="dpattachments">dpattachments.php</filename>
 		<folder>language</folder>
+		<folder plugin="dpattachments">services</folder>
+		<folder>src</folder>
 	</files>
 	<config>
 		<fields name="params">
