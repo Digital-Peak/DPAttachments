@@ -7,8 +7,6 @@
 
 defined('_JEXEC') or die();
 
-use DigitalPeak\Component\DPAttachments\Administrator\Helper\Core;
-use DigitalPeak\Component\DPAttachments\Administrator\Helper\DPAttachmentsHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
@@ -53,10 +51,10 @@ $listDirn = $this->escape($this->state->get('list.direction'));
 			<?php foreach ($this->items as $i => $item) {
 					$item->max_ordering = 0;
 					$ordering = ($listOrder == 'a.ordering');
-					$canEdit = Core::canDo('core.edit', $item->context, $item->item_id);
+					$canEdit = Factory::getApplication()->bootComponent('dpattachments')->canDo('core.edit', $item->context, $item->item_id);
 					$canCheckin = $user->authorise('core.manage', 'com_checkin') || $item->checked_out == $user->id || $item->checked_out == 0;
-					$canEditOwn = Core::canDo('core.edit.own', $item->context, $item->item_id);
-					$canChange = Core::canDo('core.edit.state', $item->context, $item->item_id) && $canCheckin;
+					$canEditOwn = Factory::getApplication()->bootComponent('dpattachments')->canDo('core.edit.own', $item->context, $item->item_id);
+					$canChange = Factory::getApplication()->bootComponent('dpattachments')->canDo('core.edit.state', $item->context, $item->item_id) && $canCheckin;
 			?>
 			<tr class="dp-attachment row<?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->context; ?>">
 				<td class="center"><?php echo HTMLHelper::_('grid.id', $i, $item->id); ?></td>
@@ -81,7 +79,7 @@ $listDirn = $this->escape($this->state->get('list.direction'));
 							</span>
 						<?php } ?>
 						<p>
-							<?php echo Text::_('COM_DPATTACHMENTS_FIELD_CONTEXT_LABEL') . ': ' . $this->escape(DPAttachmentsHelper::renderContext($item->context)); ?>
+							<?php echo Text::_('COM_DPATTACHMENTS_FIELD_CONTEXT_LABEL') . ': ' . $this->escape($this->renderContext($item->context)); ?>
 							<br/>
 							<?php echo Text::_('COM_DPATTACHMENTS_FIELD_ITEM_ID_LABEL') . ': ' . $this->escape($item->item_id); ?>
 						</p>

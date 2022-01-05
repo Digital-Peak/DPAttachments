@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-use DigitalPeak\Component\DPAttachments\Administrator\Helper\Core;
+use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use ptlis\DiffParser\Line;
 use ptlis\DiffParser\Parser;
@@ -17,7 +17,7 @@ JLoader::import('components.com_dpattachments.vendor.autoload', JPATH_ADMINISTRA
 HTMLHelper::_('stylesheet', 'com_dpattachments/views/attachment/patch.min.css', ['relative' => true]);
 
 $parser  = new Parser();
-$changes = $parser->parseFile(Core::getPath($this->item->path, $this->item->context));
+$changes = $parser->parseFile(Factory::getApplication()->bootComponent('dpattachments')->getPath($this->item->path, $this->item->context));
 ?>
 <div class="com-dpattachments-attachment com-dpattachments-attachment-patch">
 	<h3 class="com-dpattachments-attachment__header"><?php echo $this->escape($this->item->title); ?></h3>

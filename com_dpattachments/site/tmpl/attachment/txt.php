@@ -7,10 +7,10 @@
 
 defined('_JEXEC') or die();
 
-use DigitalPeak\Component\DPAttachments\Administrator\Helper\Core;
+use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 
-$content = file_get_contents(Core::getPath($this->item->path, $this->item->context));
+$content = file_get_contents(Factory::getApplication()->bootComponent('dpattachments')->getPath($this->item->path, $this->item->context));
 
 HTMLHelper::_('stylesheet', 'com_dpattachments/views/attachment/txt.min.css', ['relative' => true]);
 ?>

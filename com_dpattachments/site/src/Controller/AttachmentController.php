@@ -9,13 +9,12 @@ namespace DigitalPeak\Component\DPAttachments\Site\Controller;
 
 defined('_JEXEC') or die();
 
-use DigitalPeak\Component\DPAttachments\Administrator\Helper\Core;
-use DigitalPeak\Component\DPAttachments\Administrator\Helper\DPAttachmentsHelper;
 use DigitalPeak\Component\DPAttachments\Site\Model\FormModel;
 use Exception;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\FormController;
+use Joomla\CMS\Response\JsonResponse;
 use Joomla\CMS\Session\Session;
 use Joomla\CMS\Uri\Uri;
 
@@ -30,7 +29,7 @@ class AttachmentController extends FormController
 
 		$record = $this->getModel()->getItem($recordId);
 		if (!empty($record)) {
-			return Core::canDo('core.edit', $record->context, $record->item_id);
+			return Factory::getApplication()->bootComponent('dpattachments')->canDo('core.edit', $record->context, $record->item_id);
 		}
 
 		return parent::allowEdit($data, $key);
@@ -121,7 +120,7 @@ class AttachmentController extends FormController
 		if ($success) {
 			Factory::getApplication()->enqueueMessage(Text::_('COM_DPATTACHMENTS_UPLOAD_SUCCESS'), 'success');
 
-			$content = Core::renderLayout(
+			$content = Factory::getApplication()->bootComponent('dpattachments')->renderLayout(
 				'attachment.render',
 				['attachment' => $model->getItem($model->getState($model->getName() . '.id'))]
 			);
@@ -130,7 +129,7 @@ class AttachmentController extends FormController
 			Factory::getApplication()->enqueueMessage(Text::sprintf('JLIB_APPLICATION_ERROR_SAVE_FAILED', $model->getError()), 'error');
 		}
 
-		DPAttachmentsHelper::sendMessage(null, !$success, $returnData);
+		$this->sendMessage(null, !$success, $returnData);
 	}
 
 	public function download()
@@ -141,7 +140,7 @@ class AttachmentController extends FormController
 			exit(0);
 		}
 
-		$filename = Core::getPath($attachment->path, $attachment->context);
+		$filename = Factory::getApplication()->bootComponent('dpattachments')->getPath($attachment->path, $attachment->context);
 		if (!file_exists($filename)) {
 			header('HTTP/1.0 404 Not Found');
 			exit(0);
@@ -292,5 +291,20 @@ class AttachmentController extends FormController
 		$this->setMessage(Text::plural($message, 1), 'success');
 
 		$this->setRedirect($this->getReturnPage($this->input->getInt('id')));
+	}
+
+	private function sendMessage($message, $error = false, array $data = [])
+	{
+		ob_clean();
+
+		if (!$error) {
+			Factory::getApplication()->enqueueMessage($message);
+			echo new JsonResponse($data);
+		} else {
+			Factory::getApplication()->enqueueMessage($message, 'error');
+			echo new JsonResponse($data, '', true);
+		}
+
+		Factory::getApplication()->close();
 	}
 }

@@ -94,4 +94,16 @@ class HtmlView extends BaseHtmlView
 		$this->filterForm    = $this->get('FilterForm');
 		$this->activeFilters = $this->get('ActiveFilters');
 	}
+
+	public function renderContext($context)
+	{
+		$context = str_replace('com_', '', strtolower($context));
+
+		$buffer = '';
+		foreach (explode('.', $context) as $part) {
+			$buffer .= ucfirst($part) . ' ';
+		}
+
+		return trim($buffer, ' ');
+	}
 }

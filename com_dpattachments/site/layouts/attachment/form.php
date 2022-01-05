@@ -7,7 +7,6 @@
 
 defined('_JEXEC') or die();
 
-use DigitalPeak\Component\DPAttachments\Administrator\Helper\Core;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
@@ -38,7 +37,7 @@ HTMLHelper::_('script', 'com_dpattachments/layouts/attachment/form.min.js', ['re
 		<div class="dp-form__input dp-input">
 			<input type="file" name="file" class="dp-input__file" id="dp-input-<?php echo $itemId; ?>">
 			<label for="dp-input-<?php echo $itemId; ?>" class="dp-input__label">
-				<?php echo Core::renderLayout('block.icon', ['icon' => 'upload']); ?>
+				<?php echo Factory::getApplication()->bootComponent('dpattachments')->renderLayout('block.icon', ['icon' => 'upload']); ?>
 				<?php echo Text::_('COM_DPATTACHMENTS_BUTTON_SELECT_FILE'); ?>
 			</label>
 		</div>

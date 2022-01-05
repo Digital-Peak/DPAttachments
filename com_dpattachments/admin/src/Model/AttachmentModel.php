@@ -9,7 +9,6 @@ namespace DigitalPeak\Component\DPAttachments\Administrator\Model;
 
 defined('_JEXEC') or die();
 
-use DigitalPeak\Component\DPAttachments\Administrator\Helper\Core;
 use Exception;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
@@ -29,7 +28,7 @@ class AttachmentModel extends AdminModel
 				return false;
 			}
 
-			return Core::canDo('core.delete', $record->context, $record->item_id);
+			return Factory::getApplication()->bootComponent('dpattachments')->canDo('core.delete', $record->context, $record->item_id);
 		}
 
 		return parent::canDelete($record);
@@ -38,7 +37,7 @@ class AttachmentModel extends AdminModel
 	protected function canEditState($record)
 	{
 		if (!empty($record->id)) {
-			return Core::canDo('core.edit.state', $record->context, $record->item_id);
+			return Factory::getApplication()->bootComponent('dpattachments')->canDo('core.edit.state', $record->context, $record->item_id);
 		}
 
 		return parent::canEditState($record);
@@ -62,7 +61,7 @@ class AttachmentModel extends AdminModel
 
 	public function upload($data)
 	{
-		if (!Core::canDo('core.edit', $data['context'], $data['item_id'])) {
+		if (!Factory::getApplication()->bootComponent('dpattachments')->canDo('core.edit', $data['context'], $data['item_id'])) {
 			throw new Exception(Text::_('COM_DPATTACHMENTS_UPLOAD_NO_PERMISSION'));
 		}
 
@@ -98,10 +97,10 @@ class AttachmentModel extends AdminModel
 		$fileName = preg_replace("/[^\p{L}|0-9]+/u", "-", substr($fileName, 0, strlen($fileName) - strlen($uploadedFileExtension) - 1)) . '.' .
 			$uploadedFileExtension;
 
-		$targetFile = Core::getPath($fileName, $data['context']);
+		$targetFile = Factory::getApplication()->bootComponent('dpattachments')->getPath($fileName, $data['context']);
 		if (file_exists($targetFile)) {
 			$fileName   = Factory::getDate()->format('YmdHi') . '-' . $fileName;
-			$targetFile = Core::getPath($fileName, $data['context']);
+			$targetFile = Factory::getApplication()->bootComponent('dpattachments')->getPath($fileName, $data['context']);
 		}
 
 		if (!File::upload(

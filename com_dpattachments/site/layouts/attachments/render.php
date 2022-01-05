@@ -8,7 +8,6 @@
 
 defined('_JEXEC') or die();
 
-use DigitalPeak\Component\DPAttachments\Administrator\Helper\Core;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\Registry\Registry;
@@ -31,7 +30,7 @@ HTMLHelper::_('script', 'com_dpattachments/layouts/attachments/render.min.js', [
 	<div class="com-dpattachments-layout-attachments__attachments" data-context="<?php echo $displayData['context']; ?>"
 		 data-item="<?php echo $displayData['itemid']; ?>">
 		<?php foreach ($attachments as $attachment) { ?>
-			<?php echo Core::renderLayout('attachment.render', ['attachment' => $attachment]); ?>
+			<?php echo Factory::getApplication()->bootComponent('dpattachments')->renderLayout('attachment.render', ['attachment' => $attachment]); ?>
 		<?php } ?>
 	</div>
 </div>

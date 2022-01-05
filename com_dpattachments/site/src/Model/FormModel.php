@@ -9,7 +9,6 @@ namespace DigitalPeak\Component\DPAttachments\Site\Model;
 
 defined('_JEXEC') or die();
 
-use DigitalPeak\Component\DPAttachments\Administrator\Helper\Core;
 use DigitalPeak\Component\DPAttachments\Administrator\Model\AttachmentModel;
 use Joomla\CMS\Factory;
 use Joomla\Registry\Registry;
@@ -60,8 +59,8 @@ class FormModel extends AttachmentModel
 
 		// Check edit state permission.
 		if ($itemId) {
-			$value->params->set('access-edit', Core::canDo('core.edit', $value->context, $value->item_id));
-			$value->params->set('access-change', Core::canDo('core.edit.state', $value->context, $value->item_id));
+			$value->params->set('access-edit', Factory::getApplication()->bootComponent('dpattachments')->canDo('core.edit', $value->context, $value->item_id));
+			$value->params->set('access-change', Factory::getApplication()->bootComponent('dpattachments')->canDo('core.edit.state', $value->context, $value->item_id));
 		}
 
 		return $value;
