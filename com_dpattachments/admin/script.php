@@ -4,14 +4,26 @@
  * @copyright  Copyright (C) 2013 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-class Com_DPAttachmentsInstallerScript
-{
+use Joomla\CMS\Installer\InstallerScript;
 
-	public function install($parent)
+class Com_DPAttachmentsInstallerScript extends InstallerScript
+{
+	protected $minimumPhp      = '7.4.0';
+	protected $minimumJoomla   = '4.0.0';
+	protected $allowDowngrades = true;
+
+	public function postflight($type, $parent)
 	{
-		$this->run("update #__extensions set enabled=1 where type = 'plugin' and element = 'dpattachments'");
+		if ($parent->getElement() != 'com_dpattachments') {
+			return;
+		}
+
+		if ($type != 'install' && $type != 'discover_install') {
+			return;
+		}
 
 		$content = 'deny from all
 <Files ~ "\.(?i:gif|jpe?g|png)$">
@@ -20,30 +32,7 @@ allow from all
 </Files>';
 
 		$folder = JPATH_ROOT . '/media/com_dpattachments/attachments/';
-		JFolder::create($folder);
-		JFile::write($folder . '.htaccess', $content);
-	}
-
-	public function update($parent)
-	{
-	}
-
-	public function uninstall($parent)
-	{
-	}
-
-	public function preflight($type, $parent)
-	{
-	}
-
-	public function postflight($type, $parent)
-	{
-	}
-
-	private function run($query)
-	{
-		$db = JFactory::getDBO();
-		$db->setQuery($query);
-		$db->execute();
+		mkdir($folder);
+		file_put_contents($folder . '.htaccess', $content);
 	}
 }
