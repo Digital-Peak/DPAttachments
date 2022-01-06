@@ -26,7 +26,7 @@ class Com_DPAttachmentsInstallerScript extends InstallerScript
 		}
 
 		$content = 'deny from all
-<Files ~ "\.(?i:gif|jpe?g|png)$">
+<Files ~ "\.(?i:gif|jpe?g|png|pdf)$">
 order deny,allow
 allow from all
 </Files>';
