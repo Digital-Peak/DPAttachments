@@ -16,22 +16,19 @@ class BasicDPAttachmentsCestClass
 		$I->deleteFromDatabase('categories', ['id >' => 7]);
 		$I->deleteFromDatabase('content', []);
 		$I->deleteFromDatabase('content_frontpage', []);
+		$I->deleteFromDatabase('workflow_associations', []);
 		$I->deleteFromDatabase('dpattachments', []);
-
-		if ($I->getConfiguration('joomla_version') == 4) {
-			$I->deleteFromDatabase('workflow_associations', []);
-		}
 
 		$I->setExtensionParam('attachment_path', 'images');
 
-		$I->getModule('Filesystem')->deleteDir($I->getConfiguration('home_dir') . Attachment::ATTACHMENT_DIR);
+		$I->deleteDir($I->getConfiguration('home_dir') . Attachment::ATTACHMENT_DIR);
 
 		mkdir($I->getConfiguration('home_dir') . Attachment::ATTACHMENT_DIR, 0777, true);
 	}
 
 	public function _after(\AcceptanceTester $I)
 	{
-		$I->getModule('Filesystem')->deleteDir($I->getConfiguration('home_dir') . Attachment::ATTACHMENT_DIR);
+		$I->deleteDir($I->getConfiguration('home_dir') . Attachment::ATTACHMENT_DIR);
 
 		$I->checkForPhpNoticesOrWarnings();
 		$I->checkForJsErrors();

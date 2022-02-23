@@ -32,11 +32,12 @@ class DPAttachments extends CMSPlugin
 			return '';
 		}
 
-		return $this->app->bootComponent('dpattachments')->render($context, (int)$item->id, new Registry(['render.columns' => $this->params->get('column_count', 2)]));
+		return $this->app->bootComponent('dpattachments')
+			->render($context, $item->id, new Registry(['render.columns' => $this->params->get('column_count', 2)]));
 	}
 
 	public function onContentAfterDelete($context, $item)
 	{
-		return $this->app->bootComponent('dpattachments')->delete($context, (int)$item->id);
+		return $this->app->bootComponent('dpattachments')->delete($context, $item->id);
 	}
 }

@@ -7,8 +7,6 @@
 
 namespace Helper;
 
-use Codeception\Module\JoomlaBrowser;
-
 class Acceptance extends \Codeception\Module
 {
 	public function getConfiguration($element = null)
@@ -22,8 +20,8 @@ class Acceptance extends \Codeception\Module
 
 	public function amOnPage($link)
 	{
-		/** @var JoomlaBrowser $browser */
-		$browser = $this->getModule('JoomlaBrowser');
+		/** @var Joomla\Browser\JoomlaBrowser $browser */
+		$browser = $this->getModule('Joomla\Browser\JoomlaBrowser');
 		$browser->amOnPage($link);
 
 		$browser->checkForPhpNoticesOrWarnings();
@@ -32,10 +30,10 @@ class Acceptance extends \Codeception\Module
 
 	public function checkForJsErrors()
 	{
-		$logs = $this->getModule('JoomlaBrowser')->webDriver->manage()->getLog('browser');
+		$logs = $this->getModule('Joomla\Browser\JoomlaBrowser')->webDriver->manage()->getLog('browser');
 		foreach ($logs as $log) {
 			// Only look for internal JS errors
-			if (strpos($log['message'], $this->getModule('JoomlaBrowser')->_getConfig()['url']) !== 0) {
+			if (strpos($log['message'], $this->getModule('Joomla\Browser\JoomlaBrowser')->_getConfig()['url']) !== 0) {
 				continue;
 			}
 
@@ -60,8 +58,8 @@ class Acceptance extends \Codeception\Module
 
 	public function createCat($title)
 	{
-		/** @var JoomlaBrowser $browser */
-		$I = $this->getModule('JoomlaBrowser');
+		/** @var Joomla\Browser\JoomlaBrowser $browser */
+		$I = $this->getModule('Joomla\Browser\JoomlaBrowser');
 
 		$I->doAdministratorLogin(null, null, false);
 		$I->amOnPage('administrator/index.php?option=com_categories&extension=com_content');
@@ -74,12 +72,14 @@ class Acceptance extends \Codeception\Module
 		return $db->grabFromDatabase('categories', 'id', ['title' => $title, 'extension' => 'com_content']);
 	}
 
-	public function getModule($name)
+	/**
+	 * Lightweight variant of plugin enable.
+	 *
+	 * @param $pluginName
+	 */
+	public function enablePlugin($pluginName, $enable = true)
 	{
-		if ($name === 'JoomlaBrowser' && $this->getConfiguration('joomla_version') == 4) {
-			$name = 'Joomla\Browser\JoomlaBrowser';
-		}
-
-		return parent::getModule($name);
+		$this->getModule('Helper\\JoomlaDb')
+			->updateInDatabase('extensions', ['enabled' => $enable ? 1 : 0], ['name' => $pluginName]);
 	}
 }

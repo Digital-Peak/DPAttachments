@@ -9,6 +9,13 @@ use Step\Acceptance\Article;
 
 class ArticleViewCest extends \BasicDPAttachmentsCestClass
 {
+	public function _before(\AcceptanceTester $I)
+	{
+		parent::_before($I);
+
+		$I->enablePlugin('plg_content_dpattachments');
+	}
+
 	public function canSeeUploadFormInArticleWhenAdmin(Article $I)
 	{
 		$I->wantToTest('that the upload form is displayed in an article.');
