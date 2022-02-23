@@ -104,7 +104,7 @@ class ArticleViewCest extends \BasicDPAttachmentsCestClass
 		$I->dontSeeElement('.com-dpattachments-layout-form');
 	}
 
-	public function canUploadAttachment(Article $I)
+	public function canUploadAttachmentOnFrontPage(Article $I)
 	{
 		$I->wantToTest('that an attachment can be uploaded to an article.');
 
@@ -118,5 +118,23 @@ class ArticleViewCest extends \BasicDPAttachmentsCestClass
 
 		$I->see('test.txt');
 		$I->seeElement('.dp-attachment__link');
+		$I->seeInDatabase('dpattachments', ['context' => 'com_content.article']);
+	}
+
+	public function canUploadAttachmentOnArticleDetailsPage(Article $I)
+	{
+		$I->wantToTest('that an attachment can be uploaded to an article.');
+
+		$article = $I->createArticle(['title' => 'Test title']);
+
+		$I->doFrontEndLogin();
+		$I->amOnPage('index.php?option=com_content&view=article&id=' . $article['id']);
+
+		$I->attachFile('.com-dpattachments-layout-form__form .dp-input__file', 'test.txt');
+		$I->waitForElement('.dp-attachment');
+
+		$I->see('test.txt');
+		$I->seeElement('.dp-attachment__link');
+		$I->seeInDatabase('dpattachments', ['context' => 'com_content.article']);
 	}
 }
