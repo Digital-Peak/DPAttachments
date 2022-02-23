@@ -126,9 +126,7 @@ class DPAttachmentsComponent extends MVCComponent
 		$query = $this->db->getQuery(true);
 		$query->delete('#__dpattachments');
 		$query->where('id in (' . implode(',', $ids) . ')');
-		$this->db->setQuery($query);
-
-		$this->db->execute();
+		$this->db->setQuery($query)->execute();
 
 		return true;
 	}
