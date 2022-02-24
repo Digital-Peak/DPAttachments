@@ -25,10 +25,10 @@ Check [joomla.digital-peak.com](https://joomla.digital-peak.com/documentation/dp
 ## Development corner
 If you are cloning this repository, then clone also the [DPDocker project](https://github.com/Digital-Peak/DPDocker) into the same folder as DPAttachments and build the images. There are several tasks you can run then:
 
-### Build packages
-Creates the installable packages.
+### Install PHP dependencies
+Installs the PHP dependencies.
 
-`DPDocker/build/run.sh DPAttachments`
+`DPDocker/composer/run-install.sh DPAttachments`
 
 ### Install JS dependencies
 Installs the Javascript dependencies.
@@ -40,10 +40,15 @@ Builds the assets.
 
 `DPDocker/npm/run-build.sh DPAttachments all`
 
-### Install PHP dependencies
-Installs the PHP dependencies.
+### Build packages
+Creates the installable packages.
 
-`DPDocker/composer/run-install.sh DPAttachments`
+`DPDocker/build/run.sh DPAttachments`
+
+### Build a release
+Creates the installable packages with version 4.0.0. Change the version string when you want to build a different release version.
+
+`DPDocker/build/run.sh DPAttachments 4.0.0`
 
 ### Run system tests
 Runs the system tests.
