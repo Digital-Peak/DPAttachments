@@ -23,7 +23,7 @@ class DPAttachments extends CMSPlugin
 
 	public function onContentAfterDisplay($context, $item, $params)
 	{
-		if (!isset($item->id)) {
+		if (empty($item->id)) {
 			return '';
 		}
 
@@ -42,6 +42,10 @@ class DPAttachments extends CMSPlugin
 
 	public function onContentAfterDelete($context, $item)
 	{
+		if (empty($item->id)) {
+			return '';
+		}
+
 		if ($context === 'com_content.featured') {
 			$context = 'com_content.article';
 		}
