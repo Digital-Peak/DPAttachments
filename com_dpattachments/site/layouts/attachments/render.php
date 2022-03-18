@@ -10,6 +10,7 @@ defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\Registry\Registry;
 
 $attachments = $displayData['attachments'] ?: [];
@@ -26,7 +27,7 @@ HTMLHelper::_('behavior.core');
 HTMLHelper::_('script', 'com_dpattachments/layouts/attachments/render.min.js', ['relative' => true], ['defer' => true]);
 ?>
 <div class="com-dpattachments-layout-attachments<?php echo !$attachments ? ' com-dpattachments-layout-attachments_empty' : ''; ?>">
-	<h4 class="com-dpattachments-layout-attachments__header"><?php echo JText::_('COM_DPATTACHMENTS_ATTACHMENTS'); ?></h4>
+	<h4 class="com-dpattachments-layout-attachments__header"><?php echo Text::_('COM_DPATTACHMENTS_ATTACHMENTS'); ?></h4>
 	<div class="com-dpattachments-layout-attachments__attachments" data-context="<?php echo $displayData['context']; ?>"
 		 data-item="<?php echo $displayData['itemid']; ?>">
 		<?php foreach ($attachments as $attachment) { ?>

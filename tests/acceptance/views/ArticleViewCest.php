@@ -6,6 +6,7 @@
  */
 
 use Step\Acceptance\Article;
+use Step\Acceptance\Attachment;
 
 class ArticleViewCest extends \BasicDPAttachmentsCestClass
 {
@@ -136,5 +137,25 @@ class ArticleViewCest extends \BasicDPAttachmentsCestClass
 		$I->see('test.txt');
 		$I->seeElement('.dp-attachment__link');
 		$I->seeInDatabase('dpattachments', ['context' => 'com_content.article']);
+	}
+
+	public function canUploadMultipleAttachmentOnArticleDetailsPage(Article $I)
+	{
+		$I->wantToTest('that an attachment can be uploaded to an article.');
+
+		$article = $I->createArticle(['title' => 'Test title']);
+
+		$I->doFrontEndLogin();
+		$I->amOnPage('index.php?option=com_content&view=article&id=' . $article['id']);
+
+		$I->attachFile('.com-dpattachments-layout-form__form .dp-input__file', 'test.txt');
+		$I->waitForText('test.txt');
+		$I->attachFile('.com-dpattachments-layout-form__form .dp-input__file', 'test.jpg');
+		$I->waitForText('test.jpg');
+
+		$I->seeInDatabase('dpattachments', ['context' => 'com_content.article', 'path' => 'test.txt']);
+		$I->seeInDatabase('dpattachments', ['context' => 'com_content.article', 'path' => 'test.jpg']);
+		$I->assertFileEquals(codecept_data_dir() . '/test.txt', $I->getConfiguration('home_dir') . Attachment::ATTACHMENT_DIR . 'test.txt');
+		$I->assertFileEquals(codecept_data_dir() . '/test.jpg', $I->getConfiguration('home_dir') . Attachment::ATTACHMENT_DIR . 'test.jpg');
 	}
 }
