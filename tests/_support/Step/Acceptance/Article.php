@@ -37,7 +37,7 @@ class Article extends \AcceptanceTester
 			'state'        => 1,
 			'access'       => 1,
 			'language'     => '*',
-			'publish_up'   => null,
+			'publish_up'   => date('Y-m-d'),
 			'publish_down' => null,
 			'created_by'   => $this->user->getLoggedInUserId()
 		];

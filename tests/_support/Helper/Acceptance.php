@@ -24,6 +24,8 @@ class Acceptance extends \Codeception\Module
 		$browser = $this->getModule('Joomla\Browser\JoomlaBrowser');
 		$browser->amOnPage($link);
 
+		$browser->dontSeeInPageSource('Deprecated:');
+		$browser->dontSeeInPageSource('<b>Deprecated</b>:');
 		$browser->checkForPhpNoticesOrWarnings();
 		$this->checkForJsErrors();
 	}

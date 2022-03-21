@@ -30,6 +30,8 @@ class BasicDPAttachmentsCestClass
 	{
 		$I->deleteDir($I->getConfiguration('home_dir') . Attachment::ATTACHMENT_DIR);
 
+		$I->dontSeeInPageSource('Deprecated:');
+		$I->dontSeeInPageSource('<b>Deprecated</b>:');
 		$I->checkForPhpNoticesOrWarnings();
 		$I->checkForJsErrors();
 	}
