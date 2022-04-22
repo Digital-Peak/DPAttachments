@@ -32,7 +32,10 @@ allow from all
 </Files>';
 
 		$folder = JPATH_ROOT . '/media/com_dpattachments/attachments/';
-		mkdir($folder);
+		if (!is_dir($folder)) {
+			mkdir($folder);
+		}
+
 		file_put_contents($folder . '.htaccess', $content);
 	}
 }
