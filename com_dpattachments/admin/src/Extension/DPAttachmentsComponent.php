@@ -13,10 +13,12 @@ use DigitalPeak\Component\DPAttachments\Administrator\Model\AttachmentsModel;
 use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Dispatcher\ComponentDispatcherFactoryInterface;
+use Joomla\CMS\Extension\LegacyComponent;
 use Joomla\CMS\Extension\MVCComponent;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\MVC\Factory\MVCFactoryServiceInterface;
+use Joomla\CMS\Table\Table;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Registry\Registry;
 
@@ -155,6 +157,10 @@ class DPAttachmentsComponent extends MVCComponent
 			$table = null;
 			if ($instance instanceof MVCFactoryServiceInterface) {
 				$table = $instance->getMVCFactory()->createTable(ucfirst($modelName), 'Administrator');
+			}
+			if ($instance instanceof LegacyComponent) {
+				Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/' . $component . '/tables');
+				$table = $instance->getMVCFactory()->createTable(ucfirst($modelName), ucfirst(str_replace('com_', '', $component) . 'Table'));
 			}
 
 			if ($table) {
