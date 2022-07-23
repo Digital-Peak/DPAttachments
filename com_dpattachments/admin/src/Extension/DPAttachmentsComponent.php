@@ -61,16 +61,21 @@ class DPAttachmentsComponent extends MVCComponent
 	/**
 	 * The render function which takes care to render the HTML code. A HTML string is
 	 * returned which can be printed in any Joomla view.
+	 *
 	 * The options array or Registry option can customize the following attributes:
 	 * - render.columns: The amount of columns to render
+	 *
+	 * The render form parameter defines if the upload form should be rendered when the edit
+	 * permission exists.
 	 *
 	 * @param string $context
 	 * @param string $itemId
 	 * @param mixed  $options
+	 * @param bool   $renderForm
 	 *
 	 * @return string
 	 */
-	public function render(string $context, string $itemId, $options = null): string
+	public function render(string $context, string $itemId, $options = null, $renderForm = true): string
 	{
 		if (!$this->isEnabled()) {
 			return '';
@@ -96,7 +101,7 @@ class DPAttachmentsComponent extends MVCComponent
 			['context' => $context, 'itemid' => $itemId, 'attachments' => $attachments, 'options' => $options]
 		);
 
-		if (!$canEdit) {
+		if (!$canEdit || !$renderForm) {
 			return $buffer;
 		}
 
