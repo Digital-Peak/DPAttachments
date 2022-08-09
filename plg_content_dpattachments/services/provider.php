@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die;
 
-use DigitalPeak\Plugin\Content\DPAttachments\DPAttachments;
+use DigitalPeak\Plugin\Content\DPAttachments\Extension\DPAttachments;
 use Joomla\CMS\Extension\PluginInterface;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\DI\Container;

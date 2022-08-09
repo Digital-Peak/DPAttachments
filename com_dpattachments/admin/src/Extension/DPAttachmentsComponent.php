@@ -7,8 +7,6 @@
 
 namespace DigitalPeak\Component\DPAttachments\Administrator\Extension;
 
-defined('_JEXEC') or die();
-
 use DigitalPeak\Component\DPAttachments\Administrator\Model\AttachmentsModel;
 use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Component\ComponentHelper;

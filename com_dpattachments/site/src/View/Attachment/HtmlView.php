@@ -7,8 +7,6 @@
 
 namespace DigitalPeak\Component\DPAttachments\Site\View\Attachment;
 
-defined('_JEXEC') or die();
-
 use DigitalPeak\Component\DPAttachments\Administrator\Model\AttachmentModel;
 use Exception;
 use Joomla\CMS\Factory;
@@ -38,34 +36,6 @@ class HtmlView extends BaseHtmlView
 		}
 
 		$this->params = $this->state->get('params');
-		$active       = $app->getMenu()->getActive();
-		$temp         = clone ($this->params);
-
-		// Check to see which parameters should take priority
-		if ($active) {
-			$currentLink = $active->link;
-
-			// If the current view is the active item and an dpcase view for
-			// this dpcase, then the menu item params take priority
-			if (strpos($currentLink, 'view=case') && (strpos($currentLink, '&id=' . (string)$this->item->id))) {
-				// Load layout from active query (in case it is an alternative
-				// menu item)
-				if (isset($active->query['layout'])) {
-					$this->setLayout($active->query['layout']);
-				} elseif ($layout = $this->item->params->get('case_layout')) {
-					$this->setLayout($layout);
-				}
-
-				$this->item->params->merge($temp);
-			} else {
-				$temp->merge(!empty($this->item->params) ?: new Registry());
-				$this->item->params = $temp;
-
-				if ($layout = $this->item->params->get('case_layout')) {
-					$this->setLayout($layout);
-				}
-			}
-		}
 
 		// Increment the hit counter of the attachment.
 		$model = $this->getModel();

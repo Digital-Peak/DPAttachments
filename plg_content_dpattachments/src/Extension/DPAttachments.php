@@ -5,17 +5,20 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace DigitalPeak\Plugin\Content\DPAttachments;
-
-defined('_JEXEC') or die;
+namespace DigitalPeak\Plugin\Content\DPAttachments\Extension;
 
 use DigitalPeak\Component\DPAttachments\Administrator\Extension\DPAttachmentsComponent;
+use Joomla\CMS\Application\CMSApplication;
+use Joomla\CMS\Form\Form;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\Registry\Registry;
 
 class DPAttachments extends CMSPlugin
 {
+	/** @var CMSApplication $app */
 	protected $app;
+
+	protected $autoloadLanguage = true;
 
 	public function onContentAfterDisplay($context, $item, $params)
 	{
@@ -52,6 +55,37 @@ class DPAttachments extends CMSPlugin
 		return $buffer;
 	}
 
+	public function onContentPrepareForm(Form $form, $data)
+	{
+		$component = $this->app->bootComponent('dpattachments');
+		if (!$component instanceof DPAttachmentsComponent) {
+			return;
+		}
+
+		$catIds = $this->params->get('cat_ids');
+		if (isset($data->catid) && !empty($catIds) && !in_array($data->catid, $catIds)) {
+			return '';
+		}
+
+		$context = $form->getName();
+		if ($context === 'com_content.featured') {
+			$context = 'com_content.article';
+		}
+
+		$component = $this->app->bootComponent('dpattachments');
+		if (!$component instanceof DPAttachmentsComponent) {
+			return;
+		}
+
+		$form->loadFile(JPATH_PLUGINS . '/' . $this->_type . '/' . $this->_name . '/forms/attachments.xml');
+
+		$form->setFieldAttribute(
+			'attachments',
+			'item_id',
+			is_object($data) && !empty($data->id) ? $data->id : (is_array($data) && !empty($data['id']) ? $data['id'] : 0)
+		);
+	}
+
 	public function onContentAfterDelete($context, $item)
 	{
 		if (empty($item->id)) {
@@ -62,7 +96,6 @@ class DPAttachments extends CMSPlugin
 			$context = 'com_content.article';
 		}
 
-		// Get the component instance
 		$component = $this->app->bootComponent('dpattachments');
 		if (!$component instanceof DPAttachmentsComponent) {
 			return;

@@ -19,19 +19,21 @@ if (!$options) {
 	$options = new Registry();
 }
 
-Factory::getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR . '/components/com_dpattachments');
+/** @var CMSApplicationInterface $app */
+$app = $displayData['app'] ?? Factory::getApplication();
+$app->getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR . '/components/com_dpattachments');
 
-HTMLHelper::_('stylesheet', 'com_dpattachments/layouts/attachments/render.min.css', ['relative' => true]);
+HTMLHelper::_('stylesheet', 'com_dpattachments/dpattachments/layouts/attachments/render.min.css', ['relative' => true]);
 
 HTMLHelper::_('behavior.core');
-HTMLHelper::_('script', 'com_dpattachments/layouts/attachments/render.min.js', ['relative' => true], ['defer' => true]);
+HTMLHelper::_('script', 'com_dpattachments/dpattachments/layouts/attachments/render.min.js', ['relative' => true], ['defer' => true]);
 ?>
 <div class="com-dpattachments-layout-attachments<?php echo !$attachments ? ' com-dpattachments-layout-attachments_empty' : ''; ?>">
-	<h4 class="com-dpattachments-layout-attachments__header"><?php echo Text::_('COM_DPATTACHMENTS_ATTACHMENTS'); ?></h4>
+	<div class="com-dpattachments-layout-attachments__header"><?php echo Text::_('COM_DPATTACHMENTS_ATTACHMENTS'); ?></div>
 	<div class="com-dpattachments-layout-attachments__attachments" data-context="<?php echo $displayData['context']; ?>"
 		 data-item="<?php echo $displayData['itemid']; ?>">
 		<?php foreach ($attachments as $attachment) { ?>
-			<?php echo Factory::getApplication()->bootComponent('dpattachments')->renderLayout('attachment.render', ['attachment' => $attachment]); ?>
+			<?php echo $app->bootComponent('dpattachments')->renderLayout('attachment.render', ['attachment' => $attachment]); ?>
 		<?php } ?>
 	</div>
 </div>

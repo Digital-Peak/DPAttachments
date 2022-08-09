@@ -1,5 +1,4 @@
 {
-	"name": "DPAttachments",
 	"dependencies": {
 		"tingle.js": "^0.16"
 	}

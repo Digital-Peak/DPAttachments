@@ -4,46 +4,90 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+let dpattachmentsModal = null;
+
 document.addEventListener('DOMContentLoaded', () => {
-	[].slice.call(document.querySelectorAll('.com-dpattachments-layout-attachments .dp-attachment__link')).forEach((link) => {
-		link.addEventListener('click', e => {
-			if (!e.target.matches('.dp-attachment__link')) {
-				return true;
+	window.document.addEventListener('dpattachmentSaved', (e) => {
+		if (!dpattachmentsModal) {
+			return;
+		}
+
+		const iframe = document.querySelector('.dp-attachment-modal__content');
+		if (!iframe) {
+			return;
+		}
+
+		iframe.addEventListener('load', () => setTimeout(() => dpattachmentsModal.close(), 2000));
+	});
+
+	delegateSelector('.com-dpattachments-layout-attachments', 'click', '.dp-button-edit', (e) => {
+		e.preventDefault();
+
+		openModal(e.target.href);
+
+		return false;
+	});
+
+	delegateSelector('.com-dpattachments-layout-attachments', 'click', '.dp-button-trash', (e) => {
+		e.preventDefault();
+
+		fetch(e.target.href).then((response) => {
+			if (!response.ok) {
+				return;
 			}
 
-			e.preventDefault();
+			e.target.closest('.dp-attachment').remove();
+		});
 
-			const modalFunction = (src) => {
-				const modal = new tingle.modal({
-					footer: false,
-					stickyFooter: false,
-					closeMethods: ['overlay', 'button', 'escape'],
-					cssClass: ['dp-attachment-modal'],
-					closeLabel: Joomla.JText._('TMPL_DPSTRAP_CLOSE', 'Close')
-				});
+		return false;
+	});
 
-				modal.setContent('<iframe class="dp-attachment-preview" src="' + src + '"></iframe>');
-				modal.open();
-			};
+	delegateSelector('.com-dpattachments-layout-attachments', 'click', '.dp-attachment__link', (e) => {
+		e.preventDefault();
 
-			if (typeof tingle === 'undefined' || !tingle) {
-				const resource = document.createElement('script');
-				resource.type = 'text/javascript';
-				resource.src = Joomla.getOptions('system.paths').root + '/media/com_dpattachments/js/tingle/tingle.min.js';
-				resource.addEventListener('load', () => modalFunction(e.target.getAttribute('href')));
-				document.head.appendChild(resource);
+		openModal(e.target.getAttribute('href'));
 
-				const l = document.createElement('link');
-				l.rel = 'stylesheet';
-				l.href = Joomla.getOptions('system.paths').root + '/media/com_dpattachments/css/tingle/tingle.min.css';
-				document.head.appendChild(l);
+		return false;
+	});
 
-				return false;
-			}
+	function openModal(link) {
+		const modalFunction = (src) => {
+			dpattachmentsModal = new tingle.modal({
+				footer: false,
+				stickyFooter: false,
+				closeMethods: ['overlay', 'button', 'escape'],
+				cssClass: ['dp-attachment-modal'],
+				closeLabel: Joomla.JText._('TMPL_DPSTRAP_CLOSE', 'Close'),
+				onClose: function () {
+					dpattachmentsModal.destroy();
+				}
+			});
 
-			modalFunction(e.target.getAttribute('href'));
+			dpattachmentsModal.setContent('<iframe class="dp-attachment-modal__content" src="' + src + '"></iframe>');
+			dpattachmentsModal.open();
+		};
+
+		if (typeof tingle === 'undefined' || !tingle) {
+			const resource = document.createElement('script');
+			resource.type = 'text/javascript';
+			resource.src = Joomla.getOptions('system.paths').root + '/media/com_dpattachments/js/vendor/tingle/tingle.min.js';
+			resource.addEventListener('load', () => modalFunction(link));
+			document.head.appendChild(resource);
+
+			const l = document.createElement('link');
+			l.rel = 'stylesheet';
+			l.href = Joomla.getOptions('system.paths').root + '/media/com_dpattachments/css/vendor/tingle/tingle.min.css';
+			document.head.appendChild(l);
 
 			return false;
+		}
+
+		modalFunction(link);
+	}
+
+	function delegateSelector(selector, event, childSelector, handler) {
+		Array.from(document.querySelectorAll(selector)).forEach((el) => {
+			el.addEventListener(event, (e) => e.target.matches(childSelector) ? handler(e) : null);
 		});
-	});
+	}
 });

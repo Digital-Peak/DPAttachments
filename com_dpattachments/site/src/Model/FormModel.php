@@ -7,8 +7,6 @@
 
 namespace DigitalPeak\Component\DPAttachments\Site\Model;
 
-defined('_JEXEC') or die();
-
 use DigitalPeak\Component\DPAttachments\Administrator\Model\AttachmentModel;
 use Joomla\CMS\Factory;
 use Joomla\Registry\Registry;
@@ -21,7 +19,7 @@ class FormModel extends AttachmentModel
 		$app = Factory::getApplication();
 
 		// Load state from the request.
-		$pk = $app->input->getInt('a_id');
+		$pk = $app->input->getInt('id');
 		$this->setState('attachment.id', $pk);
 
 		$return = $app->input->get('return', null, 'base64');

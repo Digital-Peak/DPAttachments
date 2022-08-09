@@ -7,8 +7,6 @@
 
 namespace DigitalPeak\Component\DPAttachments\Site\View\Form;
 
-defined('_JEXEC') or die();
-
 use Exception;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Helper\TagsHelper;

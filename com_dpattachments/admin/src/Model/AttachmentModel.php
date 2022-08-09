@@ -7,8 +7,6 @@
 
 namespace DigitalPeak\Component\DPAttachments\Administrator\Model;
 
-defined('_JEXEC') or die();
-
 use DigitalPeak\Component\DPAttachments\Administrator\Extension\DPAttachmentsComponent;
 use Exception;
 use Joomla\CMS\Component\ComponentHelper;
@@ -30,7 +28,7 @@ class AttachmentModel extends AdminModel
 				return false;
 			}
 
-			return Factory::getApplication()->bootComponent('dpattachments')->canDo('core.delete', $record->context, $record->item_id);
+			return $this->bootComponent('dpattachments')->canDo('core.delete', $record->context, $record->item_id);
 		}
 
 		return parent::canDelete($record);
@@ -39,7 +37,7 @@ class AttachmentModel extends AdminModel
 	protected function canEditState($record)
 	{
 		if (!empty($record->id)) {
-			return Factory::getApplication()->bootComponent('dpattachments')->canDo('core.edit.state', $record->context, $record->item_id);
+			return $this->bootComponent('dpattachments')->canDo('core.edit.state', $record->context, $record->item_id);
 		}
 
 		return parent::canEditState($record);
@@ -63,7 +61,7 @@ class AttachmentModel extends AdminModel
 
 	public function upload($data)
 	{
-		if (!Factory::getApplication()->bootComponent('dpattachments')->canDo('core.edit', $data['context'], $data['item_id'])) {
+		if (!$this->bootComponent('dpattachments')->canDo('core.edit', $data['context'], $data['item_id'])) {
 			throw new Exception(Text::_('COM_DPATTACHMENTS_UPLOAD_NO_PERMISSION'));
 		}
 
@@ -99,10 +97,10 @@ class AttachmentModel extends AdminModel
 		$fileName = preg_replace("/[^\p{L}|0-9]+/u", "-", substr($fileName, 0, strlen($fileName) - strlen($uploadedFileExtension) - 1)) . '.' .
 			$uploadedFileExtension;
 
-		$targetFile = Factory::getApplication()->bootComponent('dpattachments')->getPath($fileName, $data['context']);
+		$targetFile = $this->bootComponent('dpattachments')->getPath($fileName, $data['context']);
 		if (file_exists($targetFile)) {
 			$fileName   = Factory::getDate()->format('YmdHis') . '-' . $fileName;
-			$targetFile = Factory::getApplication()->bootComponent('dpattachments')->getPath($fileName, $data['context']);
+			$targetFile = $this->bootComponent('dpattachments')->getPath($fileName, $data['context']);
 		}
 
 		if (!File::upload(
@@ -204,7 +202,7 @@ class AttachmentModel extends AdminModel
 		}
 
 		/** @var DPAttachmentsComponent $component */
-		$component = Factory::getApplication()->bootComponent('dpattachments');
+		$component = $this->bootComponent('dpattachments');
 
 		foreach ($attachments as $attachment) {
 			unlink($component->getPath($attachment->path, $attachment->context));

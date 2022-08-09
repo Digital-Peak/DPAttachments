@@ -7,8 +7,6 @@
 
 namespace DigitalPeak\Component\DPAttachments\Site\Controller;
 
-defined('_JEXEC') or die();
-
 use Exception;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
@@ -20,7 +18,7 @@ class DisplayController extends BaseController
 	{
 		$cachable = true;
 
-		$id    = $this->input->getInt('a_id');
+		$id    = $this->input->getInt('id');
 		$vName = $this->input->getCmd('view', '');
 		$this->input->set('view', $vName);
 

@@ -11,7 +11,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
 ?>
 <div class="com-dpattachments-attachment-form__form">
-	<form action="<?php echo Route::_('index.php?option=com_dpattachments&a_id=' . (int)$this->item->id); ?>"
+	<form action="<?php echo Route::_('index.php?option=com_dpattachments&id=' . (int)$this->item->id); ?>"
 		  method="post" name="adminForm" class="dp-form form-validate">
 		<fieldset class="dp-form__basic">
 			<?php echo $this->form->renderField('title'); ?>

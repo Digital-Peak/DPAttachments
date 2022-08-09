@@ -1,26 +1,22 @@
 {
 	"local": [
 		{
-			"src": "scss/views",
-			"dest": "../media/css/views"
-		},
-		{
-			"src": "scss/layouts",
-			"dest": "../media/css/layouts"
+			"src": "scss",
+			"dest": "../media/css/dpattachments"
 		},
 		{
 			"src": "js",
-			"dest": "../media/js"
+			"dest": "../media/js/dpattachments"
 		}
 	],
 	"vendor": [
 		{
 			"src": "tingle.js/dist/tingle.js",
-			"dest": "../media/js/tingle/tingle.js"
+			"dest": "../media/js/vendor/tingle/tingle.js"
 		},
 		{
 			"src": "tingle.js/dist/tingle.css",
-			"dest": "../media/css/tingle/tingle.css"
+			"dest": "../media/css/vendor/tingle/tingle.css"
 		}
 	],
 	"docBlock": "/**\n * @package    DPAttachments\n * @copyright  Copyright (C) Digital Peak GmbH. <https://www.digital-peak.com>\n * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL\n */"

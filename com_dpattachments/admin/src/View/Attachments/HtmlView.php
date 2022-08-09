@@ -7,8 +7,6 @@
 
 namespace DigitalPeak\Component\DPAttachments\Administrator\View\Attachments;
 
-defined('_JEXEC') or die();
-
 use DigitalPeak\Component\DPAttachments\Administrator\Helper\DPAttachmentsHelper;
 use Exception;
 use Joomla\CMS\Factory;

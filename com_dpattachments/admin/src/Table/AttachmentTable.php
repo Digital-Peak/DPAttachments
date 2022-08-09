@@ -7,8 +7,6 @@
 
 namespace DigitalPeak\Component\DPAttachments\Administrator\Table;
 
-defined('_JEXEC') or die();
-
 use Exception;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;

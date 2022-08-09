@@ -17,6 +17,21 @@ class ArticleViewCest extends \BasicDPAttachmentsCestClass
 		$I->enablePlugin('plg_content_dpattachments');
 	}
 
+	public function canSeeAttachmentDetails(Attachment $I, Article $IA)
+	{
+		$I->wantToTest('that the attachment details are shown.');
+
+		$article = $IA->createArticle(['title' => 'Test title']);
+		$I->createAttachment(['path' => 'test.txt', 'item_id' => $article['id']]);
+
+		$I->doFrontEndLogin();
+		$I->amOnPage('index.php?option=com_content&view=article&id=' . $article['id']);
+
+		$I->see('test.txt');
+		$I->see('Edit');
+		$I->see('Trash');
+	}
+
 	public function canSeeUploadFormInArticleWhenAdmin(Article $I)
 	{
 		$I->wantToTest('that the upload form is displayed in an article.');
@@ -114,7 +129,7 @@ class ArticleViewCest extends \BasicDPAttachmentsCestClass
 		$I->doFrontEndLogin();
 		$I->amOnPage('');
 
-		$I->attachFile('.com-dpattachments-layout-form__form .dp-input__file', 'test.txt');
+		$I->attachFile('.com-dpattachments-layout-form .dp-input__file', 'test.txt');
 		$I->waitForElement('.dp-attachment');
 
 		$I->see('test.txt');
@@ -131,7 +146,7 @@ class ArticleViewCest extends \BasicDPAttachmentsCestClass
 		$I->doFrontEndLogin();
 		$I->amOnPage('index.php?option=com_content&view=article&id=' . $article['id']);
 
-		$I->attachFile('.com-dpattachments-layout-form__form .dp-input__file', 'test.txt');
+		$I->attachFile('.com-dpattachments-layout-form .dp-input__file', 'test.txt');
 		$I->waitForElement('.dp-attachment');
 
 		$I->see('test.txt');
@@ -148,14 +163,30 @@ class ArticleViewCest extends \BasicDPAttachmentsCestClass
 		$I->doFrontEndLogin();
 		$I->amOnPage('index.php?option=com_content&view=article&id=' . $article['id']);
 
-		$I->attachFile('.com-dpattachments-layout-form__form .dp-input__file', 'test.txt');
+		$I->attachFile('.com-dpattachments-layout-form .dp-input__file', 'test.txt');
 		$I->waitForText('test.txt');
-		$I->attachFile('.com-dpattachments-layout-form__form .dp-input__file', 'test.jpg');
+		$I->attachFile('.com-dpattachments-layout-form .dp-input__file', 'test.jpg');
 		$I->waitForText('test.jpg');
 
 		$I->seeInDatabase('dpattachments', ['context' => 'com_content.article', 'path' => 'test.txt']);
 		$I->seeInDatabase('dpattachments', ['context' => 'com_content.article', 'path' => 'test.jpg']);
 		$I->assertFileEquals(codecept_data_dir() . '/test.txt', $I->getConfiguration('home_dir') . Attachment::ATTACHMENT_DIR . 'test.txt');
 		$I->assertFileEquals(codecept_data_dir() . '/test.jpg', $I->getConfiguration('home_dir') . Attachment::ATTACHMENT_DIR . 'test.jpg');
+	}
+
+	public function canTrashAttachment(Attachment $I, Article $IA)
+	{
+		$I->wantToTest('that an attachment can be trashed.');
+
+		$article = $IA->createArticle(['title' => 'Test title']);
+		$I->createAttachment(['path' => 'test.txt', 'item_id' => $article['id']]);
+
+		$I->doFrontEndLogin();
+		$I->amOnPage('index.php?option=com_content&view=article&id=' . $article['id']);
+		$I->click('Trash');
+		$I->wait(2);
+
+		$I->dontSee('test.txt');
+		$I->seeInDatabase('dpattachments', ['context' => 'com_content.article', 'path' => 'test.txt', 'state' => -2]);
 	}
 }

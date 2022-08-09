@@ -7,8 +7,6 @@
 
 namespace DigitalPeak\Component\DPAttachments\Administrator\Helper;
 
-defined('_JEXEC') or die();
-
 use Joomla\CMS\Factory;
 use Joomla\CMS\Object\CMSObject;
 

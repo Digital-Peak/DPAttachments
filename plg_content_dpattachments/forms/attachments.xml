@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="dpattachments" label="PLG_CONTENT_DPATTACHMENTS_FIELD_ATTACHMENTS_SET_LABEL"
+		addfieldprefix="DigitalPeak\Plugin\Content\DPAttachments\Field">
+		<field name="attachments" type="dpattachments" hiddenLabel="true"/>
+	</fieldset>
+</form>

@@ -11,13 +11,14 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 
 		Array.prototype.forEach.call(files, (file) => {
-			const progress = input.form.querySelector('.dp-form__progress');
+			const container = input.closest('.com-dpattachments-layout-form');
+			const progress = container.querySelector('.dp-form__progress');
 			progress.style.display = 'block';
 			progress.value = 0;
 
 			// We do our own because no content type must be set
 			const xhr = new XMLHttpRequest();
-			xhr.open('post', input.form.getAttribute('action'), true);
+			xhr.open('post', container.getAttribute('data-upload-url'), true);
 			xhr.setRequestHeader('X-CSRF-Token', Joomla.getOptions('csrf.token', ''));
 			xhr.onreadystatechange = () => {
 				// Request not finished
@@ -31,7 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
 					const json = JSON.parse(xhr.responseText);
 					Joomla.renderMessages(json.messages);
 
-					const container = document.querySelector('.com-dpattachments-layout-attachments__attachments[data-context="' + json.data.context + '"][data-item="' + json.data.item_id + '"]');
+					const container = document.querySelector(
+						'.com-dpattachments-layout-attachments__attachments[data-context="' + json.data.context + '"][data-item="' + json.data.item_id + '"]'
+					);
 					container.parentElement.classList.remove('com-dpattachments-layout-attachments_empty');
 					container.innerHTML += json.data.html;
 
@@ -45,8 +48,10 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 			}, false);
 
-			const fd = new FormData(input.form);
+			const fd = new FormData();
 			fd.append('file', file);
+			fd.append('attachment[context]', container.getAttribute('data-context'));
+			fd.append('attachment[item_id]', container.getAttribute('data-item'));
 			xhr.send(fd);
 		});
 	};

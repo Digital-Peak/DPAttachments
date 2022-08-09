@@ -14,7 +14,7 @@ use Joomla\CMS\Router\Route;
 
 HTMLHelper::_('behavior.keepalive');
 HTMLHelper::_('behavior.formvalidator');
-HTMLHelper::_('script', 'com_dpattachments/views/form/edit.min.js', ['relative' => true, 'version' => 'auto'], ['defer' => true]);
+HTMLHelper::_('script', 'com_dpattachments/dpattachments/views/form/edit.min.js', ['relative' => true, 'version' => 'auto'], ['defer' => true]);
 ?>
 <div class="com-dpattachments-attachment-form">
 	<form action="<?php echo Route::_('index.php?option=com_dpattachments&layout=edit&id=' . (int) $this->item->id); ?>"
