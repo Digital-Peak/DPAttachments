@@ -22,6 +22,11 @@ class DPAttachments extends CMSPlugin
 
 	public function onContentAfterDisplay($context, $item, $params)
 	{
+		// Ignore DPAttachments
+		if ($context === 'com_dpattachments.attachment') {
+			return;
+		}
+
 		// Check if there is an ID
 		if (empty($item->id)) {
 			return '';
@@ -57,28 +62,33 @@ class DPAttachments extends CMSPlugin
 
 	public function onContentPrepareForm(Form $form, $data)
 	{
+		// The path to the form XML files
+		$formsFolderPath = JPATH_PLUGINS . '/' . $this->_type . '/' . $this->_name . '/forms';
+
+		// The context
+		$context = $form->getName();
+
+		// The component instance
 		$component = $this->app->bootComponent('dpattachments');
 		if (!$component instanceof DPAttachmentsComponent) {
 			return;
 		}
 
+		// Check if there are categories to filter
 		$catIds = $this->params->get('cat_ids');
 		if (isset($data->catid) && !empty($catIds) && !in_array($data->catid, $catIds)) {
 			return '';
 		}
 
-		$context = $form->getName();
+		// Map the context
 		if ($context === 'com_content.featured') {
 			$context = 'com_content.article';
 		}
 
-		$component = $this->app->bootComponent('dpattachments');
-		if (!$component instanceof DPAttachmentsComponent) {
-			return;
-		}
+		// Load the attachments into the form
+		$form->loadFile($formsFolderPath . '/attachments.xml');
 
-		$form->loadFile(JPATH_PLUGINS . '/' . $this->_type . '/' . $this->_name . '/forms/attachments.xml');
-
+		// Set the item ID attribute
 		$form->setFieldAttribute(
 			'attachments',
 			'item_id',
@@ -88,19 +98,23 @@ class DPAttachments extends CMSPlugin
 
 	public function onContentAfterDelete($context, $item)
 	{
+		// Check if there is an id
 		if (empty($item->id)) {
 			return '';
 		}
 
+		// Map the context
 		if ($context === 'com_content.featured') {
 			$context = 'com_content.article';
 		}
 
+		// Load the component instance
 		$component = $this->app->bootComponent('dpattachments');
 		if (!$component instanceof DPAttachmentsComponent) {
 			return;
 		}
 
+		// Delete the attachment for the item
 		return $component->delete($context, $item->id);
 	}
 }

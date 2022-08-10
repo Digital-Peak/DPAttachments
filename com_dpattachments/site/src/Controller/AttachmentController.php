@@ -8,9 +8,6 @@
 namespace DigitalPeak\Component\DPAttachments\Site\Controller;
 
 use DigitalPeak\Component\DPAttachments\Administrator\Controller\AttachmentController as BaseAttachmentController;
-use Exception;
-use Joomla\CMS\Language\Text;
-use Joomla\CMS\Session\Session;
 use Joomla\CMS\Uri\Uri;
 
 class AttachmentController extends BaseAttachmentController

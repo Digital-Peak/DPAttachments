@@ -13,12 +13,16 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Dispatcher\ComponentDispatcherFactoryInterface;
 use Joomla\CMS\Extension\LegacyComponent;
 use Joomla\CMS\Extension\MVCComponent;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Fields\FieldsServiceInterface;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\MVC\Factory\MVCFactoryServiceInterface;
+use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Table\Table;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Registry\Registry;
+use stdClass;
 
 /**
  * Public DPAttachments component.
@@ -29,7 +33,7 @@ use Joomla\Registry\Registry;
  *
  * echo $app->bootComponent('dpattachments')->render('com_foo.bar', $item->id);
  */
-class DPAttachmentsComponent extends MVCComponent
+class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterface
 {
 	/**
 	 * The cached items.
@@ -92,6 +96,31 @@ class DPAttachmentsComponent extends MVCComponent
 
 		if (!$attachments && !$canEdit) {
 			return '';
+		}
+
+		PluginHelper::importPlugin('content');
+		foreach ($attachments as $attachment) {
+			$attachment->text = '';
+			$this->app->triggerEvent('onContentPrepare', ['com_dpattachments.attachment', &$attachment, &$options, 0]);
+
+			$attachment->event = new stdClass();
+			$results           = $this->app->triggerEvent(
+				'onContentAfterTitle',
+				['com_dpattachments.attachment', &$attachment, &$this->params, 0]
+			);
+			$attachment->event->afterDisplayTitle = trim(implode("\n", $results));
+
+			$results = $this->app->triggerEvent(
+				'onContentBeforeDisplay',
+				['com_dpattachments.attachment', &$attachment, &$options, 0]
+			);
+			$attachment->event->beforeDisplayAttachment = trim(implode("\n", $results));
+
+			$results = $this->app->triggerEvent(
+				'onContentAfterDisplay',
+				['com_dpattachments.attachment', &$attachment, &$options, 0]
+			);
+			$attachment->event->afterDisplayAttachment = trim(implode("\n", $results));
 		}
 
 		$buffer = $this->renderLayout(
@@ -269,6 +298,33 @@ class DPAttachmentsComponent extends MVCComponent
 			null,
 			['component' => 'com_dpattachments', 'client' => 0]
 		);
+	}
+
+	public function validateSection($section, $item = null)
+	{
+		if (Factory::getApplication()->isClient('site')) {
+			switch ($section) {
+				case 'form':
+					$section = 'attachment';
+			}
+		}
+
+		if ($section != 'attachment') {
+			return null;
+		}
+
+		return $section;
+	}
+
+	public function getContexts(): array
+	{
+		Factory::getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR);
+
+		$contexts = [
+			'com_dpattachments.attachment' => Text::_('COM_DPATTACHMENTS')
+		];
+
+		return $contexts;
 	}
 
 	/**

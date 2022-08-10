@@ -48,10 +48,19 @@ foreach (Folder::files(JPATH_SITE . '/components/com_dpattachments/tmpl/attachme
 	<a href="<?php echo Route::_('index.php?option=com_dpattachments&task=attachment.download&id=' . (int)$attachment->id); ?>" target="_blank">
 		<?php echo $component->renderLayout('block.icon', ['icon' => 'download']); ?>
 	</a>
+	<?php if (!empty($attachment->event) && !empty($attachment->event->afterDisplayTitle)) { ?>
+		<div class="dp-attachment__after-title"><?php echo $attachment->event->afterDisplayTitle; ?></div>
+	<?php } ?>
+	<?php if (!empty($attachment->event) && !empty($attachment->event->beforeDisplayAttachment)) { ?>
+		<div class="dp-attachment__before-display"><?php echo $attachment->event->beforeDisplayAttachment; ?></div>
+	<?php } ?>
 	<div class="dp-attachment__date">
 		<?php $author = $attachment->created_by_alias ?: (isset($attachment->author_name) ? $attachment->author_name : $attachment->created_by); ?>
 		<?php echo sprintf($app->getLanguage()->_('COM_DPATTACHMENTS_TEXT_UPLOADED_LABEL'), HTMLHelper::_('date.relative', $attachment->created), $author); ?>
 	</div>
+	<?php if (!empty($attachment->event) && !empty($attachment->event->afterDisplayAttachment)) { ?>
+		<div class="dp-attachment__after-display"><?php echo $attachment->event->afterDisplayAttachment; ?></div>
+	<?php } ?>
 	<div class="dp-attachment__actions">
 		<?php if ($component->canDo('core.edit', $attachment->context, $attachment->item_id)) { ?>
 			<a href="<?php echo Route::_('index.php?option=com_dpattachments&task=attachment.edit&id=' . $attachment->id . ($app->isClient('site') ? '&tmpl=component' :'')); ?>"

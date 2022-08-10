@@ -36,6 +36,8 @@
 		<menu>COM_DPATTACHMENTS</menu>
 		<submenu>
 			<menu link="option=com_dpattachments&amp;view=attachments" view="attachments">COM_DPATTACHMENTS_ATTACHMENTS</menu>
+			<menu link="option=com_fields&amp;context=com_dpattachments.attachment">JGLOBAL_FIELDS</menu>
+			<menu link="option=com_fields&amp;view=groups&amp;context=com_dpattachments.attachment">JGLOBAL_FIELD_GROUPS</menu>
 		</submenu>
 		<files folder="admin">
 			<filename>access.xml</filename>
