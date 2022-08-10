@@ -98,8 +98,31 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			return '';
 		}
 
+		$user = $this->app->getIdentity();
 		PluginHelper::importPlugin('content');
-		foreach ($attachments as $attachment) {
+		foreach ($attachments as $key => $attachment) {
+			if ($attachment->context === 'com_dpcalendar.event'
+				&& !$this->canDo('core.admin', 'com_dpcalendar.event', $itemId)
+				&& $attachment->params->get('dpcalendar_event_ticket')
+				&& $options->get('item')) {
+				if (empty($options->get('item')->tickets)) {
+					unset($attachments[$key]);
+					continue;
+				}
+
+				$found = false;
+				foreach ($options->get('item')->tickets as $ticket) {
+					if ($user->id && ($ticket->email === $user->email || $ticket->user_id == $user->id)) {
+						$found = true;
+					}
+				}
+
+				if (!$found) {
+					unset($attachments[$key]);
+					continue;
+				}
+			}
+
 			$attachment->text = '';
 			$this->app->triggerEvent('onContentPrepare', ['com_dpattachments.attachment', &$attachment, &$options, 0]);
 
@@ -187,12 +210,11 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			$instance = $this->app->bootComponent($component);
 
 			$table = null;
-			if ($instance instanceof MVCFactoryServiceInterface) {
-				$table = $instance->getMVCFactory()->createTable(ucfirst($modelName), 'Administrator');
-			}
 			if ($instance instanceof LegacyComponent) {
 				Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/' . $component . '/tables');
 				$table = $instance->getMVCFactory()->createTable(ucfirst($modelName), ucfirst(str_replace('com_', '', $component) . 'Table'));
+			} elseif ($instance instanceof MVCFactoryServiceInterface) {
+				$table = $instance->getMVCFactory()->createTable(ucfirst($modelName), 'Administrator');
 			}
 
 			if ($table) {

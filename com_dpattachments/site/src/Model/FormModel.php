@@ -53,7 +53,7 @@ class FormModel extends AttachmentModel
 		$value      = ArrayHelper::toObject($properties, 'JObject');
 
 		// Convert attrib field to Registry.
-		$value->params = new Registry();
+		$value->params = new Registry($value->params);
 
 		// Check edit state permission.
 		if ($itemId) {

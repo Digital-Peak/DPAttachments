@@ -11,6 +11,7 @@ use Exception;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Table\Table;
+use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
 class AttachmentTable extends Table
@@ -20,6 +21,17 @@ class AttachmentTable extends Table
 		parent::__construct('#__dpattachments', 'id', $db);
 
 		$this->setColumnAlias('published', 'state');
+	}
+
+	public function bind($array, $ignore = '')
+	{
+		if (is_array($array) && isset($array['params']) && is_array($array['params'])) {
+			$registry = new Registry();
+			$registry->loadArray($array['params']);
+			$array['params'] = (string)$registry;
+		}
+
+		return parent::bind($array, $ignore);
 	}
 
 	public function check()
@@ -43,6 +55,19 @@ class AttachmentTable extends Table
 
 		if ($this->description === null) {
 			$this->description = '';
+		}
+
+		if ($this->publish_up === '') {
+			$this->publish_up = null;
+		}
+		if ($this->publish_down === '') {
+			$this->publish_down = null;
+		}
+		if ($this->modified === '') {
+			$this->modified = null;
+		}
+		if ($this->hits === '') {
+			$this->hits = 0;
 		}
 
 		return true;

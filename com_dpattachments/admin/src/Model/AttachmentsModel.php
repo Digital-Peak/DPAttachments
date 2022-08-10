@@ -11,6 +11,7 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
 class AttachmentsModel extends ListModel
@@ -87,6 +88,17 @@ class AttachmentsModel extends ListModel
 		parent::populateState('a.created', 'asc');
 	}
 
+	public function getItems()
+	{
+		$items = parent::getItems();
+
+		foreach ($items as $attachment) {
+			$attachment->params = new Registry($attachment->params);
+		}
+
+		return $items;
+	}
+
 	protected function getStoreId($id = '')
 	{
 		// Compile the store id.
@@ -107,13 +119,7 @@ class AttachmentsModel extends ListModel
 		$app   = Factory::getApplication();
 
 		// Select the required fields from the table.
-		$query->select(
-			$this->getState(
-				'list.select',
-				'a.id, a.title, a.description, a.path, a.size, a.checked_out, a.checked_out_time, a.context, a.item_id' .
-				', a.state, a.access, a.created, a.created_by, a.created_by_alias, a.modified, a.publish_up, a.publish_down, a.hits'
-			)
-		);
+		$query->select($this->getState('list.select', 'a.*'));
 		$query->from('#__dpattachments AS a');
 
 		// Join over the users for the checked out user.

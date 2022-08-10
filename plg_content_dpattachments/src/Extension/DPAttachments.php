@@ -38,7 +38,7 @@ class DPAttachments extends CMSPlugin
 			return '';
 		}
 
-		// Mak the correct context
+		// Make the correct context
 		if ($context === 'com_content.featured') {
 			$context = 'com_content.article';
 		}
@@ -50,11 +50,20 @@ class DPAttachments extends CMSPlugin
 		}
 
 		// Render the attachments and upload form
-		$buffer = $component->render($context, $item->id, new Registry(['render.columns' => $this->params->get('column_count', 2)]));
+		$buffer = $component->render(
+			$context,
+			$item->id,
+			new Registry(['render.columns' => $this->params->get('column_count', 2), 'item' => $item])
+		);
 
 		// Render the attachment form the original event as well
 		if (isset($item->original_id) && $item->original_id > 0) {
-			$buffer .= $component->render($context, $item->original_id, new Registry(['render.columns' => $this->params->get('column_count', 2)]), false);
+			$buffer .= $component->render(
+				$context,
+				$item->original_id,
+				new Registry(['render.columns' => $this->params->get('column_count', 2), 'item' => $item]),
+				false
+			);
 		}
 
 		return $buffer;
@@ -67,6 +76,30 @@ class DPAttachments extends CMSPlugin
 
 		// The context
 		$context = $form->getName();
+
+		// When DPAttachments
+		if ($context === 'com_dpattachments.attachment') {
+			$dataContext = '';
+			if (is_object($data) && !empty($data->context)) {
+				$dataContext = $data->context;
+			}
+
+			if (!$dataContext && is_array($data) && !empty($data['context'])) {
+				$dataContext = $data['context'];
+			}
+
+			$inputData = $this->app->input->get('jform', [], 'array');
+			if (!$dataContext && $inputData && !empty($inputData['context'])) {
+				$dataContext = $inputData['context'];
+			}
+
+			// Add some extension specific fields
+			if ($dataContext && file_exists($formsFolderPath . '/context/' . $dataContext . '.xml')) {
+				$form->loadFile($formsFolderPath . '/context/' . $dataContext . '.xml');
+			}
+
+			return;
+		}
 
 		// The component instance
 		$component = $this->app->bootComponent('dpattachments');
