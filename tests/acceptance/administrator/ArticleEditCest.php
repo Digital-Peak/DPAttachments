@@ -46,6 +46,20 @@ class ArticleEditCest extends \BasicDPAttachmentsCestClass
 		$I->seeElement('.com-dpattachments-layout-form');
 	}
 
+	public function cantSeeUploadFormInArticleFormWhenDisabledExtension(Article $I)
+	{
+		$I->wantToTest('that the upload form is not displayed in an article form when disabled.');
+
+		$I->setExtensionParam('components_exclude', ['com_content']);
+
+		$article = $I->createArticle(['title' => 'Test title']);
+
+		$I->doAdministratorLogin(null, null, false);
+		$I->amOnPage('/administrator/index.php?option=com_content&task=article.edit&id=' . $article['id']);
+
+		$I->dontSee('Attachments');
+	}
+
 	public function canSeeUploadFormInArticleFormForSpecificCategory(Article $I)
 	{
 		$I->wantToTest('that the upload form is displayed in an article form for a specific category.');

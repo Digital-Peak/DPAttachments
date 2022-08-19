@@ -2,15 +2,12 @@
 <config>
 	<fieldset name="dpattachments" label="COM_DPATTACHMENTS_ATTACHMENTS"
 		description="COM_DPATTACHMENTS_CONFIG_ATTACHMENT_SETTINGS_DESC">
-		<field name="attachment_path" type="text"
-			default="media/com_dpattachments/attachments/" label="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_PATH_LABEL"
-			description="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_PATH_DESC" />
-		<field name="attachment_extensions" type="text"
-			default="gif,jpg,png,zip,rar,csv,txt,pdf" label="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_EXTENSIONS_LABEL"
-			description="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_EXTENSIONS_DESC" />
-		<field name="allow_unsafe_uploads" type="radio" class="btn-group"
-			default="0" label="COM_DPATTACHMENTS_CONFIG_FIELD_UNSAFE_UPLOADS_LABEL"
-			description="COM_DPATTACHMENTS_CONFIG_FIELD_UNSAFE_UPLOADS_DESC">
+		<field name="attachment_path" type="text" default="media/com_dpattachments/attachments/"
+			label="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_PATH_LABEL" description="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_PATH_DESC" />
+		<field name="attachment_extensions" type="text" default="gif,jpg,png,zip,rar,csv,txt,pdf"
+			label="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_EXTENSIONS_LABEL" description="COM_DPATTACHMENTS_CONFIG_FIELD_ATTACHMENT_EXTENSIONS_DESC" />
+		<field name="allow_unsafe_uploads" type="radio" class="btn-group" default="0"
+			label="COM_DPATTACHMENTS_CONFIG_FIELD_UNSAFE_UPLOADS_LABEL" description="COM_DPATTACHMENTS_CONFIG_FIELD_UNSAFE_UPLOADS_DESC">
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
@@ -20,23 +17,21 @@
 		<field name="menuitems_exclude" type="menuitem" multiple="true"
 			label="COM_DPATTACHMENTS_CONFIG_FIELD_MENU_ITEMS_EXCLUDE_LABEL"
 			description="COM_DPATTACHMENTS_CONFIG_FIELD_MENU_ITEMS_EXCLUDE_DESC" />
-		<field name="components" type="sql" multiple="true" translate="true"
+		<field name="components" type="sql" multiple="true" translate="true" key_field="name" value_field="name"
+			layout="joomla.form.field.list-fancy-select"
 			query="SELECT extension_id, name FROM `#__extensions` WHERE `type`='component' AND `enabled`=1"
-			label="COM_DPATTACHMENTS_CONFIG_FIELD_COMPONENTS_LABEL" description="COM_DPATTACHMENTS_CONFIG_FIELD_COMPONENTS_DESC"
-			key_field="name" value_field="name">
+			label="COM_DPATTACHMENTS_CONFIG_FIELD_COMPONENTS_LABEL" description="COM_DPATTACHMENTS_CONFIG_FIELD_COMPONENTS_DESC">
 		</field>
-		<field name="components_exclude" type="sql" multiple="true"
-			translate="true"
+		<field name="components_exclude" type="sql" multiple="true"  translate="true" key_field="name" value_field="name"
+			default="[&quot;com_cache&quot;,&quot;com_actionlogs&quot;,&quot;com_menus&quot;]" layout="joomla.form.field.list-fancy-select"
 			query="SELECT extension_id, name FROM `#__extensions` WHERE `type`='component' AND `enabled`=1"
 			label="COM_DPATTACHMENTS_CONFIG_FIELD_COMPONENTS_EXCLUDE_LABEL"
-			description="COM_DPATTACHMENTS_CONFIG_FIELD_COMPONENTS_EXCLUDE_DESC"
-			key_field="name" value_field="name">
+			description="COM_DPATTACHMENTS_CONFIG_FIELD_COMPONENTS_EXCLUDE_DESC">
 		</field>
 	</fieldset>
 	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL"
 		description="JCONFIG_PERMISSIONS_DESC">
-		<field name="rules" type="rules" label="JCONFIG_PERMISSIONS_LABEL"
-			class="inputbox" validate="rules" filter="rules" component="com_dpattachments"
-			section="component" />
+		<field name="rules" type="rules" validate="rules" filter="rules" component="com_dpattachments" section="component"
+			label="JCONFIG_PERMISSIONS_LABEL"/>
 	</fieldset>
 </config>

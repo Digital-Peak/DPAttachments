@@ -9,6 +9,7 @@ namespace DigitalPeak\Plugin\Content\DPAttachments\Extension;
 
 use DigitalPeak\Component\DPAttachments\Administrator\Extension\DPAttachmentsComponent;
 use Joomla\CMS\Application\CMSApplication;
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\Registry\Registry;
@@ -116,6 +117,33 @@ class DPAttachments extends CMSPlugin
 		// Map the context
 		if ($context === 'com_content.featured') {
 			$context = 'com_content.article';
+		}
+
+		list($componentName) = explode('.', $context);
+		$params              = ComponentHelper::getParams('com_dpattachments');
+
+		// Check if the component is in the list of excluded ones
+		$components = $params->get('components_exclude', ['com_plugins', 'com_config', 'com_menus']);
+		if (!empty($components)) {
+			if (!is_array($components)) {
+				$components = [$components];
+			}
+
+			if (in_array($componentName, $components)) {
+				return;
+			}
+		}
+
+		// Check if the component is in the list of the selected ones
+		$components = $params->get('components');
+		if (!empty($components)) {
+			if (!is_array($components)) {
+				$components = [$components];
+			}
+
+			if (!in_array($componentName, $components)) {
+				return;
+			}
 		}
 
 		// Load the attachments into the form
