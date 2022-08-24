@@ -123,7 +123,7 @@ class DPAttachments extends CMSPlugin
 		$params              = ComponentHelper::getParams('com_dpattachments');
 
 		// Check if the component is in the list of excluded ones
-		$components = $params->get('components_exclude', ['com_plugins', 'com_config', 'com_menus']);
+		$components = $params->get('components_exclude', ['com_plugins', 'com_config', 'com_menus', 'com_scheduler']);
 		if (!empty($components)) {
 			if (!is_array($components)) {
 				$components = [$components];
