@@ -21,6 +21,7 @@ use Joomla\CMS\MVC\Factory\MVCFactoryServiceInterface;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Table\Table;
 use Joomla\Database\DatabaseInterface;
+use Joomla\Event\Event;
 use Joomla\Registry\Registry;
 use stdClass;
 
@@ -98,31 +99,15 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			return '';
 		}
 
-		$user = $this->app->getIdentity();
 		PluginHelper::importPlugin('content');
-		foreach ($attachments as $key => $attachment) {
-			if ($attachment->context === 'com_dpcalendar.event'
-				&& !$this->canDo('core.admin', 'com_dpcalendar.event', $itemId)
-				&& $attachment->params->get('dpcalendar_event_ticket')
-				&& $options->get('item')) {
-				if (empty($options->get('item')->tickets)) {
-					unset($attachments[$key]);
-					continue;
-				}
 
-				$found = false;
-				foreach ($options->get('item')->tickets as $ticket) {
-					if ($user->id && ($ticket->email === $user->email || $ticket->user_id == $user->id)) {
-						$found = true;
-					}
-				}
+		$event = new Event(
+			'onDPAttachmentsRenderList',
+			['context' => $context, 'item_id' => $itemId, 'attachments' => $attachments, 'component' => $this, 'options' => $options]
+		);
+		$this->app->getDispatcher()->dispatch('onDPAttachmentsRenderList', $event);
 
-				if (!$found) {
-					unset($attachments[$key]);
-					continue;
-				}
-			}
-
+		foreach ($event->getArgument('attachments') as $attachment) {
 			$attachment->text = '';
 			$this->app->triggerEvent('onContentPrepare', ['com_dpattachments.attachment', &$attachment, &$options, 0]);
 
@@ -148,7 +133,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 
 		$buffer = $this->renderLayout(
 			'attachments.render',
-			['context' => $context, 'itemid' => $itemId, 'attachments' => $attachments, 'options' => $options]
+			['context' => $context, 'itemid' => $itemId, 'attachments' => $event->getArgument('attachments'), 'options' => $options]
 		);
 
 		if (!$canEdit || !$renderForm) {
@@ -203,6 +188,13 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 	 */
 	public function canDo(string $action, string $context, string $itemId): bool
 	{
+		PluginHelper::importPlugin('dpattachments');
+		$event = new Event('onDPAttachmentsCheckPermission', ['action' => $action, 'context' => $context, 'item_id' => $itemId]);
+		$this->app->getDispatcher()->dispatch('onDPAttachmentsCheckPermission', $event);
+		if ($event->hasArgument('allowed') && $event->getArgument('allowed') === true) {
+			return true;
+		}
+
 		$key = $context . '.' . $itemId;
 
 		list($component, $modelName) = explode('.', $context);
@@ -245,13 +237,13 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			return true;
 		}
 
-		// If the edit action is requestd we check for edit.own
-		if ($action == 'core.edit' && isset($item->created_by) && $user->authorise('core.edit.own', $asset) && $item->created_by == $user->id) {
+		// If the edit action is requested we check for edit.own
+		if ($action === 'core.edit' && isset($item->created_by) && $user->authorise('core.edit.own', $asset) && $item->created_by == $user->id) {
 			return true;
 		}
 
 		// The creator will always have the edit state permissions to trash attachments
-		if ($action == 'core.edit.state' && isset($item->created_by) && $item->created_by == $user->id) {
+		if ($action === 'core.edit.state' && isset($item->created_by) && $item->created_by == $user->id) {
 			return true;
 		}
 

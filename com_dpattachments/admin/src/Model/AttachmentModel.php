@@ -15,6 +15,7 @@ use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Utilities\ArrayHelper;
 
 class AttachmentModel extends AdminModel
@@ -125,6 +126,8 @@ class AttachmentModel extends AdminModel
 
 	public function getForm($data = [], $loadData = true)
 	{
+		PluginHelper::importPlugin('dpattachments');
+
 		// Get the form.
 		Form::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpattachments/forms');
 		$form = $this->loadForm('com_dpattachments.attachment', 'attachment', ['control' => 'jform', 'load_data' => $loadData]);

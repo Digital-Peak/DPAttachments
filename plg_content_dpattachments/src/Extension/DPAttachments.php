@@ -72,33 +72,8 @@ class DPAttachments extends CMSPlugin
 
 	public function onContentPrepareForm(Form $form, $data)
 	{
-		// The path to the form XML files
-		$formsFolderPath = JPATH_PLUGINS . '/' . $this->_type . '/' . $this->_name . '/forms';
-
-		// The context
 		$context = $form->getName();
-
-		// When DPAttachments
 		if ($context === 'com_dpattachments.attachment') {
-			$dataContext = '';
-			if (is_object($data) && !empty($data->context)) {
-				$dataContext = $data->context;
-			}
-
-			if (!$dataContext && is_array($data) && !empty($data['context'])) {
-				$dataContext = $data['context'];
-			}
-
-			$inputData = $this->app->input->get('jform', [], 'array');
-			if (!$dataContext && $inputData && !empty($inputData['context'])) {
-				$dataContext = $inputData['context'];
-			}
-
-			// Add some extension specific fields
-			if ($dataContext && file_exists($formsFolderPath . '/context/' . $dataContext . '.xml')) {
-				$form->loadFile($formsFolderPath . '/context/' . $dataContext . '.xml');
-			}
-
 			return;
 		}
 
@@ -147,7 +122,7 @@ class DPAttachments extends CMSPlugin
 		}
 
 		// Load the attachments into the form
-		$form->loadFile($formsFolderPath . '/attachments.xml');
+		$form->loadFile(JPATH_PLUGINS . '/content/dpattachments/forms/attachments.xml');
 
 		// Set the item ID attribute
 		$form->setFieldAttribute(

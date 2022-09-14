@@ -206,8 +206,8 @@ class AttachmentsModel extends ListModel
 			$nullDate = $db->quote($db->getNullDate());
 			$nowDate  = $db->quote(Factory::getDate()->toSql());
 
-			$query->where('(a.publish_up = ' . $nullDate . ' OR a.publish_up <= ' . $nowDate . ')');
-			$query->where('(a.publish_down = ' . $nullDate . ' OR a.publish_down >= ' . $nowDate . ')');
+			$query->where('(a.publish_up IS NULL OR a.publish_up = ' . $nullDate . ' OR a.publish_up <= ' . $nowDate . ')');
+			$query->where('(a.publish_down IS NULL OR a.publish_down = ' . $nullDate . ' OR a.publish_down >= ' . $nowDate . ')');
 		}
 
 		// Add the list ordering clause.
