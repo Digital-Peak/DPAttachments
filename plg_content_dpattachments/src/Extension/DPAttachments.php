@@ -57,16 +57,6 @@ class DPAttachments extends CMSPlugin
 			new Registry(['render.columns' => $this->params->get('column_count', 2), 'item' => $item])
 		);
 
-		// Render the attachment form the original event as well
-		if (isset($item->original_id) && $item->original_id > 0) {
-			$buffer .= $component->render(
-				$context,
-				$item->original_id,
-				new Registry(['render.columns' => $this->params->get('column_count', 2), 'item' => $item]),
-				false
-			);
-		}
-
 		return $buffer;
 	}
 

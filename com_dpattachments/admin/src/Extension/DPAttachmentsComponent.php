@@ -102,10 +102,10 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 		PluginHelper::importPlugin('content');
 
 		$event = new Event(
-			'onDPAttachmentsRenderList',
+			'onDPAttachmentsBeforeProcessList',
 			['context' => $context, 'item_id' => $itemId, 'attachments' => $attachments, 'component' => $this, 'options' => $options]
 		);
-		$this->app->getDispatcher()->dispatch('onDPAttachmentsRenderList', $event);
+		$this->app->getDispatcher()->dispatch('onDPAttachmentsBeforeProcessList', $event);
 
 		foreach ($event->getArgument('attachments') as $attachment) {
 			$attachment->text = '';
@@ -130,6 +130,12 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			);
 			$attachment->event->afterDisplayAttachment = trim(implode("\n", $results));
 		}
+
+		$event = new Event(
+			'onDPAttachmentsAfterProcessList',
+			['context' => $context, 'item_id' => $itemId, 'attachments' => $event->getArgument('attachments'), 'component' => $this, 'options' => $options]
+		);
+		$this->app->getDispatcher()->dispatch('onDPAttachmentsAfterProcessList', $event);
 
 		$buffer = $this->renderLayout(
 			'attachments.render',
@@ -306,12 +312,26 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 	 */
 	public function renderLayout(string $name, array $data): string
 	{
-		return LayoutHelper::render(
+		$event = new Event(
+			'onDPAttachmentsBeforeRenderLayout',
+			['name' => $name, 'data' => $data, 'component' => $this]
+		);
+		$this->app->getDispatcher()->dispatch('onDPAttachmentsBeforeRenderLayout', $event);
+
+		$content = LayoutHelper::render(
 			$name,
 			$data,
 			null,
 			['component' => 'com_dpattachments', 'client' => 0]
 		);
+
+		$event = new Event(
+			'onDPAttachmentsAfterRenderLayout',
+			['name' => $name, 'data' => $data, 'content' => $content, 'component' => $this]
+		);
+		$this->app->getDispatcher()->dispatch('onDPAttachmentsAfterRenderLayout', $event);
+
+		return $event->getArgument('content');
 	}
 
 	public function validateSection($section, $item = null)

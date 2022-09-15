@@ -1,5 +1,5 @@
 ### Introduction
-DPAttachments is a simple attachment extension which extends articles, banners, DPCalendar events with attachment support. Attachments can be uploaded in the details or the form view. Attachments are stored per item in an unique folder on the local file system.
+DPAttachments is a simple attachment extension which extends articles, banners, DPCalendar events with attachment support. Attachments can be uploaded in the details or the form view and they are stored per item in an unique folder on the local file system.
 
 Developers can also easily integrate it into their extensions, with just one line of code. More information can be found in the #608 docs.
 
