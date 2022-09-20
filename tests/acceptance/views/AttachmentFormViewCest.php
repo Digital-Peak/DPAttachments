@@ -12,11 +12,18 @@ class AttachmentFormViewCest extends \BasicDPAttachmentsCestClass
 {
 	private $url = '/index.php?option=com_dpattachments&task=attachment.edit&id=';
 
+	public function _before(\AcceptanceTester $I)
+	{
+		parent::_before($I);
+
+		$I->enablePlugin('plg_content_dpattachments');
+	}
+
 	public function canOpenFormFromArticle(Attachment $I, Article $IA)
 	{
 		$I->wantToTest('that the attachment form can be opened from an article view.');
 
-		$article    = $IA->createArticle(['title' => 'Test title']);
+		$article = $IA->createArticle(['title' => 'Test title']);
 		$I->createAttachment(['path' => 'test.txt', 'item_id' => $article['id']]);
 
 		$I->doFrontEndLogin();
