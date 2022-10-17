@@ -23,6 +23,8 @@ class DPAttachments extends CMSPlugin
 
 	public function onContentAfterDisplay($context, $item, $params)
 	{
+		$context = $this->transformContext($context, $item);
+
 		// Ignore DPAttachments
 		if ($context === 'com_dpattachments.attachment') {
 			return;
@@ -37,11 +39,6 @@ class DPAttachments extends CMSPlugin
 		$catIds = $this->params->get('cat_ids');
 		if (isset($item->catid) && !empty($catIds) && !in_array($item->catid, $catIds)) {
 			return '';
-		}
-
-		// Make the correct context
-		if ($context === 'com_content.featured') {
-			$context = 'com_content.article';
 		}
 
 		// Get the component instance
@@ -62,7 +59,8 @@ class DPAttachments extends CMSPlugin
 
 	public function onContentPrepareForm(Form $form, $data)
 	{
-		$context = $form->getName();
+		$context = $this->transformContext($form->getName(), $data);
+
 		if ($context === 'com_dpattachments.attachment') {
 			return;
 		}
@@ -77,11 +75,6 @@ class DPAttachments extends CMSPlugin
 		$catIds = $this->params->get('cat_ids');
 		if (isset($data->catid) && !empty($catIds) && !in_array($data->catid, $catIds)) {
 			return '';
-		}
-
-		// Map the context
-		if ($context === 'com_content.featured') {
-			$context = 'com_content.article';
 		}
 
 		list($componentName) = explode('.', $context);
@@ -129,11 +122,6 @@ class DPAttachments extends CMSPlugin
 			return '';
 		}
 
-		// Map the context
-		if ($context === 'com_content.featured') {
-			$context = 'com_content.article';
-		}
-
 		// Load the component instance
 		$component = $this->app->bootComponent('dpattachments');
 		if (!$component instanceof DPAttachmentsComponent) {
@@ -141,6 +129,35 @@ class DPAttachments extends CMSPlugin
 		}
 
 		// Delete the attachment for the item
-		return $component->delete($context, $item->id);
+		return $component->delete($this->transformContext($context, $item), $item->id);
+	}
+
+	/**
+	 * Transforms the given context for the given item into a default one. Like
+	 * that we ensure the same context across different views for the same entity.
+	 *
+	 * @param string $context
+	 * @param mixed  $item
+	 *
+	 * @return string
+	 */
+	private function transformContext(string $context, $item)
+	{
+		// Categories lists
+		if ($context === 'com_content.categories') {
+			return 'com_categories.category';
+		}
+
+		// Featured display
+		if ($context === 'com_content.featured') {
+			return 'com_content.article';
+		}
+
+		// Items in a category list view
+		if ($context === 'com_content.category' && !empty($item->catid)) {
+			return 'com_content.article';
+		}
+
+		return $context;
 	}
 }

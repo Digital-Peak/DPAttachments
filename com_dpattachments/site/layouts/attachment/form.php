@@ -36,8 +36,8 @@ HTMLHelper::_('script', 'com_dpattachments/dpattachments/layouts/attachment/form
 		<span class="dp-upload__paste"><?php echo Text::_('COM_DPATTACHMENTS_TEXT_PASTE'); ?></span>
 	</div>
 	<div class="dp-form__input dp-input">
-		<input type="file" name="file" class="dp-input__file" id="dp-input-<?php echo $itemId; ?>">
-		<label for="dp-input-<?php echo $itemId; ?>" class="dp-input__label">
+		<input type="file" name="file" class="dp-input__file" id="dp-input-<?php echo $context . '-' . $itemId; ?>">
+		<label for="dp-input-<?php echo $context . '-' . $itemId; ?>" class="dp-input__label">
 			<?php echo Factory::getApplication()->bootComponent('dpattachments')->renderLayout('block.icon', ['icon' => 'upload']); ?>
 			<?php echo Text::_('COM_DPATTACHMENTS_BUTTON_SELECT_FILE'); ?>
 		</label>

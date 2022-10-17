@@ -26,7 +26,7 @@ class AttachmentViewCest extends \BasicDPAttachmentsCestClass
 		$I->see('test.' . $provider['extension']);
 		$I->seeElement('.com-dpattachments-attachment-' . $provider['extension']);
 		$I->seeElement('.com-dpattachments-attachment__content');
-		$I->seeElement('img[src$="' . Attachment::ATTACHMENT_DIR . 'test.' . $provider['extension'] . '"]');
+		$I->seeElement('img[src$="' . Attachment::ARTICLES_ATTACHMENT_DIR . 'test.' . $provider['extension'] . '"]');
 	}
 
 	/**

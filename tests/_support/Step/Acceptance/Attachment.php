@@ -9,7 +9,8 @@ namespace Step\Acceptance;
 
 class Attachment extends \AcceptanceTester
 {
-	public const ATTACHMENT_DIR = '/images/com_content.article/';
+	public const ARTICLES_ATTACHMENT_DIR   = '/images/com_content.article/';
+	public const CATEGORIES_ATTACHMENT_DIR = '/images/com_categories.category/';
 
 	private $user    = null;
 	private $article = null;
@@ -54,7 +55,7 @@ class Attachment extends \AcceptanceTester
 			$attachment['item_id'] = $this->article->createArticle(['title' => 'Test title'])['id'];
 		}
 
-		copy(codecept_data_dir($attachment['path']), $I->getConfiguration('home_dir') . self::ATTACHMENT_DIR . $attachment['path']);
+		copy(codecept_data_dir($attachment['path']), $I->getConfiguration('home_dir') . self::ARTICLES_ATTACHMENT_DIR . $attachment['path']);
 
 		$attachment['id'] = $I->haveInDatabase('dpattachments', $attachment);
 
