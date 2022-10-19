@@ -21,7 +21,7 @@
 			<fieldset name="basic">
 				<field name="cat_ids" type="sql" multiple="true" translate="true"
 					query="SELECT id, concat(title, ' [', extension, ']') as title FROM `#__categories` WHERE `published` = 1 and id > 1"
-					key_field="id" value_field="title"
+					key_field="id" value_field="title" layout="joomla.form.field.list-fancy-select"
 					label="JGLOBAL_CHOOSE_CATEGORY_LABEL" description="JGLOBAL_CHOOSE_CATEGORY_DESC"/>
 			</fieldset>
 		</fields>

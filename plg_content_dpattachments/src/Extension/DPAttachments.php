@@ -73,7 +73,7 @@ class DPAttachments extends CMSPlugin
 
 		// Check if there are categories to filter
 		$catIds = $this->params->get('cat_ids');
-		if (isset($data->catid) && !empty($catIds) && !in_array($data->catid, $catIds)) {
+		if (!empty($catIds) && isset($data->catid) && !in_array($data->catid, $catIds)) {
 			return '';
 		}
 
