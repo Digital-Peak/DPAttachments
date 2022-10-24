@@ -6,6 +6,6 @@
 	"devReleaseDescription": "<p>This is a new version of the {{extension}} Joomla attachment extension. It is a dev release for version {{version}} which contains a patch for the case {{#cases id={{caseId}} state=all}}<a href='{{backLinkFull}}'>{{caseId}}</a>{{/cases}}. Translation files are not included in this release, but will be in the final version. Install the whole package through the Joomla installer as you do with regular releases</p>\n<p>{{arsCatTitle}} needs the same requirements as Joomla and does run nicely within the following browsers: Firefox, Edge, Chrome, Opera but not Internet Explorer</p>\n<h3>Installation</h3>\n<p>To install {{arsCatTitle}}, you have to download the package and upload it through the Joomla installer. After a successful installation test if the case was solved.</p>",
 	"devReleaseNotes": "",
 	"accessLevels": {
-		"Core": 1
+		"Free": 1
 	}
 }

@@ -1,7 +1,7 @@
 {
 	"packages": [
 		{
-			"name": "DPAttachments-Core",
+			"name": "DPAttachments-Free",
 			"originalManifestFileName": "pkg_dpattachments",
 			"substituteManifestFileName": "pkg_dpattachments",
 			"extensions": [
