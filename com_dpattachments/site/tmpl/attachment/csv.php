@@ -28,7 +28,7 @@ $csv->encoding('UTF-16', 'UTF-8');
 $csv->delimiter = $delimiter;
 $csv->parse($content);
 
-HTMLHelper::_('stylesheet', 'com_dpattachments/views/attachment/csv.min.css', ['relative' => true]);
+HTMLHelper::_('stylesheet', 'com_dpattachments/dpattachments/views/attachment/csv.min.css', ['relative' => true]);
 ?>
 <div class="com-dpattachments-attachment com-dpattachments-attachment-csv">
 	<h3 class="com-dpattachments-attachment__header"><?php echo $this->escape($this->item->title); ?></h3>

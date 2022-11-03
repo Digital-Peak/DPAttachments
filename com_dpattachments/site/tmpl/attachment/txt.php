@@ -12,7 +12,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 
 $content = file_get_contents(Factory::getApplication()->bootComponent('dpattachments')->getPath($this->item->path, $this->item->context));
 
-HTMLHelper::_('stylesheet', 'com_dpattachments/views/attachment/txt.min.css', ['relative' => true]);
+HTMLHelper::_('stylesheet', 'com_dpattachments/dpattachments/views/attachment/txt.min.css', ['relative' => true]);
 ?>
 <div class="com-dpattachments-attachment com-dpattachments-attachment-txt">
 	<h3 class="com-dpattachments-attachment__header"><?php echo $this->escape($this->item->title); ?></h3>

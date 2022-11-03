@@ -9,7 +9,7 @@ defined('_JEXEC') or die();
 
 use Joomla\CMS\HTML\HTMLHelper;
 
-HTMLHelper::_('stylesheet', 'com_dpattachments/views/attachment/image.min.css', ['relative' => true]);
+HTMLHelper::_('stylesheet', 'com_dpattachments/dpattachments/views/attachment/image.min.css', ['relative' => true]);
 
 $path = $this->params->get('attachment_path', 'media/com_dpattachments/attachments/');
 $path = trim($path, '/') . '/' . $this->item->context . '/' . $this->item->path;

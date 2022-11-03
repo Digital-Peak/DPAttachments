@@ -14,7 +14,7 @@ use ptlis\DiffParser\Parser;
 
 JLoader::import('components.com_dpattachments.vendor.autoload', JPATH_ADMINISTRATOR);
 
-HTMLHelper::_('stylesheet', 'com_dpattachments/views/attachment/patch.min.css', ['relative' => true]);
+HTMLHelper::_('stylesheet', 'com_dpattachments/dpattachments/views/attachment/patch.min.css', ['relative' => true]);
 
 $parser  = new Parser();
 $changes = $parser->parseFile(Factory::getApplication()->bootComponent('dpattachments')->getPath($this->item->path, $this->item->context));
