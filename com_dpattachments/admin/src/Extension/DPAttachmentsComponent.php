@@ -406,7 +406,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			}
 		}
 
-		$components = $params->get('components_exclude', ['com_plugins', 'com_config', 'com_menus', 'com_scheduler']);
+		$components = $params->get('components_exclude', ['com_cache', 'com_actionlogs', 'com_menus', 'com_config', 'com_scheduler', 'com_plugins']);
 		if (!empty($components)) {
 			if (!is_array($components)) {
 				$components = [$components];
