@@ -114,7 +114,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			$attachment->event = new stdClass();
 			$results           = $this->app->triggerEvent(
 				'onContentAfterTitle',
-				['com_dpattachments.attachment', &$attachment, &$this->params, 0]
+				['com_dpattachments.attachment', &$attachment, &$options, 0]
 			);
 			$attachment->event->afterDisplayTitle = trim(implode("\n", $results));
 
