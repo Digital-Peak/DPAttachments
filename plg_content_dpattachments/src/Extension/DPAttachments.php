@@ -21,6 +21,8 @@ class DPAttachments extends CMSPlugin
 
 	protected $autoloadLanguage = true;
 
+	private $FORMS_TO_EXCLUDE = ['com_users.registration'];
+
 	public function onContentAfterDisplay($context, $item, $params)
 	{
 		$context = $this->transformContext($context, $item);
@@ -61,7 +63,13 @@ class DPAttachments extends CMSPlugin
 	{
 		$context = $this->transformContext($form->getName(), $data);
 
+		// Do not load it on our own
 		if ($context === 'com_dpattachments.attachment') {
+			return;
+		}
+
+		// Check if the context belongs to a form we don't want
+		if (in_array($context, $this->FORMS_TO_EXCLUDE)) {
 			return;
 		}
 
