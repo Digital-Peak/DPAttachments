@@ -37,8 +37,9 @@ class Attachment extends \AcceptanceTester
 			'context'      => 'com_content.article',
 			'state'        => 1,
 			'access'       => 1,
-			'publish_up'   => '0000-00-00 00:00:00',
-			'publish_down' => '0000-00-00 00:00:00',
+			'publish_up'   => null,
+			'publish_down' => null,
+			'description'  => '',
 			'created'      => (new \DateTime())->format('Y-m-d H:i:s'),
 			'created_by'   => $this->user->getLoggedInUserId()
 		];

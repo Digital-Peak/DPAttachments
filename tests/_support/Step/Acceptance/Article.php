@@ -37,8 +37,18 @@ class Article extends \AcceptanceTester
 			'state'        => 1,
 			'access'       => 1,
 			'language'     => '*',
+			'introtext'    => '',
+			'fulltext'     => '',
+			'images'       => '',
+			'urls'         => '',
+			'attribs'      => '',
+			'metakey'      => '',
+			'metadesc'     => '',
+			'metadata'     => '',
 			'publish_up'   => date('Y-m-d'),
 			'publish_down' => null,
+			'created'      => date('Y-m-d'),
+			'modified'     => date('Y-m-d'),
 			'created_by'   => $this->user->getLoggedInUserId()
 		];
 
