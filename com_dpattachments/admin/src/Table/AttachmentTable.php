@@ -36,7 +36,7 @@ class AttachmentTable extends Table
 
 	public function check()
 	{
-		if ($this->publish_down > $this->_db->getNullDate() && $this->publish_down < $this->publish_up) {
+		if ($this->publish_down && $this->publish_down < $this->publish_up) {
 			// Swap the dates.
 			$temp               = $this->publish_up;
 			$this->publish_up   = $this->publish_down;
@@ -57,15 +57,22 @@ class AttachmentTable extends Table
 			$this->description = '';
 		}
 
-		if ($this->publish_up === '') {
-			$this->publish_up = null;
+		if (empty($this->created) || $this->created === $this->getDbo()->getNullDate()) {
+			$this->created = null;
 		}
-		if ($this->publish_down === '') {
-			$this->publish_down = null;
-		}
-		if ($this->modified === '') {
+		if (empty($this->modified) || $this->modified === $this->getDbo()->getNullDate()) {
 			$this->modified = null;
 		}
+		if (empty($this->publish_up) || $this->publish_up === $this->getDbo()->getNullDate()) {
+			$this->publish_up = null;
+		}
+		if (empty($this->publish_down) || $this->publish_down === $this->getDbo()->getNullDate()) {
+			$this->publish_down = null;
+		}
+		if (empty($this->checked_out_time) || $this->checked_out_time === $this->getDbo()->getNullDate()) {
+			$this->checked_out_time = null;
+		}
+
 		if ($this->hits === '') {
 			$this->hits = 0;
 		}

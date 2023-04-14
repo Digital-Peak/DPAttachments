@@ -1,0 +1,10 @@
+ALTER TABLE `#__dpattachments` CHANGE `checked_out_time` `checked_out_time` DATETIME NULL DEFAULT NULL;
+UPDATE `#__dpattachments` SET `checked_out_time` = NULL WHERE `checked_out_time` = '0000-00-00 00:00:00';
+ALTER TABLE `#__dpattachments` CHANGE `created` `created` DATETIME NULL DEFAULT NULL;
+UPDATE `#__dpattachments` SET `created` = NULL WHERE `created` = '0000-00-00 00:00:00';
+ALTER TABLE `#__dpattachments` CHANGE `modified` `modified` DATETIME NULL DEFAULT NULL;
+UPDATE `#__dpattachments` SET `modified` = NULL WHERE `modified` = '0000-00-00 00:00:00';
+ALTER TABLE `#__dpattachments` CHANGE `publish_up` `publish_up` DATETIME NULL DEFAULT NULL;
+UPDATE `#__dpattachments` SET `publish_up` = NULL WHERE `publish_up` = '0000-00-00 00:00:00';
+ALTER TABLE `#__dpattachments` CHANGE `publish_down` `publish_down` DATETIME NULL DEFAULT NULL;
+UPDATE `#__dpattachments` SET `publish_down` = NULL WHERE `publish_down` = '0000-00-00 00:00:00';

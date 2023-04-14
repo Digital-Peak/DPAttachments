@@ -46,16 +46,6 @@ class AttachmentModel extends AdminModel
 
 	protected function prepareTable($table)
 	{
-		// Set the publish date to now
-		$db = $this->getDbo();
-		if ($table->state == 1 && (int)$table->publish_up == 0) {
-			$table->publish_up = Factory::getDate()->toSql();
-		}
-
-		if ($table->state == 1 && intval($table->publish_down) == 0) {
-			$table->publish_down = $db->getNullDate();
-		}
-
 		// Increment the content version number.
 		$table->version++;
 	}
