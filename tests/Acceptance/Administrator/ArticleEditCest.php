@@ -28,7 +28,7 @@ class ArticleEditCest extends BasicDPAttachmentsCestClass
 		$article = $IA->createArticle(['title' => 'Test title']);
 		$I->createAttachment(['path' => 'test.txt', 'item_id' => $article['id']]);
 
-		$I->doAdministratorLogin(null, null, false);
+		$I->doAdministratorLogin();
 		$I->amOnPage('/administrator/index.php?option=com_content&task=article.edit&id=' . $article['id']);
 		$I->click('Attachments');
 
@@ -43,7 +43,7 @@ class ArticleEditCest extends BasicDPAttachmentsCestClass
 
 		$article = $I->createArticle(['title' => 'Test title']);
 
-		$I->doAdministratorLogin(null, null, false);
+		$I->doAdministratorLogin();
 		$I->amOnPage('/administrator/index.php?option=com_content&task=article.edit&id=' . $article['id']);
 		$I->click('Attachments');
 
@@ -58,7 +58,7 @@ class ArticleEditCest extends BasicDPAttachmentsCestClass
 
 		$article = $I->createArticle(['title' => 'Test title']);
 
-		$I->doAdministratorLogin(null, null, false);
+		$I->doAdministratorLogin();
 		$I->amOnPage('/administrator/index.php?option=com_content&task=article.edit&id=' . $article['id']);
 
 		$I->dontSee('Attachments');
@@ -104,7 +104,7 @@ class ArticleEditCest extends BasicDPAttachmentsCestClass
 
 		$article = $I->createArticle(['title' => 'Test title']);
 
-		$I->doAdministratorLogin(null, null, false);
+		$I->doAdministratorLogin();
 		$I->amOnPage('/administrator/index.php?option=com_content&task=article.edit&id=' . $article['id']);
 		$I->click('Attachments');
 
@@ -122,7 +122,7 @@ class ArticleEditCest extends BasicDPAttachmentsCestClass
 
 		$article = $I->createArticle(['title' => 'Test title']);
 
-		$I->doAdministratorLogin(null, null, false);
+		$I->doAdministratorLogin();
 		$I->amOnPage('/administrator/index.php?option=com_content&task=article.edit&id=' . $article['id']);
 		$I->click('Attachments');
 
@@ -144,7 +144,7 @@ class ArticleEditCest extends BasicDPAttachmentsCestClass
 		$article = $IA->createArticle(['title' => 'Test title']);
 		$I->createAttachment(['path' => 'test.txt', 'item_id' => $article['id']]);
 
-		$I->doAdministratorLogin(null, null, false);
+		$I->doAdministratorLogin();
 		$I->amOnPage('/administrator/index.php?option=com_content&task=article.edit&id=' . $article['id']);
 		$I->click('Attachments');
 		$I->click('Trash');
@@ -158,7 +158,7 @@ class ArticleEditCest extends BasicDPAttachmentsCestClass
 	{
 		$I->wantToTest('that an information message is shown when an article is not saved.');
 
-		$I->doAdministratorLogin(null, null, false);
+		$I->doAdministratorLogin();
 		$I->amOnPage('/administrator/index.php?option=com_content&task=article.edit');
 		$I->click('Attachments');
 

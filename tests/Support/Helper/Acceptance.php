@@ -7,8 +7,34 @@
 
 namespace Tests\Support\Helper;
 
-class Acceptance extends \Codeception\Module
+use Codeception\Module;
+
+class Acceptance extends Module
 {
+	public function doFrontEndLogin($user = null, $password = null, $useSnapshot = true)
+	{
+		/** @var JoomlaBrowser $browser */
+		$I = $this->getModule('Joomla\Browser\JoomlaBrowser');
+
+		if (is_null($user)) {
+			$user = $I->_getConfig('username');
+		}
+
+		if (is_null($password)) {
+			$password = $I->_getConfig('password');
+		}
+
+		if ($useSnapshot && $I->loadSessionSnapshot('front' . $user)) {
+			return;
+		}
+
+		$I->doFrontEndLogin($user, $password);
+
+		if ($useSnapshot) {
+			$I->saveSessionSnapshot('front' . $user);
+		}
+	}
+
 	public function getConfiguration($element = null)
 	{
 		if (is_null($element)) {
@@ -63,7 +89,7 @@ class Acceptance extends \Codeception\Module
 		/** @var Joomla\Browser\JoomlaBrowser $browser */
 		$I = $this->getModule('Joomla\Browser\JoomlaBrowser');
 
-		$I->doAdministratorLogin(null, null, false);
+		$I->doAdministratorLogin();
 		$I->amOnPage('administrator/index.php?option=com_categories&extension=com_content');
 		$I->click('New');
 		$I->fillField(['id' => 'jform_title'], $title);

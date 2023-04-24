@@ -20,7 +20,7 @@ class AttachmentEditCest extends BasicDPAttachmentsCestClass
 
 		$I->createAttachment(['path' => 'test.jpg']);
 
-		$I->doAdministratorLogin(null, null, false);
+		$I->doAdministratorLogin();
 		$I->amOnPage(AttachmentsListPage::$url);
 		$I->click('test.jpg');
 		$I->waitForElement(AttachmentFormPage::$rootClass);

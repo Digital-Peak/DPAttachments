@@ -19,7 +19,7 @@ class MediaListCest extends BasicDPAttachmentsCestClass
 	{
 		parent::_before($I);
 
-		$I->doAdministratorLogin(null, null, false);
+		$I->doAdministratorLogin();
 
 		if (is_dir($I->getConfiguration('home_dir') . '/images/test')) {
 			(new FileSystem())->deleteDir($I->getConfiguration('home_dir') . '/images/test');

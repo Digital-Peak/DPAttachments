@@ -24,7 +24,7 @@ class MenuEditCest extends BasicDPAttachmentsCestClass
 	{
 		$I->wantToTest('that the attachment details are not shown in the menu item form.');
 
-		$I->doAdministratorLogin(null, null, false);
+		$I->doAdministratorLogin();
 		$I->amOnPage('/administrator/index.php?option=com_menus&task=menu.edit');
 
 		$I->dontSee('Attachments');

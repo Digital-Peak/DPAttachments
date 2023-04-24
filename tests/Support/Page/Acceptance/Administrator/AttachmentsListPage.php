@@ -11,6 +11,6 @@ use Tests\Support\AcceptanceTester;
 
 class AttachmentsListPage extends AcceptanceTester
 {
-	public static $url       = '/administrator/index.php?option=com_dpattachments&view=attachments';
+	public static $url       = '/administrator/index.php?option=com_dpattachments&view=attachments&filter[state]=';
 	public static $rootClass = '.com-dpattachments-attachments';
 }

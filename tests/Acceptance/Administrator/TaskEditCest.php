@@ -24,7 +24,7 @@ class TaskEditCest extends BasicDPAttachmentsCestClass
 	{
 		$I->wantToTest('that the attachment details are not shown in the task form.');
 
-		$I->doAdministratorLogin(null, null, false);
+		$I->doAdministratorLogin();
 		$I->amOnPage('/administrator/index.php?option=com_scheduler&view=select&layout=default');
 		$I->click('Demo Task');
 

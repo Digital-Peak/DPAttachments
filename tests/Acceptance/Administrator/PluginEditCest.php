@@ -24,7 +24,7 @@ class PluginEditCest extends BasicDPAttachmentsCestClass
 	{
 		$I->wantToTest('that the attachment details are not shown in the plugin form.');
 
-		$I->doAdministratorLogin(null, null, false);
+		$I->doAdministratorLogin();
 		$I->amOnPage(
 			'/administrator/index.php?option=com_plugins&task=plugin.edit&extension_id=' . $I->grabFromDatabase('extensions', 'extension_id', [])
 		);

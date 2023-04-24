@@ -18,7 +18,7 @@ class AttachmentsListCest extends BasicDPAttachmentsCestClass
 	{
 		parent::_before($I);
 
-		$I->doAdministratorLogin(null, null, false);
+		$I->doAdministratorLogin();
 	}
 
 	public function canNavigateToAttachmentForm(Attachment $I)
