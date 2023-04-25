@@ -58,7 +58,7 @@ class AttachmentsListCest extends BasicDPAttachmentsCestClass
 		$I->click('Filter Options');
 		$I->selectOption('#filter_state', 'Trashed');
 		$I->click('input[name="checkall-toggle"]');
-		$I->clickToolbarButton('Empty Trash');
+		$I->clickJoomlaToolbarButton('Empty Trash');
 
 		$I->dontSeeInDatabase('dpattachments', []);
 		$I->dontSeeFileFound($I->getConfiguration('home_dir') . Attachment::ARTICLES_ATTACHMENT_DIR . 'test.jpg');
