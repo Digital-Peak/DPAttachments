@@ -7,6 +7,7 @@
 
 namespace Tests\Support\Step\Acceptance;
 
+use DateTime;
 use Tests\Support\AcceptanceTester;
 
 class Article extends AcceptanceTester
@@ -47,10 +48,10 @@ class Article extends AcceptanceTester
 			'metakey'      => '',
 			'metadesc'     => '',
 			'metadata'     => '',
-			'publish_up'   => date('Y-m-d'),
+			'publish_up'   => (new DateTime())->format('Y-m-d H:i:s'),
 			'publish_down' => null,
-			'created'      => date('Y-m-d'),
-			'modified'     => date('Y-m-d'),
+			'created'      => (new DateTime())->format('Y-m-d H:i:s'),
+			'modified'     => (new DateTime())->format('Y-m-d H:i:s'),
 			'created_by'   => $this->user->getLoggedInUserId()
 		];
 

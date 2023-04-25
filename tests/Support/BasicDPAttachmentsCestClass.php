@@ -21,7 +21,7 @@ class BasicDPAttachmentsCestClass
 		$I->deleteFromDatabase('workflow_associations', []);
 		$I->deleteFromDatabase('dpattachments', []);
 
-		$I->setExtensionParam('attachment_path', 'images');
+		$I->setExtensionParam('attachment_path', 'images', 'com_dpattachments');
 
 		$I->deleteDir($I->getConfiguration('home_dir') . Attachment::ARTICLES_ATTACHMENT_DIR);
 		$I->deleteDir($I->getConfiguration('home_dir') . Attachment::CATEGORIES_ATTACHMENT_DIR);
