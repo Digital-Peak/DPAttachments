@@ -91,7 +91,8 @@ class ArticleViewCest extends BasicDPAttachmentsCestClass
 	{
 		$I->wantToTest('that the upload form is displayed in an article for a specific category.');
 
-		$category = $I->createCat('Test cat');
+		$I->doAdministratorLogin();
+		$category = $I->createDPCategory('Test cat', 'com_content');
 		$I->setExtensionParam('cat_ids', [$category], 'plg_content_dpattachments');
 
 		$I->createArticle(['title' => 'Test title', 'catid' => $category]);
@@ -107,7 +108,8 @@ class ArticleViewCest extends BasicDPAttachmentsCestClass
 	{
 		$I->wantToTest('that the upload form is displayed in an article for a specific category.');
 
-		$category = $I->createCat('Test cat');
+		$I->doAdministratorLogin();
+		$category = $I->createDPCategory('Test cat', 'com_content');
 
 		$I->setExtensionParam(
 			'cat_ids',
