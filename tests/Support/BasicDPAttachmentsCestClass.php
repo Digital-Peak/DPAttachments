@@ -23,17 +23,17 @@ class BasicDPAttachmentsCestClass
 
 		$I->setExtensionParam('attachment_path', 'images', 'com_dpattachments');
 
-		$I->deleteDir($I->getConfiguration('home_dir') . Attachment::ARTICLES_ATTACHMENT_DIR);
-		$I->deleteDir($I->getConfiguration('home_dir') . Attachment::CATEGORIES_ATTACHMENT_DIR);
+		$I->deleteDir($I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . Attachment::ARTICLES_ATTACHMENT_DIR);
+		$I->deleteDir($I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . Attachment::CATEGORIES_ATTACHMENT_DIR);
 
-		mkdir($I->getConfiguration('home_dir') . Attachment::ARTICLES_ATTACHMENT_DIR, 0777, true);
-		mkdir($I->getConfiguration('home_dir') . Attachment::CATEGORIES_ATTACHMENT_DIR, 0777, true);
+		mkdir($I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . Attachment::ARTICLES_ATTACHMENT_DIR, 0777, true);
+		mkdir($I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . Attachment::CATEGORIES_ATTACHMENT_DIR, 0777, true);
 	}
 
 	public function _after(AcceptanceTester $I)
 	{
-		$I->deleteDir($I->getConfiguration('home_dir') . Attachment::ARTICLES_ATTACHMENT_DIR);
-		$I->deleteDir($I->getConfiguration('home_dir') . Attachment::CATEGORIES_ATTACHMENT_DIR);
+		$I->deleteDir($I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . Attachment::ARTICLES_ATTACHMENT_DIR);
+		$I->deleteDir($I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . Attachment::CATEGORIES_ATTACHMENT_DIR);
 
 		$I->checkForPhpNoticesOrWarnings();
 		$I->checkForJsErrors();

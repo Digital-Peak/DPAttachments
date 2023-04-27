@@ -59,7 +59,7 @@ class Attachment extends AcceptanceTester
 			$attachment['item_id'] = $this->article->createArticle(['title' => 'Test title'])['id'];
 		}
 
-		copy(codecept_data_dir($attachment['path']), $I->getConfiguration('home_dir') . self::ARTICLES_ATTACHMENT_DIR . $attachment['path']);
+		copy(codecept_data_dir($attachment['path']), $I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . self::ARTICLES_ATTACHMENT_DIR . $attachment['path']);
 
 		$attachment['id'] = $I->haveInDatabase('dpattachments', $attachment);
 

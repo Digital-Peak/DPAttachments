@@ -61,7 +61,7 @@ class AttachmentsListCest extends BasicDPAttachmentsCestClass
 		$I->clickJoomlaToolbarButton('Empty Trash');
 
 		$I->dontSeeInDatabase('dpattachments', []);
-		$I->dontSeeFileFound($I->getConfiguration('home_dir') . Attachment::ARTICLES_ATTACHMENT_DIR . 'test.jpg');
-		$I->dontSeeFileFound($I->getConfiguration('home_dir') . Attachment::ARTICLES_ATTACHMENT_DIR . 'test.png');
+		$I->dontSeeFileFound($I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . Attachment::ARTICLES_ATTACHMENT_DIR . 'test.jpg');
+		$I->dontSeeFileFound($I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . Attachment::ARTICLES_ATTACHMENT_DIR . 'test.png');
 	}
 }

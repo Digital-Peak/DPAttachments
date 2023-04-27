@@ -21,21 +21,21 @@ class MediaListCest extends BasicDPAttachmentsCestClass
 
 		$I->doAdministratorLogin();
 
-		if (is_dir($I->getConfiguration('home_dir') . '/images/test')) {
-			(new FileSystem())->deleteDir($I->getConfiguration('home_dir') . '/images/test');
+		if (is_dir($I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . '/images/test')) {
+			(new FileSystem())->deleteDir($I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . '/images/test');
 		}
 
-		mkdir($I->getConfiguration('home_dir') . '/images/test');
-		mkdir($I->getConfiguration('home_dir') . '/images/test/delete');
-		copy(codecept_data_dir('test.jpg'), $I->getConfiguration('home_dir') . '/images/test/test.jpg');
+		mkdir($I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . '/images/test');
+		mkdir($I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . '/images/test/delete');
+		copy(codecept_data_dir('test.jpg'), $I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . '/images/test/test.jpg');
 	}
 
 	public function _after(AcceptanceTester $I)
 	{
 		parent::_after($I);
 
-		if (is_dir($I->getConfiguration('home_dir') . '/images/test')) {
-			(new FileSystem())->deleteDir($I->getConfiguration('home_dir') . '/images/test');
+		if (is_dir($I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . '/images/test')) {
+			(new FileSystem())->deleteDir($I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . '/images/test');
 		}
 	}
 
@@ -51,7 +51,7 @@ class MediaListCest extends BasicDPAttachmentsCestClass
 		$I->click('#media-delete-item');
 		$I->waitForText('Item deleted');
 
-		$I->dontSeeFileFound($I->getConfiguration('home_dir') . '/images/test/test.jpg');
+		$I->dontSeeFileFound($I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . '/images/test/test.jpg');
 	}
 
 	public function canDeleteFolder(Attachment $I)
@@ -66,6 +66,6 @@ class MediaListCest extends BasicDPAttachmentsCestClass
 		$I->click('#media-delete-item');
 		$I->waitForText('Item deleted');
 
-		$I->dontSeeFileFound($I->getConfiguration('home_dir') . '/images/test/delete');
+		$I->dontSeeFileFound($I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . '/images/test/delete');
 	}
 }

@@ -159,8 +159,8 @@ class ArticlesBlogViewCest extends BasicDPAttachmentsCestClass
 
 		$I->seeInDatabase('dpattachments', ['context' => 'com_categories.category', 'path' => 'test.txt']);
 		$I->seeInDatabase('dpattachments', ['context' => 'com_categories.category', 'path' => 'test.jpg']);
-		$I->assertFileEquals(codecept_data_dir() . '/test.txt', $I->getConfiguration('home_dir') . Attachment::CATEGORIES_ATTACHMENT_DIR . 'test.txt');
-		$I->assertFileEquals(codecept_data_dir() . '/test.jpg', $I->getConfiguration('home_dir') . Attachment::CATEGORIES_ATTACHMENT_DIR . 'test.jpg');
+		$I->assertFileEquals(codecept_data_dir() . '/test.txt', $I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . Attachment::CATEGORIES_ATTACHMENT_DIR . 'test.txt');
+		$I->assertFileEquals(codecept_data_dir() . '/test.jpg', $I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . Attachment::CATEGORIES_ATTACHMENT_DIR . 'test.jpg');
 	}
 
 	public function canUploadAttachmentToArticle(Article $I)
@@ -196,8 +196,8 @@ class ArticlesBlogViewCest extends BasicDPAttachmentsCestClass
 
 		$I->seeInDatabase('dpattachments', ['context' => 'com_content.article', 'path' => 'test.txt']);
 		$I->seeInDatabase('dpattachments', ['context' => 'com_content.article', 'path' => 'test.jpg']);
-		$I->assertFileEquals(codecept_data_dir() . '/test.txt', $I->getConfiguration('home_dir') . Attachment::ARTICLES_ATTACHMENT_DIR . 'test.txt');
-		$I->assertFileEquals(codecept_data_dir() . '/test.jpg', $I->getConfiguration('home_dir') . Attachment::ARTICLES_ATTACHMENT_DIR . 'test.jpg');
+		$I->assertFileEquals(codecept_data_dir() . '/test.txt', $I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . Attachment::ARTICLES_ATTACHMENT_DIR . 'test.txt');
+		$I->assertFileEquals(codecept_data_dir() . '/test.jpg', $I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . Attachment::ARTICLES_ATTACHMENT_DIR . 'test.jpg');
 	}
 
 	public function canTrashAttachment(Attachment $I, Article $IA)
