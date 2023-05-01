@@ -7,7 +7,7 @@
 
 namespace Tests\Support;
 
-use Tests\Support\Step\Acceptance\Attachment;
+use Tests\Support\Step\Attachment;
 
 class BasicDPAttachmentsCestClass
 {

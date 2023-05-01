@@ -9,9 +9,9 @@ namespace Tests\Acceptance\Administrator;
 
 use Tests\Support\AcceptanceTester;
 use Tests\Support\BasicDPAttachmentsCestClass;
-use Tests\Support\Step\Acceptance\Attachment;
+use Tests\Support\Step\Attachment;
 
-class ConfigEditCest extends BasicDPAttachmentsCestClass
+class PluginEditCest extends BasicDPAttachmentsCestClass
 {
 	public function _before(AcceptanceTester $I)
 	{
@@ -22,11 +22,13 @@ class ConfigEditCest extends BasicDPAttachmentsCestClass
 
 	public function cantSeeAttachmentDetails(Attachment $I)
 	{
-		$I->wantToTest('that the attachment details are not shown in the global config form.');
+		$I->wantToTest('that the attachment details are not shown in the plugin form.');
 
 		$I->doAdministratorLogin();
-		$I->amOnPage('/administrator/index.php?option=com_config&view=component&component=com_content');
+		$I->amOnPage(
+			'/administrator/index.php?option=com_plugins&task=plugin.edit&extension_id=' . $I->grabFromDatabase('extensions', 'extension_id', [])
+		);
 
-		$I->dontSee('Attachments', '#config');
+		$I->dontSee('Attachments');
 	}
 }

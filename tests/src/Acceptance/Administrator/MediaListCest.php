@@ -10,8 +10,8 @@ namespace Tests\Acceptance\Administrator;
 use Codeception\Util\FileSystem;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\BasicDPAttachmentsCestClass;
-use Tests\Support\Page\Acceptance\Administrator\MediaListPage;
-use Tests\Support\Step\Acceptance\Attachment;
+use Tests\Support\Page\Administrator\MediaListPage;
+use Tests\Support\Step\Attachment;
 
 class MediaListCest extends BasicDPAttachmentsCestClass
 {

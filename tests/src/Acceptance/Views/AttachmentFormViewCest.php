@@ -9,8 +9,8 @@ namespace Tests\Acceptance\Views;
 
 use Tests\Support\AcceptanceTester;
 use Tests\Support\BasicDPAttachmentsCestClass;
-use Tests\Support\Step\Acceptance\Article;
-use Tests\Support\Step\Acceptance\Attachment;
+use Tests\Support\Step\Article;
+use Tests\Support\Step\Attachment;
 
 class AttachmentFormViewCest extends BasicDPAttachmentsCestClass
 {

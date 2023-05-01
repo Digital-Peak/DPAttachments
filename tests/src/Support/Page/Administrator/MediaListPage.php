@@ -5,7 +5,7 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Tests\Support\Page\Acceptance\Administrator;
+namespace Tests\Support\Page\Administrator;
 
 use Tests\Support\AcceptanceTester;
 

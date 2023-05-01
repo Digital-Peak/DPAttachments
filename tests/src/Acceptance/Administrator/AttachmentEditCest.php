@@ -8,9 +8,9 @@
 namespace Tests\Acceptance\Administrator;
 
 use Tests\Support\BasicDPAttachmentsCestClass;
-use Tests\Support\Page\Acceptance\Administrator\AttachmentFormPage;
-use Tests\Support\Page\Acceptance\Administrator\AttachmentsListPage;
-use Tests\Support\Step\Acceptance\Attachment;
+use Tests\Support\Page\Administrator\AttachmentFormPage;
+use Tests\Support\Page\Administrator\AttachmentsListPage;
+use Tests\Support\Step\Attachment;
 
 class AttachmentEditCest extends BasicDPAttachmentsCestClass
 {

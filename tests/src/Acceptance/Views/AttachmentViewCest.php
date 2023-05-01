@@ -9,7 +9,7 @@ namespace Tests\Acceptance\Views;
 
 use Codeception\Example;
 use Tests\Support\BasicDPAttachmentsCestClass;
-use Tests\Support\Step\Acceptance\Attachment;
+use Tests\Support\Step\Attachment;
 
 class AttachmentViewCest extends BasicDPAttachmentsCestClass
 {

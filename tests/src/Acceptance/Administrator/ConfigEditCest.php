@@ -9,9 +9,9 @@ namespace Tests\Acceptance\Administrator;
 
 use Tests\Support\AcceptanceTester;
 use Tests\Support\BasicDPAttachmentsCestClass;
-use Tests\Support\Step\Acceptance\Attachment;
+use Tests\Support\Step\Attachment;
 
-class MenuEditCest extends BasicDPAttachmentsCestClass
+class ConfigEditCest extends BasicDPAttachmentsCestClass
 {
 	public function _before(AcceptanceTester $I)
 	{
@@ -22,11 +22,11 @@ class MenuEditCest extends BasicDPAttachmentsCestClass
 
 	public function cantSeeAttachmentDetails(Attachment $I)
 	{
-		$I->wantToTest('that the attachment details are not shown in the menu item form.');
+		$I->wantToTest('that the attachment details are not shown in the global config form.');
 
 		$I->doAdministratorLogin();
-		$I->amOnPage('/administrator/index.php?option=com_menus&task=menu.edit');
+		$I->amOnPage('/administrator/index.php?option=com_config&view=component&component=com_content');
 
-		$I->dontSee('Attachments');
+		$I->dontSee('Attachments', '#config');
 	}
 }

@@ -9,7 +9,7 @@ namespace Tests\Acceptance\Administrator;
 
 use Tests\Support\AcceptanceTester;
 use Tests\Support\BasicDPAttachmentsCestClass;
-use Tests\Support\Step\Acceptance\Attachment;
+use Tests\Support\Step\Attachment;
 
 class TaskEditCest extends BasicDPAttachmentsCestClass
 {

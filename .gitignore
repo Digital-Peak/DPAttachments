@@ -3,5 +3,5 @@
 /**/js
 /**/vendor
 /com_dpattachments/media/attachments
-/tests/Support/_generated
+/tests/src/Support/_generated
 .vscode

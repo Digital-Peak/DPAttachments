@@ -5,7 +5,7 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Tests\Support\Step\Acceptance;
+namespace Tests\Support\Step;
 
 use Tests\Support\AcceptanceTester;
 

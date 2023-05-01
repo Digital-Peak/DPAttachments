@@ -9,9 +9,9 @@ namespace Tests\Acceptance\Administrator;
 
 use Tests\Support\AcceptanceTester;
 use Tests\Support\BasicDPAttachmentsCestClass;
-use Tests\Support\Step\Acceptance\Attachment;
+use Tests\Support\Step\Attachment;
 
-class PluginEditCest extends BasicDPAttachmentsCestClass
+class MenuEditCest extends BasicDPAttachmentsCestClass
 {
 	public function _before(AcceptanceTester $I)
 	{
@@ -22,12 +22,10 @@ class PluginEditCest extends BasicDPAttachmentsCestClass
 
 	public function cantSeeAttachmentDetails(Attachment $I)
 	{
-		$I->wantToTest('that the attachment details are not shown in the plugin form.');
+		$I->wantToTest('that the attachment details are not shown in the menu item form.');
 
 		$I->doAdministratorLogin();
-		$I->amOnPage(
-			'/administrator/index.php?option=com_plugins&task=plugin.edit&extension_id=' . $I->grabFromDatabase('extensions', 'extension_id', [])
-		);
+		$I->amOnPage('/administrator/index.php?option=com_menus&task=menu.edit');
 
 		$I->dontSee('Attachments');
 	}
