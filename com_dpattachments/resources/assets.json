@@ -19,5 +19,5 @@
 			"dest": "../media/css/vendor/tingle/tingle.css"
 		}
 	],
-	"docBlock": "/**\n * @package    DPAttachments\n * @copyright  Copyright (C) Digital Peak GmbH. <https://www.digital-peak.com>\n * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL\n */"
+	"docBlock": "/**\n * @package    DPAttachments\n * @copyright  Copyright (C) Digital Peak GmbH. <https://www.digital-peak.com>\n * @license    https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL\n */"
 }

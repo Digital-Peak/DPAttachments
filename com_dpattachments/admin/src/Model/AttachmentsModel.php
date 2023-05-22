@@ -2,7 +2,7 @@
 /**
  * @package    DPAttachments
  * @copyright  Copyright (C) 2013 Digital Peak GmbH. <https://www.digital-peak.com>
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
 namespace DigitalPeak\Component\DPAttachments\Administrator\Model;
@@ -203,7 +203,7 @@ class AttachmentsModel extends ListModel
 
 		if ($app->isClient('site')) {
 			// Filter by start and end dates.
-			$nowDate  = $db->quote(Factory::getDate()->toSql());
+			$nowDate = $db->quote(Factory::getDate()->toSql());
 
 			$query->where('(a.publish_up IS NULL OR a.publish_up is null OR a.publish_up <= ' . $nowDate . ')');
 			$query->where('(a.publish_down IS NULL OR a.publish_down is null OR a.publish_down >= ' . $nowDate . ')');
