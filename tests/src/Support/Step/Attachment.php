@@ -15,12 +15,10 @@ class Attachment extends AcceptanceTester
 	public const ARTICLES_ATTACHMENT_DIR   = '/images/com_content.article/';
 	public const CATEGORIES_ATTACHMENT_DIR = '/images/com_categories.category/';
 
-	private $user    = null;
 	private $article = null;
 
-	public function _inject(User $user, Article $article)
+	public function _inject(Article $article)
 	{
-		$this->user    = $user;
 		$this->article = $article;
 	}
 
@@ -44,7 +42,7 @@ class Attachment extends AcceptanceTester
 			'publish_down' => null,
 			'description'  => '',
 			'created'      => (new DateTime())->format('Y-m-d H:i:s'),
-			'created_by'   => $this->user->getLoggedInUserId()
+			'created_by'   => $I->grabFromDatabase('users', 'id', ['username' => 'admin']),
 		];
 
 		if (is_array($data)) {

@@ -1,8 +1,8 @@
 <?php
 /**
- * @package    DPCalendar
+ * @package    DPAttachments
  * @copyright  Copyright (C) 2022 Digital Peak GmbH. <https://www.digital-peak.com>
- * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+ * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 namespace Tests\Acceptance\Administrator;

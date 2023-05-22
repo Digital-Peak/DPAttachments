@@ -1,13 +1,13 @@
 <?php
 /**
  * @package    DPAttachments
- * @copyright  Copyright (C) 2020 Digital Peak GmbH. <https://www.digital-peak.com>
+ * @copyright  Copyright (C) 2023 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Tests\Acceptance\Install;
+namespace Docs\Acceptance\Install;
 
-use Tests\Support\AcceptanceTester;
+use Docs\Support\AcceptanceTester;
 
 class InstallDPAttachmentsCest
 {

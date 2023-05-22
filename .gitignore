@@ -4,4 +4,6 @@
 /**/vendor
 /com_dpattachments/media/attachments
 /tests/src/Support/_generated
+/docs/src/Support/_generated
+/docs/content/screenshots
 .vscode
