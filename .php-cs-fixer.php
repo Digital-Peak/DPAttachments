@@ -7,6 +7,7 @@ $config->setRules([
 		'array_syntax'                    => ['syntax' => 'short'],
 		'whitespace_after_comma_in_array' => true,
 		'indentation_type'                => true,
+		'single_space_after_construct'    => true,
 		'no_break_comment'                => false,
 		'binary_operator_spaces'          => [
 			'default'   => 'single_space',
