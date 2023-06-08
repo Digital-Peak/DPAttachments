@@ -8,9 +8,9 @@
 namespace Tests\Acceptance\Administrator;
 
 use Codeception\Util\FileSystem;
+use DigitalPeak\Support\Page\Joomla\Administrator\MediaPage;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\BasicDPAttachmentsCestClass;
-use Tests\Support\Page\Administrator\MediaListPage;
 use Tests\Support\Step\Attachment;
 
 class MediaListCest extends BasicDPAttachmentsCestClass
@@ -43,7 +43,7 @@ class MediaListCest extends BasicDPAttachmentsCestClass
 	{
 		$I->wantToTest('that it is possible to delete a file in the media manager.');
 
-		$I->amOnPage(MediaListPage::$url);
+		$I->amOnPage(MediaPage::$mediaUrl . '&path=local-images:/test');
 		$I->waitForElement('.media-browser-image');
 		$I->moveMouseOver('.media-browser-image .media-browser-item-info');
 		$I->click('.media-browser-image .action-toggle');
@@ -58,7 +58,7 @@ class MediaListCest extends BasicDPAttachmentsCestClass
 	{
 		$I->wantToTest('that it is possible to delete a folder in the media manager.');
 
-		$I->amOnPage(MediaListPage::$url);
+		$I->amOnPage(MediaPage::$mediaUrl . '&path=local-images:/test');
 		$I->waitForElement('.media-browser-item-directory');
 		$I->moveMouseOver('.media-browser-item-directory .media-browser-item-info');
 		$I->click('.media-browser-item-directory .action-toggle');
