@@ -65,14 +65,14 @@ foreach (Folder::files(JPATH_SITE . '/components/com_dpattachments/tmpl/attachme
 		<?php if ($component->canDo('core.edit', $attachment->context, $attachment->item_id)) { ?>
 			<a href="<?php echo Route::_('index.php?option=com_dpattachments&task=attachment.edit&id=' . $attachment->id . ($app->isClient('site') ? '&tmpl=component' :'')); ?>"
 				class="dp-button dp-button-edit">
-				<?php echo $component->renderLayout('block.icon', ['icon' => 'pencil-alt']); ?>
+				<?php echo $component->renderLayout('block.icon', ['icon' => 'pencil']); ?>
 				<?php echo $app->getLanguage()->_('JACTION_EDIT'); ?>
 			</a>
 		<?php } ?>
 		<?php if ($component->canDo('core.edit.state', $attachment->context, $attachment->item_id)) { ?>
 			<a href="<?php echo Route::_('index.php?option=com_dpattachments&task=attachment.publish&state=-2&id='
 				. $attachment->id . '&' . Session::getFormToken() . '=1'); ?>" class="dp-button dp-button-trash">
-				<?php echo $component->renderLayout('block.icon', ['icon' => 'trash-alt']); ?>
+				<?php echo $component->renderLayout('block.icon', ['icon' => 'trash']); ?>
 				<?php echo $app->getLanguage()->_('JTRASH'); ?>
 			</a>
 		<?php } ?>

@@ -37,6 +37,14 @@ $files = [
 
 // From v5.0.0 to v5.1.0
 '/plugins/content/dpattachments/forms/context',
+
+// From v5.2.0 to case 10008
+'/media/com_dpattachments/images/icons/ban-solid.svg',
+'/media/com_dpattachments/images/icons/check-solid.svg',
+'/media/com_dpattachments/images/icons/download-solid.svg',
+'/media/com_dpattachments/images/icons/pencil-alt-solid.svg',
+'/media/com_dpattachments/images/icons/trash-alt-solid.svg',
+'/media/com_dpattachments/images/icons/upload-solid.svg',
 ];
 
 foreach ($files as $file) {

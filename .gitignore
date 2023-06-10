@@ -1,8 +1,6 @@
 /**/node_modules
-/**/css
-/**/js
 /**/vendor
-/com_dpattachments/media/attachments
+/com_dpattachments/media
 /tests/src/Support/_generated
 /docs/src/Support/_generated
 /docs/content/screenshots

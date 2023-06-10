@@ -11,6 +11,17 @@
 	],
 	"vendor": [
 		{
+			"src": [
+				"@fortawesome/fontawesome-free/svgs/solid/ban.svg",
+				"@fortawesome/fontawesome-free/svgs/solid/check.svg",
+				"@fortawesome/fontawesome-free/svgs/solid/download.svg",
+				"@fortawesome/fontawesome-free/svgs/solid/pencil.svg",
+				"@fortawesome/fontawesome-free/svgs/solid/trash.svg",
+				"@fortawesome/fontawesome-free/svgs/solid/upload.svg"
+			],
+			"dest": "../media/images/icons"
+		},
+		{
 			"src": "tingle.js/dist/tingle.js",
 			"dest": "../media/js/vendor/tingle/tingle.js"
 		},
