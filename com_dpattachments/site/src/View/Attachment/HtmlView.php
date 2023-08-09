@@ -11,7 +11,6 @@ use DigitalPeak\Component\DPAttachments\Administrator\Model\AttachmentModel;
 use Exception;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
-use Joomla\Registry\Registry;
 
 class HtmlView extends BaseHtmlView
 {
@@ -19,6 +18,7 @@ class HtmlView extends BaseHtmlView
 	protected $params;
 	protected $state;
 	protected $user;
+	protected $input;
 
 	public function display($tpl = null)
 	{

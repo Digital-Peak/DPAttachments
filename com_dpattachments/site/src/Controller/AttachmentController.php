@@ -63,7 +63,7 @@ class AttachmentController extends BaseAttachmentController
 		}
 
 		if ($return) {
-			$append .= '&return=' . base64_encode($return);
+			$append .= '&return=' . base64_encode($return . ($tmpl ? (strpos($return, '?') === false ? '?' : '&') . 'tmpl=' . $tmpl : ''));
 		}
 
 		return $append;
