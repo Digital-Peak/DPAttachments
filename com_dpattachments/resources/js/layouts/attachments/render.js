@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			return;
 		}
 
-		iframe.addEventListener('load', () => setTimeout(() => dpattachmentsModal.close(), 2000));
+		iframe.addEventListener('load', () => setTimeout(() => location.reload(), 2000));
 	});
 
 	delegateSelector('.com-dpattachments-layout-attachments', 'click', '.dp-button-edit', (e) => {
