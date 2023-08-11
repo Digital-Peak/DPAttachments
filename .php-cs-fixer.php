@@ -9,6 +9,7 @@ $config->setRules([
 		'indentation_type'                => true,
 		'single_space_after_construct'    => true,
 		'no_break_comment'                => false,
+		'no_unused_imports'               => true,
 		'binary_operator_spaces'          => [
 			'default'   => 'single_space',
 			'operators' => [
