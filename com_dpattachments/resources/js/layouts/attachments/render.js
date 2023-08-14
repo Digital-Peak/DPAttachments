@@ -7,7 +7,7 @@
 let dpattachmentsModal = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-	window.document.addEventListener('dpattachmentSaved', (e) => {
+	window.document.addEventListener('dpattachmentSaved', () => {
 		if (!dpattachmentsModal) {
 			return;
 		}

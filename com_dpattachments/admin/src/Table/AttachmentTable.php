@@ -7,7 +7,6 @@
 
 namespace DigitalPeak\Component\DPAttachments\Administrator\Table;
 
-use Exception;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Table\Table;
@@ -119,7 +118,7 @@ class AttachmentTable extends Table
 			if ($this->$k) {
 				$pks = [$this->$k];
 			} else {
-				throw new Exception(Text::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
+				throw new \Exception(Text::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
 			}
 		}
 

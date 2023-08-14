@@ -63,7 +63,7 @@ foreach (Folder::files(JPATH_SITE . '/components/com_dpattachments/tmpl/attachme
 	<?php } ?>
 	<div class="dp-attachment__actions">
 		<?php if ($component->canDo('core.edit', $attachment->context, $attachment->item_id)) { ?>
-			<a href="<?php echo Route::_('index.php?option=com_dpattachments&task=attachment.edit&id=' . $attachment->id . ($app->isClient('site') ? '&tmpl=component' :'')); ?>"
+			<a href="<?php echo Route::_('index.php?option=com_dpattachments&task=attachment.edit&id=' . $attachment->id . ($app->isClient('site') ? '&tmpl=component' : '')); ?>"
 				class="dp-button dp-button-edit">
 				<?php echo $component->renderLayout('block.icon', ['icon' => 'pencil']); ?>
 				<?php echo $app->getLanguage()->_('JACTION_EDIT'); ?>

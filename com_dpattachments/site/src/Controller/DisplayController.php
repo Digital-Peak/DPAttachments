@@ -7,7 +7,6 @@
 
 namespace DigitalPeak\Component\DPAttachments\Site\Controller;
 
-use Exception;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\BaseController;
@@ -49,7 +48,7 @@ class DisplayController extends BaseController
 		// Check for edit form.
 		if ($vName == 'form' && !$this->checkEditId('com_dpattachments.edit.attachment', $id)) {
 			// Somehow the person just went to the form - we don't allow that.
-			throw new Exception(Text::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id), 403);
+			throw new \Exception(Text::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id), 403);
 		}
 
 		parent::display($cachable, $safeurlparams);

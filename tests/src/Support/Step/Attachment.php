@@ -7,7 +7,6 @@
 
 namespace Tests\Support\Step;
 
-use DateTime;
 use Tests\Support\AcceptanceTester;
 
 class Attachment extends AcceptanceTester
@@ -41,7 +40,7 @@ class Attachment extends AcceptanceTester
 			'publish_up'   => null,
 			'publish_down' => null,
 			'description'  => '',
-			'created'      => (new DateTime())->format('Y-m-d H:i:s'),
+			'created'      => (new \DateTime())->format('Y-m-d H:i:s'),
 			'created_by'   => $I->grabFromDatabase('users', 'id', ['username' => 'admin']),
 		];
 

@@ -45,13 +45,9 @@
 	}
 
 	.dp-line {
-
 		&__original-nr,
 		&__new-nr,
 		&__operation {
-			-webkit-user-select: none;
-			-moz-user-select: none;
-			-ms-user-select: none;
 			user-select: none;
 		}
 

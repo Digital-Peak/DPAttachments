@@ -27,9 +27,8 @@
 	@extend .dp-control__input
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (width <=640px) {
 	.dp-control {
-
 		&__label,
 		&__input {
 			width: 100%;
@@ -38,9 +37,8 @@
 	}
 
 	.control-group {
-
-		control-label,
-		controls {
+		.control-label,
+		.controls {
 			width: 100%;
 			margin-left: 0;
 		}

@@ -8,7 +8,6 @@
 namespace DigitalPeak\Component\DPAttachments\Site\View\Attachment;
 
 use DigitalPeak\Component\DPAttachments\Administrator\Model\AttachmentModel;
-use Exception;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
 
@@ -32,7 +31,7 @@ class HtmlView extends BaseHtmlView
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
-			throw new Exception(implode('\n', $errors));
+			throw new \Exception(implode('\n', $errors));
 		}
 
 		$this->params = $this->state->get('params');

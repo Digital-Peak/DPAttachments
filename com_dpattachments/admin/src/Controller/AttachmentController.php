@@ -7,7 +7,6 @@
 
 namespace DigitalPeak\Component\DPAttachments\Administrator\Controller;
 
-use Exception;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Response\JsonResponse;
@@ -205,7 +204,7 @@ class AttachmentController extends FormController
 		$success = $model->publish($id, $this->input->getInt('state'));
 
 		if (!$success) {
-			throw new Exception(Text::sprintf('JLIB_APPLICATION_ERROR_SAVE_FAILED', $model->getError()));
+			throw new \Exception(Text::sprintf('JLIB_APPLICATION_ERROR_SAVE_FAILED', $model->getError()));
 		}
 
 		$this->setMessage(Text::plural('COM_DPATTACHMENTS_N_ITEMS_TRASHED', 1), 'success');

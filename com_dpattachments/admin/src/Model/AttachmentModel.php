@@ -8,7 +8,6 @@
 namespace DigitalPeak\Component\DPAttachments\Administrator\Model;
 
 use DigitalPeak\Component\DPAttachments\Administrator\Extension\DPAttachmentsComponent;
-use Exception;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
@@ -53,7 +52,7 @@ class AttachmentModel extends AdminModel
 	public function upload($data)
 	{
 		if (!$this->bootComponent('dpattachments')->canDo('core.edit', $data['context'], $data['item_id'])) {
-			throw new Exception(Text::_('COM_DPATTACHMENTS_UPLOAD_NO_PERMISSION'));
+			throw new \Exception(Text::_('COM_DPATTACHMENTS_UPLOAD_NO_PERMISSION'));
 		}
 
 		$fileName = $_FILES['file']['name'];
@@ -82,7 +81,7 @@ class AttachmentModel extends AdminModel
 		}
 
 		if ($extOk == false) {
-			throw new Exception(Text::sprintf('COM_DPATTACHMENTS_UPLOAD_INVALID_EXTENSION', implode(',', $validFileExts)));
+			throw new \Exception(Text::sprintf('COM_DPATTACHMENTS_UPLOAD_INVALID_EXTENSION', implode(',', $validFileExts)));
 		}
 
 		$fileName = preg_replace("/[^\p{L}|0-9]+/u", "-", substr($fileName, 0, strlen($fileName) - strlen($uploadedFileExtension) - 1)) . '.' .
@@ -100,7 +99,7 @@ class AttachmentModel extends AdminModel
 			false,
 			ComponentHelper::getParams('com_dpattachments')->get('allow_unsafe_uploads', 0)
 		)) {
-			throw new Exception(Text::_('COM_DPATTACHMENTS_UPLOAD_ERROR'));
+			throw new \Exception(Text::_('COM_DPATTACHMENTS_UPLOAD_ERROR'));
 		}
 
 		$data['path'] = $fileName;
@@ -185,7 +184,7 @@ class AttachmentModel extends AdminModel
 	public function delete(&$pks)
 	{
 		$attachments = [];
-		foreach (ArrayHelper::toInteger((array) $pks) as  $id) {
+		foreach (ArrayHelper::toInteger((array) $pks) as $id) {
 			$attachments[] = $this->getItem($id);
 		}
 

@@ -8,6 +8,7 @@
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Layout\LayoutHelper;
+
 ?>
 <div class="com-dpattachments-attachments__filters">
 	<?php echo LayoutHelper::render('joomla.searchtools.default', ['view' => $this]); ?>

@@ -12,10 +12,10 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 
-$app = Factory::getApplication();
-$user = Factory::getUser();
+$app       = Factory::getApplication();
+$user      = Factory::getUser();
 $listOrder = $this->escape($this->state->get('list.ordering'));
-$listDirn = $this->escape($this->state->get('list.direction'));
+$listDirn  = $this->escape($this->state->get('list.direction'));
 ?>
 <div class="com-dpattachments-attachments__attachments">
 	<table class="table table-striped" id="dpattachmentList">
@@ -49,12 +49,12 @@ $listDirn = $this->escape($this->state->get('list.direction'));
 		</thead>
 		<tbody>
 			<?php foreach ($this->items as $i => $item) {
-					$item->max_ordering = 0;
-					$ordering = ($listOrder == 'a.ordering');
-					$canEdit = Factory::getApplication()->bootComponent('dpattachments')->canDo('core.edit', $item->context, $item->item_id);
-					$canCheckin = $user->authorise('core.manage', 'com_checkin') || $item->checked_out == $user->id || $item->checked_out == 0;
-					$canEditOwn = Factory::getApplication()->bootComponent('dpattachments')->canDo('core.edit.own', $item->context, $item->item_id);
-					$canChange = Factory::getApplication()->bootComponent('dpattachments')->canDo('core.edit.state', $item->context, $item->item_id) && $canCheckin;
+				$item->max_ordering = 0;
+				$ordering           = ($listOrder == 'a.ordering');
+				$canEdit            = Factory::getApplication()->bootComponent('dpattachments')->canDo('core.edit', $item->context, $item->item_id);
+				$canCheckin         = $user->authorise('core.manage', 'com_checkin') || $item->checked_out == $user->id || $item->checked_out == 0;
+				$canEditOwn         = Factory::getApplication()->bootComponent('dpattachments')->canDo('core.edit.own', $item->context, $item->item_id);
+				$canChange          = Factory::getApplication()->bootComponent('dpattachments')->canDo('core.edit.state', $item->context, $item->item_id) && $canCheckin;
 			?>
 			<tr class="dp-attachment row<?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->context; ?>">
 				<td class="center"><?php echo HTMLHelper::_('grid.id', $i, $item->id); ?></td>

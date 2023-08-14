@@ -8,7 +8,6 @@
 namespace DigitalPeak\Component\DPAttachments\Administrator\View\Attachment;
 
 use DigitalPeak\Component\DPAttachments\Administrator\Helper\DPAttachmentsHelper;
-use Exception;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
@@ -29,7 +28,7 @@ class HtmlView extends BaseHtmlView
 
 		// Check for errors.
 		if ($errors = $this->get('Errors')) {
-			throw new Exception($errors);
+			throw new \Exception($errors);
 		}
 
 		$this->addToolbar();

@@ -7,7 +7,6 @@
 
 namespace DigitalPeak\Component\DPAttachments\Site\View\Form;
 
-use Exception;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Helper\TagsHelper;
 use Joomla\CMS\Language\Text;
@@ -37,7 +36,7 @@ class HtmlView extends BaseHtmlView
 		}
 
 		if ($authorised !== true) {
-			throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'));
+			throw new \Exception(Text::_('JERROR_ALERTNOAUTHOR'));
 		}
 
 		$this->item->tags = new TagsHelper();
@@ -47,7 +46,7 @@ class HtmlView extends BaseHtmlView
 
 		// Check for errors
 		if ($errors = $this->get('Errors')) {
-			throw new Exception(implode('\n', $errors));
+			throw new \Exception(implode('\n', $errors));
 		}
 
 		// Create a shortcut to the parameters

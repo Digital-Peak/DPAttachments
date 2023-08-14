@@ -25,16 +25,12 @@
 	& th {
 		border-left: 1px solid #cbcbcb;
 		border-width: 0 0 0 1px;
+		border-bottom: 1px solid #cbcbcb;
 		font-size: inherit;
 		margin: 0;
 		overflow: visible;
 		padding: 0.4em 1em;
 		text-align: center;
-	}
-
-	& td:first-child,
-	& th:first-child {
-		border-left-width: 0;
 	}
 
 	& thead {
@@ -54,21 +50,20 @@
 		background-color: #f2f2f2;
 	}
 
-	& tr:nth-child(2n-1) td {
-		background-color: #f2f2f2;
+	& td:first-child,
+	& th:first-child {
+		border-left-width: 0;
 	}
 
-	& td,
-	& th {
-		border-bottom: 1px solid #cbcbcb;
+	& tr:nth-child(2n-1) td {
+		background-color: #f2f2f2;
 	}
 
 	& tbody>tr:last-child {
 		border-bottom-width: 0;
 	}
 
-	@media screen and (max-width: 767px) {
-
+	@media screen and (width <=767px) {
 		&,
 		thead,
 		tbody,
@@ -95,7 +90,7 @@
 			text-align: left;
 		}
 
-		td:before {
+		td::before {
 			content: attr(data-column);
 			position: absolute;
 			left: 10px;

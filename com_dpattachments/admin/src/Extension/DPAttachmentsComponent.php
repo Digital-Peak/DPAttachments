@@ -23,7 +23,6 @@ use Joomla\CMS\Table\Table;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Event\Event;
 use Joomla\Registry\Registry;
-use stdClass;
 
 /**
  * Public DPAttachments component.
@@ -111,7 +110,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			$attachment->text = '';
 			$this->app->triggerEvent('onContentPrepare', ['com_dpattachments.attachment', &$attachment, &$options, 0]);
 
-			$attachment->event = new stdClass();
+			$attachment->event = new \stdClass();
 			$results           = $this->app->triggerEvent(
 				'onContentAfterTitle',
 				['com_dpattachments.attachment', &$attachment, &$options, 0]

@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	};
 
 	[].slice.call(document.querySelectorAll('.com-dpattachments-layout-form .dp-input__file')).forEach((input, index) => {
-		input.addEventListener('change', (e) => processFileList(input, input.files), false);
+		input.addEventListener('change', () => processFileList(input, input.files), false);
 		input.addEventListener('drop', (e) => {
 			e.stopPropagation();
 			e.preventDefault();
@@ -78,10 +78,10 @@ document.addEventListener('DOMContentLoaded', () => {
 					}
 
 					// Create a fake file name for images from clipboard, since this data doesn't get sent
-					const matches = new RegExp("/\(.*\)").exec(file.type);
+					const matches = new RegExp('/(.*)').exec(file.type);
 					if (!file.name && matches) {
 						const extension = matches[1];
-						file.name = "clipboard" + i + "." + extension;
+						file.name = 'clipboard' + i + '.' + extension;
 					}
 
 					files.push(file);
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		[].slice.call(document.querySelectorAll('.com-dpattachments-layout-form')).forEach((form) => {
 			// Copied from https://github.com/bgrins/filereader.js
-			const initializedOnBody = false;
+			let initializedOnBody = false;
 
 			// Bind drag events to the form to add the class while dragging, and accept the drop data transfer
 			form.addEventListener('dragenter', (e) => {
@@ -135,8 +135,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			}, false);
 
 			// Bind to body to prevent the form events from firing when it was initialized on the page
-			document.body.addEventListener('dragstart', (e) => initializedOnBody = true, true);
-			document.body.addEventListener('dragend', (e) => initializedOnBody = false, true);
+			document.body.addEventListener('dragstart', () => initializedOnBody = true, true);
+			document.body.addEventListener('dragend', () => initializedOnBody = false, true);
 			document.body.addEventListener('drop', (e) => {
 				if (e.dataTransfer.files && e.dataTransfer.files.length) {
 					e.stopPropagation();
