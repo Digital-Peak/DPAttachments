@@ -7,8 +7,14 @@
 let dpattachmentsModal = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-	window.document.addEventListener('dpattachmentSaved', () => {
+	window.document.addEventListener('dpattachmentSaved', (e) => {
 		if (!dpattachmentsModal) {
+			return;
+		}
+
+		// Just close when the attachment form is cancelled
+		if (e.detail === 'attachment.cancel') {
+			dpattachmentsModal.close();
 			return;
 		}
 

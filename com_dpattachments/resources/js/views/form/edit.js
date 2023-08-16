@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		const form = document.querySelector('.com-dpattachments-attachment-form .dp-form');
 		if (task == 'attachment.cancel' || document.formvalidator.isValid(form)) {
 			Joomla.submitform(task, form);
-			window.parent.document.dispatchEvent(new Event('dpattachmentSaved'));
+			window.parent.document.dispatchEvent(new CustomEvent('dpattachmentSaved', { 'detail': task }));
 		}
 	};
 
