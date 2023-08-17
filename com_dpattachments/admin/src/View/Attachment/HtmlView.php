@@ -52,7 +52,6 @@ class HtmlView extends BaseHtmlView
 		if ($isNew && (count($user->getAuthorisedCategories('com_dpattachments', 'core.create')) > 0)) {
 			ToolbarHelper::apply('attachment.apply');
 			ToolbarHelper::save('attachment.save');
-			ToolbarHelper::save2new('attachment.save2new');
 			ToolbarHelper::cancel('attachment.cancel');
 
 			return;
@@ -65,18 +64,7 @@ class HtmlView extends BaseHtmlView
 			if ($canDo->get('core.edit') || ($canDo->get('core.edit.own') && $this->item->created_by == $user->id)) {
 				ToolbarHelper::apply('attachment.apply');
 				ToolbarHelper::save('attachment.save');
-
-				// We can save this record, but check the create permission
-				// to see if we can return to make a new one.
-				if ($canDo->get('core.create')) {
-					ToolbarHelper::save2new('attachment.save2new');
-				}
 			}
-		}
-
-		// If checked out, we can still save
-		if ($canDo->get('core.create')) {
-			ToolbarHelper::save2copy('attachment.save2copy');
 		}
 
 		ToolbarHelper::cancel('attachment.cancel', 'JTOOLBAR_CLOSE');
