@@ -26,7 +26,7 @@ class TaskEditCest extends BasicDPAttachmentsCestClass
 
 		$I->doAdministratorLogin();
 		$I->amOnPage('/administrator/index.php?option=com_scheduler&view=select&layout=default');
-		$I->click('Demo Task');
+		$I->click('GET Request');
 
 		$I->dontSee('Attachments');
 	}

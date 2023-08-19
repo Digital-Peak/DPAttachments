@@ -50,7 +50,7 @@ class FormModel extends AttachmentModel
 		}
 
 		$properties = $table->getProperties(1);
-		$value      = ArrayHelper::toObject($properties, 'JObject');
+		$value      = ArrayHelper::toObject($properties);
 
 		// Convert attrib field to Registry.
 		$value->params = new Registry($value->params);
