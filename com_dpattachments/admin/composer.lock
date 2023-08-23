@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "62f918c3a62eaa44af1c527bf4d8afba",
+    "content-hash": "ee99a449fc8d912f23526d8d28d4750d",
     "packages": [
         {
             "name": "parsecsv/php-parsecsv",
@@ -131,5 +131,5 @@
     "platform-overrides": {
         "php": "7.4"
     },
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.3.0"
 }
