@@ -15,6 +15,7 @@ $config->setRules([
 		'@PSR12'                          => true,
 		'array_syntax'                    => ['syntax' => 'short'],
 		'whitespace_after_comma_in_array' => true,
+		'concat_space'                    => ['spacing' => 'one'],
 		'indentation_type'                => true,
 		'single_space_around_construct'   => true,
 		'no_break_comment'                => false,
