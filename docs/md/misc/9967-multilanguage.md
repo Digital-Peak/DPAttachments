@@ -22,14 +22,19 @@ Please follow the following steps to add your translation to DPAttachments.
 
 1. **Register**  
 You can register at [translate.digital-peak.com](https://translate.digital-peak.com/). Please use your username you are using on joomla.digital-peak.com!
-2. **DPAttachments on transifex**  
+2. **DPAttachments on the Digital peak translation service**  
 You can find DPAttachments under this URL: [translate.digital-peak.com/projects/dpattachments](https://translate.digital-peak.com/projects/dpattachments)
-1. **Create the language**  
-Please create your language if there is no one yet. Please use the five digit xx_XX language code instead of the two digit language code. Or start translating a specific language right now.
-1. **Doing the translation**  
+3. **Create the language**  
+Please create your language if there is no one yet. Please use the five digit xx_XX language code instead of the two digit language code. Or start translating an already existing language right now.
+4. **Doing the translation**  
 Go back to the mainpage of the DPAttachments project page: [translate.digital-peak.com/projects/dpattachments](https://translate.digital-peak.com/projects/dpattachments). There you can see a list of the components or languages. To translate one of those just click on it and navigate to the translations.
 
 For further information visit [docs.weblate.org](https://docs.weblate.org/en/latest/user/translating.html).
+
+### Enable notifications
+To get notifications when new components or strings are added/updated, go to your [profile](https://translate.digital-peak.com/accounts/profile/#notifications) and set all option in the "Translation notifications" panel to "instant notification". This is very important to be able to maintain the extension you want.
+
+![Instant notifications](../../misc-images/misc/translate-notifications.jpg)
 
 #### Warnings
 _**Please test that your language works in Joomla! before uploading the file into the Digital Peak translation service. Otherwise your translations may break during import!**_
