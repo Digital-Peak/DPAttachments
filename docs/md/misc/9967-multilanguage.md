@@ -25,7 +25,7 @@ You can register at [translate.digital-peak.com](https://translate.digital-peak.
 2. **DPAttachments on the Digital peak translation service**  
 You can find DPAttachments under this URL: [translate.digital-peak.com/projects/dpattachments](https://translate.digital-peak.com/projects/dpattachments)
 3. **Create the language**  
-Please create your language if there is no one yet. Please use the five digit xx_XX language code instead of the two digit language code. Or start translating an already existing language right now.
+Navigate to any component and click the "+" sign beside the "Language" header. The admin will create your preferred language then. Use the five digit xx_XX language code instead of the two digit language code, as this is a Joomla standard. Or start translating an already existing language right now.
 4. **Doing the translation**  
 Go back to the mainpage of the DPAttachments project page: [translate.digital-peak.com/projects/dpattachments](https://translate.digital-peak.com/projects/dpattachments). There you can see a list of the components or languages. To translate one of those just click on it and navigate to the translations.
 
