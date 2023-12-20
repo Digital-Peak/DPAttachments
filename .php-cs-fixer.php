@@ -7,7 +7,8 @@
 $finder = PhpCsFixer\Finder::create()
 	->in(__DIR__)
 	->notPath('/tmpl/')
-	->notPath('/layouts/');
+	->notPath('/layouts/')
+	->notName('AcceptanceTesterActions.php');
 
 $config = new PhpCsFixer\Config();
 
