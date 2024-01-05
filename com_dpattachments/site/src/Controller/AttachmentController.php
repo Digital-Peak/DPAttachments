@@ -12,9 +12,10 @@ use Joomla\CMS\Uri\Uri;
 
 class AttachmentController extends BaseAttachmentController
 {
+	public $input;
 	protected $view_item = 'form';
 
-	public function cancel($key = 'id')
+	public function cancel($key = 'id'): void
 	{
 		parent::cancel($key);
 
@@ -33,14 +34,14 @@ class AttachmentController extends BaseAttachmentController
 		return $result;
 	}
 
-	public function publish()
+	public function publish(): void
 	{
 		parent::publish();
 
-		$this->setRedirect($this->getReturnPage($this->input->getInt('id')));
+		$this->setRedirect($this->getReturnPage());
 	}
 
-	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'id')
+	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'id'): string
 	{
 		$tmpl   = $this->input->get('tmpl');
 		$append = '';
@@ -55,10 +56,10 @@ class AttachmentController extends BaseAttachmentController
 			$append .= '&' . $urlVar . '=' . $recordId;
 		}
 
-		$itemId = $this->input->getInt('Itemid');
+		$itemId = $this->input->getInt('Itemid', 0);
 		$return = $this->getReturnPage();
 
-		if ($itemId) {
+		if ($itemId !== 0) {
 			$append .= '&Itemid=' . $itemId;
 		}
 

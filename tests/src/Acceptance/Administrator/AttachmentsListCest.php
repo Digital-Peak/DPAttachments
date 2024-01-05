@@ -14,14 +14,14 @@ use Tests\Support\Step\Attachment;
 
 class AttachmentsListCest extends BasicDPAttachmentsCestClass
 {
-	public function _before(AcceptanceTester $I)
+	public function _before(AcceptanceTester $I): void
 	{
 		parent::_before($I);
 
 		$I->doAdministratorLogin();
 	}
 
-	public function canNavigateToAttachmentForm(Attachment $I)
+	public function canNavigateToAttachmentForm(Attachment $I): void
 	{
 		$I->wantToTest('that it is possible to edit an attachment.');
 
@@ -35,7 +35,7 @@ class AttachmentsListCest extends BasicDPAttachmentsCestClass
 		$I->seeInCurrentUrl('view=attachment');
 	}
 
-	public function seeAttachmentsInList(Attachment $I)
+	public function seeAttachmentsInList(Attachment $I): void
 	{
 		$I->wantToTest('that attachments are displayed in the list.');
 
@@ -47,7 +47,7 @@ class AttachmentsListCest extends BasicDPAttachmentsCestClass
 		$I->seeNumberOfElements(AttachmentsListPage::$rootClass . ' .dp-attachment', 2);
 	}
 
-	public function canDeleteAttachment(Attachment $I)
+	public function canDeleteAttachment(Attachment $I): void
 	{
 		$I->wantToTest('that attachments are displayed in the list.');
 

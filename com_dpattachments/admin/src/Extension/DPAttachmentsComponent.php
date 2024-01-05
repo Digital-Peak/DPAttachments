@@ -37,20 +37,12 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 {
 	/**
 	 * The cached items.
-	 *
-	 * @var array
 	 */
-	private $itemCache = [];
+	private array $itemCache = [];
 
-	/**
-	 * @var DatabaseInterface $db
-	 */
-	private $db;
+	private DatabaseInterface $db;
 
-	/**
-	 * @var CMSApplicationInterface $app
-	 */
-	private $app;
+	private CMSApplicationInterface $app;
 
 	public function __construct(CMSApplicationInterface $app, DatabaseInterface $db, ComponentDispatcherFactoryInterface $dispatcherFactory)
 	{
@@ -94,7 +86,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 		$canEdit     = $this->canDo('core.edit', $context, $itemId);
 		$attachments = $this->getAttachments($context, $itemId);
 
-		if (!$attachments && !$canEdit) {
+		if ($attachments === [] && !$canEdit) {
 			return '';
 		}
 
@@ -145,9 +137,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			return $buffer;
 		}
 
-		$buffer .= $this->renderLayout('attachment.form', ['itemId' => $itemId, 'context' => $context]);
-
-		return $buffer;
+		return $buffer . $this->renderLayout('attachment.form', ['itemId' => $itemId, 'context' => $context]);
 	}
 
 	/**
@@ -166,7 +156,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			$ids[] = (int)$attachment->id;
 		}
 
-		if (empty($ids)) {
+		if ($ids === []) {
 			return true;
 		}
 
@@ -202,8 +192,8 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 
 		$key = $context . '.' . $itemId;
 
-		list($component, $modelName) = explode('.', $context);
-		if (!key_exists($key, $this->itemCache)) {
+		[$component, $modelName] = explode('.', $context);
+		if (!array_key_exists($key, $this->itemCache)) {
 			$instance = $this->app->bootComponent($component);
 
 			$table = null;
@@ -214,7 +204,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 				$table = $instance->getMVCFactory()->createTable(ucfirst($modelName), 'Administrator');
 			}
 
-			if ($table) {
+			if ($table !== null) {
 				$table->load($itemId);
 			}
 
@@ -227,7 +217,10 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 
 		// No item so we can only check for component permission
 		if (!$item || (isset($item->id) && !$item->id)) {
-			return $user->authorise($action, $component) || $user->authorise($action, 'com_dpattachments');
+			if ($user->authorise($action, $component)) {
+				return true;
+			}
+			return (bool) $user->authorise($action, 'com_dpattachments');
 		}
 
 		$asset = $component;
@@ -333,13 +326,10 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 		return $event->getArgument('content');
 	}
 
-	public function validateSection($section, $item = null)
+	public function validateSection($section, $item = null): ?string
 	{
-		if (Factory::getApplication()->isClient('site')) {
-			switch ($section) {
-				case 'form':
-					$section = 'attachment';
-			}
+		if (Factory::getApplication()->isClient('site') && $section === 'form') {
+			$section = 'attachment';
 		}
 
 		if ($section != 'attachment') {
@@ -353,11 +343,9 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 	{
 		Factory::getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR);
 
-		$contexts = [
+		return [
 			'com_dpattachments.attachment' => Text::_('COM_DPATTACHMENTS')
 		];
-
-		return $contexts;
 	}
 
 	/**
@@ -377,7 +365,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 				$menuItems = [$menuItems];
 			}
 
-			if (!in_array($input->getInt('Itemid'), $menuItems)) {
+			if (!in_array($input->getInt('Itemid', 0), $menuItems)) {
 				return false;
 			}
 		}
@@ -388,7 +376,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 				$menuItems = [$menuItems];
 			}
 
-			if (in_array($input->getInt('Itemid'), $menuItems)) {
+			if (in_array($input->getInt('Itemid', 0), $menuItems)) {
 				return false;
 			}
 		}

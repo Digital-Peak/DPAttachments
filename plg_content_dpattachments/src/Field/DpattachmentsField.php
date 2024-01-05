@@ -13,13 +13,15 @@ use Joomla\CMS\Form\FormField;
 
 class DpattachmentsField extends FormField
 {
+	public $element;
+	public $form;
 	protected $type = 'Dpattachments';
 
 	protected function getInput()
 	{
 		$app = Factory::getApplication();
 
-		if (!(string)$this->element['item_id']) {
+		if ((string)$this->element['item_id'] === '' || (string)$this->element['item_id'] === '0') {
 			return $app->getLanguage()->_('PLG_CONTENT_DPATTACHMENTS_FIELD_ATTACHMENTS_NO_ITEM_MESSAGE');
 		}
 

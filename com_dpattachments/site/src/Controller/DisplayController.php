@@ -13,11 +13,12 @@ use Joomla\CMS\MVC\Controller\BaseController;
 
 class DisplayController extends BaseController
 {
-	public function display($cachable = false, $urlparams = false)
+	public $input;
+	public function display($cachable = false, $urlparams = false): self
 	{
 		$cachable = true;
 
-		$id    = $this->input->getInt('id');
+		$id    = $this->input->getInt('id', 0);
 		$vName = $this->input->getCmd('view', '');
 		$this->input->set('view', $vName);
 

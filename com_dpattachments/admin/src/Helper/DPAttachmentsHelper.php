@@ -14,7 +14,7 @@ class DPAttachmentsHelper
 {
 	public static $extension = 'com_dpattachments';
 
-	public static function getActions()
+	public static function getActions(): CMSObject
 	{
 		$user   = Factory::getUser();
 		$result = new CMSObject();

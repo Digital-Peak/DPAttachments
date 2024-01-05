@@ -15,11 +15,11 @@ use Joomla\DI\ServiceProviderInterface;
 use Joomla\Event\DispatcherInterface;
 
 return new class () implements ServiceProviderInterface {
-	public function register(Container $container)
+	public function register(Container $container): void
 	{
 		$container->set(
 			PluginInterface::class,
-			function (Container $container) {
+			static function (Container $container): DPAttachments {
 				$dispatcher = $container->get(DispatcherInterface::class);
 				return new DPAttachments(
 					$dispatcher,

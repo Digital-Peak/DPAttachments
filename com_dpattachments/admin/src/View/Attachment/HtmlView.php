@@ -15,11 +15,12 @@ use Joomla\CMS\Toolbar\ToolbarHelper;
 
 class HtmlView extends BaseHtmlView
 {
+	public $canDo;
 	protected $form;
 	protected $item;
 	protected $state;
 
-	public function display($tpl = null)
+	public function display($tpl = null): void
 	{
 		$this->form  = $this->get('Form');
 		$this->item  = $this->get('Item');
@@ -40,7 +41,7 @@ class HtmlView extends BaseHtmlView
 		Factory::getApplication()->input->set('hidemainmenu', true);
 		$user       = Factory::getUser();
 		$isNew      = ($this->item->id == 0);
-		$checkedOut = !($this->item->checked_out == 0 || $this->item->checked_out == $user->id);
+		$checkedOut = $this->item->checked_out != 0 && $this->item->checked_out != $user->id;
 		$canDo      = DPAttachmentsHelper::getActions();
 		ToolbarHelper::title(
 			Text::_('COM_DPATTACHMENTS_VIEW_ATTACHMENT_' . ($checkedOut ? 'ATTACHMENT' : ($isNew ? 'ADD_ATTACHMENT' : 'EDIT_ATTACHMENT')))
@@ -58,13 +59,11 @@ class HtmlView extends BaseHtmlView
 		}
 
 		// Can't save the record if it's checked out.
-		if (!$checkedOut) {
-			// Since it's an existing record, check the edit permission, or
-			// fall back to edit own if the owner.
-			if ($canDo->get('core.edit') || ($canDo->get('core.edit.own') && $this->item->created_by == $user->id)) {
-				ToolbarHelper::apply('attachment.apply');
-				ToolbarHelper::save('attachment.save');
-			}
+		// Since it's an existing record, check the edit permission, or
+		// fall back to edit own if the owner.
+		if (!$checkedOut && ($canDo->get('core.edit') || ($canDo->get('core.edit.own') && $this->item->created_by == $user->id))) {
+			ToolbarHelper::apply('attachment.apply');
+			ToolbarHelper::save('attachment.save');
 		}
 
 		ToolbarHelper::cancel('attachment.cancel', 'JTOOLBAR_CLOSE');

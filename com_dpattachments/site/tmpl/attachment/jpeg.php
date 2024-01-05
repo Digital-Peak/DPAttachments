@@ -9,5 +9,5 @@ defined('_JEXEC') or die();
 ?>
 <div class="com-dpattachments-attachment com-dpattachments-attachment-jpeg">
 	<h3 class="com-dpattachments-attachment__header"><?php echo $this->escape($this->item->title); ?></h3>
-	<?php require_once 'image.php'; ?>
+	<?php require_once __DIR__ . '/image.php'; ?>
 </div>

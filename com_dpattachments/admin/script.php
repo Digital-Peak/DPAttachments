@@ -15,7 +15,7 @@ class Com_DPAttachmentsInstallerScript extends InstallerScript
 	protected $minimumJoomla   = '4.0.0';
 	protected $allowDowngrades = true;
 
-	public function postflight($type, $parent)
+	public function postflight($type, $parent): void
 	{
 		if ($parent->getElement() != 'com_dpattachments') {
 			return;

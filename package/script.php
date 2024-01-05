@@ -17,7 +17,7 @@ class Pkg_DPAttachmentsInstallerScript extends InstallerScript
 	protected $minimumPhp    = '7.4.0';
 	protected $minimumJoomla = '4.0.0';
 
-	public function update(PackageAdapter $parent)
+	public function update(PackageAdapter $parent): void
 	{
 		$file = $parent->getParent()->getPath('source') . '/deleted.php';
 		if (file_exists($file)) {
@@ -32,7 +32,7 @@ class Pkg_DPAttachmentsInstallerScript extends InstallerScript
 			$version  = (string)$manifest->version;
 		}
 
-		if (empty($version) || $version == 'DP_DEPLOY_VERSION') {
+		if ($version === null || $version === '' || $version === '0' || $version == 'DP_DEPLOY_VERSION') {
 			return;
 		}
 
@@ -52,7 +52,7 @@ class Pkg_DPAttachmentsInstallerScript extends InstallerScript
 		}
 	}
 
-	public function postflight($type, $parent)
+	public function postflight($type, $parent): void
 	{
 		if ($parent->getElement() != 'pkg_dpattachments') {
 			return;

@@ -19,22 +19,20 @@ use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
 
 return new class () implements ServiceProviderInterface {
-	public function register(Container $container)
+	public function register(Container $container): void
 	{
 		$container->registerServiceProvider(new MVCFactory('\\DigitalPeak\\Component\\DPAttachments'));
 		$container->registerServiceProvider(new ComponentDispatcherFactory('\\DigitalPeak\\Component\\DPAttachments'));
 
 		$container->set(
 			ComponentInterface::class,
-			function (Container $container) {
+			static function (Container $container): DPAttachmentsComponent {
 				$component = new DPAttachmentsComponent(
 					Factory::getApplication(),
 					$container->get(DatabaseInterface::class),
 					$container->get(ComponentDispatcherFactoryInterface::class)
 				);
-
 				$component->setMVCFactory($container->get(MVCFactoryInterface::class));
-
 				return $component;
 			}
 		);

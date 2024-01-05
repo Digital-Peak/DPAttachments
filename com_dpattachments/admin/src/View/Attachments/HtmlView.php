@@ -18,11 +18,15 @@ use Joomla\CMS\Toolbar\ToolbarHelper;
 
 class HtmlView extends BaseHtmlView
 {
+	public $authors;
+	public $sidebar;
+	public $filterForm;
+	public $activeFilters;
 	protected $items;
 	protected $pagination;
 	protected $state;
 
-	public function display($tpl = null)
+	public function display($tpl = null): void
 	{
 		$this->items      = $this->get('Items');
 		$this->pagination = $this->get('Pagination');
@@ -81,18 +85,11 @@ class HtmlView extends BaseHtmlView
 		if ($canDo->get('core.admin')) {
 			ToolbarHelper::preferences('com_dpattachments');
 		}
-
-		// Only render the sidebar when we are not editing a form, modal or Joomla 4
-		if (version_compare(JVERSION, '4', '<')) {
-			$this->sidebar = \JHtmlSidebar::render();
-		} else {
-			$this->sidebar = null;
-		}
 		$this->filterForm    = $this->get('FilterForm');
 		$this->activeFilters = $this->get('ActiveFilters');
 	}
 
-	public function renderContext($context)
+	public function renderContext($context): string
 	{
 		$context = str_replace('com_', '', strtolower($context));
 

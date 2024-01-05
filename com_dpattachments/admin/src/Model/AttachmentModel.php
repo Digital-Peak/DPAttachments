@@ -8,6 +8,7 @@
 namespace DigitalPeak\Component\DPAttachments\Administrator\Model;
 
 use DigitalPeak\Component\DPAttachments\Administrator\Extension\DPAttachmentsComponent;
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
@@ -49,7 +50,7 @@ class AttachmentModel extends AdminModel
 		$table->version++;
 	}
 
-	public function upload($data)
+	public function upload(array $data)
 	{
 		if (!$this->bootComponent('dpattachments')->canDo('core.edit', $data['context'], $data['item_id'])) {
 			throw new \Exception(Text::_('COM_DPATTACHMENTS_UPLOAD_NO_PERMISSION'));
@@ -74,8 +75,8 @@ class AttachmentModel extends AdminModel
 
 		$extOk = false;
 
-		foreach ($validFileExts as $key => $value) {
-			if (preg_match("/$value/i", $uploadedFileExtension)) {
+		foreach ($validFileExts as $value) {
+			if (preg_match(sprintf('/%s/i', $value), $uploadedFileExtension)) {
 				$extOk = true;
 			}
 		}
@@ -147,7 +148,12 @@ class AttachmentModel extends AdminModel
 	protected function loadFormData()
 	{
 		// Check the session for previously entered form data.
-		$app  = Factory::getApplication();
+		$app = Factory::getApplication();
+
+		if (!$app instanceof CMSApplication) {
+			return new \stdClass();
+		}
+
 		$data = $app->getUserState('com_dpattachments.edit.attachment.data', []);
 
 		if (empty($data)) {
@@ -155,7 +161,7 @@ class AttachmentModel extends AdminModel
 
 			// Prime some default values.
 			if ($this->getState('attachment.id') == 0) {
-				$data->set('itemid', $app->input->getInt('itemid', $app->getUserState('com_dpattachments.item.filter.itemid')));
+				$data->set('itemid', $app->input->getInt('itemid', $app->getUserState('com_dpattachments.item.filter.itemid', 0)));
 			}
 		}
 
@@ -164,16 +170,16 @@ class AttachmentModel extends AdminModel
 		return $data;
 	}
 
-	public function hit($pk = 0)
+	public function hit($pk = 0): bool
 	{
 		$input    = Factory::getApplication()->input;
 		$hitcount = $input->getInt('hitcount', 1);
 
 		if ($hitcount) {
-			$pk = (!empty($pk)) ? $pk : (int)$this->getState('case.id');
+			$pk = (empty($pk)) ? (int)$this->getState('case.id') : $pk;
 			$db = $this->getDbo();
 
-			$db->setQuery('UPDATE #__dpattachments' . ' SET hits = hits + 1' . ' WHERE id = ' . (int)$pk);
+			$db->setQuery('UPDATE #__dpattachments SET hits = hits + 1 WHERE id = ' . (int)$pk);
 
 			$db->execute();
 		}

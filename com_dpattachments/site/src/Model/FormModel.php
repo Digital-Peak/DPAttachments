@@ -19,7 +19,7 @@ class FormModel extends AttachmentModel
 		$app = Factory::getApplication();
 
 		// Load state from the request.
-		$pk = $app->input->getInt('id');
+		$pk = $app->input->getInt('id', 0);
 		$this->setState('attachment.id', $pk);
 
 		$return = $app->input->get('return', null, 'base64');
@@ -34,7 +34,7 @@ class FormModel extends AttachmentModel
 
 	public function getItem($itemId = null)
 	{
-		$itemId = (int)(!empty($itemId)) ? $itemId : $this->getState('attachment.id');
+		$itemId = (int)(!empty($itemId)) !== 0 ? $itemId : $this->getState('attachment.id');
 
 		// Get a row instance.
 		$table = $this->getTable();
@@ -64,7 +64,7 @@ class FormModel extends AttachmentModel
 		return $value;
 	}
 
-	public function getReturnPage()
+	public function getReturnPage(): string
 	{
 		return base64_encode($this->getState('return_page'));
 	}

@@ -14,9 +14,11 @@ use Joomla\CMS\Session\Session;
 
 class AttachmentController extends FormController
 {
+	public $app;
+	public $input;
 	protected function allowEdit($data = [], $key = 'id')
 	{
-		$recordId = (int)isset($data[$key]) ? $data[$key] : 0;
+		$recordId = (int)isset($data[$key]) !== 0 ? $data[$key] : 0;
 
 		$record = $this->getModel()->getItem($recordId);
 		if (!empty($record)) {
@@ -26,7 +28,7 @@ class AttachmentController extends FormController
 		return parent::allowEdit($data, $key);
 	}
 
-	public function upload()
+	public function upload(): void
 	{
 		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
@@ -52,7 +54,7 @@ class AttachmentController extends FormController
 		$this->sendMessage(null, !$success, $returnData);
 	}
 
-	public function download()
+	public function download(): void
 	{
 		$attachment = $this->getModel()->getItem($this->input->get('id'));
 		if (!$attachment) {
@@ -71,11 +73,6 @@ class AttachmentController extends FormController
 		$basename  = @basename($filename);
 		$filesize  = @filesize($filename);
 		$mime_type = 'application/octet-stream';
-
-		// Clear cache
-		while (@ob_end_clean()) {
-			;
-		}
 
 		// Fix IE bugs
 		if (isset($_SERVER['HTTP_USER_AGENT']) && strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
@@ -105,7 +102,7 @@ class AttachmentController extends FormController
 		header('Connection: close');
 
 		error_reporting(0);
-		if (!ini_get('safe_mode')) {
+		if (ini_get('safe_mode') === '' || ini_get('safe_mode') === '0' || ini_get('safe_mode') === false) {
 			set_time_limit(0);
 		}
 
@@ -114,12 +111,12 @@ class AttachmentController extends FormController
 		$seek_start  = 0;
 		$seek_end    = $filesize - 1;
 		if (isset($_SERVER['HTTP_RANGE'])) {
-			list($size_unit, $range_orig) = explode('=', $_SERVER['HTTP_RANGE'], 2);
+			[$size_unit, $range_orig] = explode('=', $_SERVER['HTTP_RANGE'], 2);
 
 			if ($size_unit == 'bytes') {
 				// Multiple ranges could be specified at the same time, but for
 				// simplicity only serve the first range
-				list($range, $extra_ranges) = explode(',', $range_orig, 2);
+				[$range, $extra_ranges] = explode(',', $range_orig, 2);
 			} else {
 				$range = '';
 			}
@@ -127,13 +124,13 @@ class AttachmentController extends FormController
 			$range = '';
 		}
 
-		if ($range) {
+		if ($range !== '' && $range !== '0') {
 			// Figure out download piece from range (if set)
-			list($seek_start, $seek_end) = explode('-', $range, 2);
+			[$seek_start, $seek_end] = explode('-', $range, 2);
 
 			// Set start and end based on range (if set), else set defaults also check for invalid ranges
-			$seek_end   = (empty($seek_end)) ? -1 : min(abs(intval($seek_end)), ($filesize - 1));
-			$seek_start = (empty($seek_start) || $seek_end < abs(intval($seek_start))) ? 0 : max(abs(intval($seek_start)), 0);
+			$seek_end   = ($seek_end === '' || $seek_end === '0') ? -1 : min(abs((int) $seek_end), ($filesize - 1));
+			$seek_start = ($seek_start === '' || $seek_start === '0' || $seek_end < abs((int) $seek_start)) ? 0 : max(abs((int) $seek_start), 0);
 
 			$isResumable = true;
 		}
@@ -162,17 +159,15 @@ class AttachmentController extends FormController
 
 				// Notify of filesize, if this info is available
 				if ($filesize > 0) {
-					header('Content-Length: ' . (int)$filesize);
+					header('Content-Length: ' . $filesize);
 				}
 			}
 			$read = 0;
 			while (!feof($handle) && ($chunksize > 0)) {
-				if ($isResumable) {
-					if ($totalLength - $read < $chunksize) {
-						$chunksize = $totalLength - $read;
-						if ($chunksize < 0) {
-							continue;
-						}
+				if ($isResumable && $totalLength - $read < $chunksize) {
+					$chunksize = $totalLength - $read;
+					if ($chunksize < 0) {
+						continue;
 					}
 				}
 				$buffer = fread($handle, $chunksize);
@@ -187,7 +182,7 @@ class AttachmentController extends FormController
 		} else {
 			// Notify of filesize, if this info is available
 			if ($filesize > 0) {
-				header('Content-Length: ' . (int)$filesize);
+				header('Content-Length: ' . $filesize);
 			}
 			@readfile($filename);
 		}
@@ -195,13 +190,13 @@ class AttachmentController extends FormController
 		$this->app->close();
 	}
 
-	public function publish()
+	public function publish(): void
 	{
 		Session::checkToken('get') or jexit(Text::_('JINVALID_TOKEN'));
 
 		$id      = $this->input->get('id');
 		$model   = $this->getModel();
-		$success = $model->publish($id, $this->input->getInt('state'));
+		$success = $model->publish($id, $this->input->getInt('state', 0));
 
 		if (!$success) {
 			throw new \Exception(Text::sprintf('JLIB_APPLICATION_ERROR_SAVE_FAILED', $model->getError()));
@@ -212,7 +207,7 @@ class AttachmentController extends FormController
 		$this->setRedirect('index.php?option=com_dpattachments&view=attachments');
 	}
 
-	private function sendMessage($message, $error = false, array $data = [])
+	private function sendMessage($message, bool $error = false, array $data = []): void
 	{
 		ob_clean();
 

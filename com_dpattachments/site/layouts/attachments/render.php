@@ -28,7 +28,7 @@ HTMLHelper::_('stylesheet', 'com_dpattachments/dpattachments/layouts/attachments
 HTMLHelper::_('behavior.core');
 HTMLHelper::_('script', 'com_dpattachments/dpattachments/layouts/attachments/render.min.js', ['relative' => true], ['defer' => true]);
 ?>
-<div class="com-dpattachments-layout-attachments<?php echo !$attachments ? ' com-dpattachments-layout-attachments_empty' : ''; ?>">
+<div class="com-dpattachments-layout-attachments<?php echo $attachments ? '' : ' com-dpattachments-layout-attachments_empty'; ?>">
 	<div class="com-dpattachments-layout-attachments__header"><?php echo Text::_('COM_DPATTACHMENTS_ATTACHMENTS'); ?></div>
 	<div class="com-dpattachments-layout-attachments__attachments" data-context="<?php echo $displayData['context']; ?>"
 		 data-item="<?php echo $displayData['itemid']; ?>">

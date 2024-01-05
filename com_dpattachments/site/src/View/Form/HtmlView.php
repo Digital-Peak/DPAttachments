@@ -14,12 +14,22 @@ use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
 
 class HtmlView extends BaseHtmlView
 {
+	/**
+	 * @var string
+	 */
+	public $pageclass_sfx;
+	public $params;
+	/**
+	 * @var mixed
+	 */
+	public $user;
+	public $document;
 	protected $form;
 	protected $item;
 	protected $return_page;
 	protected $state;
 
-	public function display($tpl = null)
+	public function display($tpl = null): void
 	{
 		$user = Factory::getUser();
 
@@ -29,11 +39,7 @@ class HtmlView extends BaseHtmlView
 		$this->form        = $this->get('Form');
 		$this->return_page = $this->get('ReturnPage');
 
-		if (empty($this->item->id)) {
-			$authorised = false;
-		} else {
-			$authorised = $this->item->params->get('access-edit');
-		}
+		$authorised = empty($this->item->id) ? false : $this->item->params->get('access-edit');
 
 		if ($authorised !== true) {
 			throw new \Exception(Text::_('JERROR_ALERTNOAUTHOR'));

@@ -19,7 +19,7 @@ class HtmlView extends BaseHtmlView
 	protected $user;
 	protected $input;
 
-	public function display($tpl = null)
+	public function display($tpl = null): void
 	{
 		$this->setModel(new AttachmentModel(), true);
 		$app        = Factory::getApplication();
@@ -30,7 +30,7 @@ class HtmlView extends BaseHtmlView
 		$this->state = $this->get('State');
 
 		// Check for errors.
-		if (count($errors = $this->get('Errors'))) {
+		if (count($errors = $this->get('Errors')) > 0) {
 			throw new \Exception(implode('\n', $errors));
 		}
 

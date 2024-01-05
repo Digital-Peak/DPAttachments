@@ -16,12 +16,13 @@ use Joomla\Registry\Registry;
 
 class DPAttachments extends CMSPlugin
 {
+	public $params;
 	/** @var CMSApplication $app */
 	protected $app;
 
 	protected $autoloadLanguage = true;
 
-	private $FORMS_TO_EXCLUDE = ['com_users.registration'];
+	private array $FORMS_TO_EXCLUDE = ['com_users.registration'];
 
 	public function onContentAfterDisplay($context, $item, $params)
 	{
@@ -85,8 +86,8 @@ class DPAttachments extends CMSPlugin
 			return '';
 		}
 
-		list($componentName) = explode('.', $context);
-		$params              = ComponentHelper::getParams('com_dpattachments');
+		[$componentName] = explode('.', $context);
+		$params          = ComponentHelper::getParams('com_dpattachments');
 
 		// Check if the component is in the list of excluded ones
 		$components = $params->get(
@@ -126,7 +127,7 @@ class DPAttachments extends CMSPlugin
 		);
 	}
 
-	public function onContentAfterDelete($context, $item)
+	public function onContentAfterDelete(string $context, $item)
 	{
 		// Check if there is an id
 		if (empty($item->id)) {
@@ -152,7 +153,7 @@ class DPAttachments extends CMSPlugin
 	 *
 	 * @return string
 	 */
-	private function transformContext(string $context, $item)
+	private function transformContext(string $context, $item): string
 	{
 		// Categories lists
 		if ($context === 'com_content.categories') {

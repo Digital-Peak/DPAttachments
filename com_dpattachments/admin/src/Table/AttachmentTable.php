@@ -10,12 +10,36 @@ namespace DigitalPeak\Component\DPAttachments\Administrator\Table;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Table\Table;
+use Joomla\Database\DatabaseDriver;
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
 class AttachmentTable extends Table
 {
-	public function __construct(&$db)
+	public $publish_down;
+	public $publish_up;
+	public $title;
+	/**
+	 * @var string
+	 */
+	public $path;
+	public $description;
+	public $created;
+	public $modified;
+	public $checked_out_time;
+	public $hits;
+	public $id;
+	public $modified_by;
+	public $created_by;
+	public $created_ip;
+	/**
+	 * @var int
+	 */
+	public $state;
+	public $_tbl_key;
+	public $_db;
+	public $_tbl;
+	public function __construct(DatabaseDriver &$db)
 	{
 		parent::__construct('#__dpattachments', 'id', $db);
 
@@ -33,7 +57,7 @@ class AttachmentTable extends Table
 		return parent::bind($array, $ignore);
 	}
 
-	public function check()
+	public function check(): bool
 	{
 		if ($this->publish_down && $this->publish_down < $this->publish_up) {
 			// Swap the dates.
@@ -89,7 +113,7 @@ class AttachmentTable extends Table
 			$this->modified    = $date->toSql();
 			$this->modified_by = $user->get('id');
 		} else {
-			if (!(int)$this->created) {
+			if ((int)$this->created === 0) {
 				$this->created = $date->toSql();
 			}
 
@@ -104,7 +128,7 @@ class AttachmentTable extends Table
 		return parent::store($updateNulls);
 	}
 
-	public function publish($pks = null, $state = 1, $userId = 0)
+	public function publish($pks = null, $state = 1, $userId = 0): bool
 	{
 		$k = $this->_tbl_key;
 
@@ -129,13 +153,13 @@ class AttachmentTable extends Table
 		if (!property_exists($this, 'checked_out') || !property_exists($this, 'checked_out_time')) {
 			$checkin = '';
 		} else {
-			$checkin = ' AND (checked_out = 0 OR checked_out = ' . (int)$userId . ')';
+			$checkin = ' AND (checked_out = 0 OR checked_out = ' . $userId . ')';
 		}
 
 		// Update the publishing state for rows with the given primary keys
 		$query = $this->_db->getQuery(true)
 			->update($this->_db->quoteName($this->_tbl))
-			->set($this->_db->quoteName('state') . ' = ' . (int)$state)
+			->set($this->_db->quoteName('state') . ' = ' . $state)
 			->where('(' . $where . ')' . $checkin);
 		$this->_db->setQuery($query);
 

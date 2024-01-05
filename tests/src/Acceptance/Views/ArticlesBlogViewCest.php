@@ -14,14 +14,14 @@ use Tests\Support\Step\Attachment;
 
 class ArticlesBlogViewCest extends BasicDPAttachmentsCestClass
 {
-	public function _before(AcceptanceTester $I)
+	public function _before(AcceptanceTester $I): void
 	{
 		parent::_before($I);
 
 		$I->enablePlugin('plg_content_dpattachments');
 	}
 
-	public function canSeeAttachmentDetails(Attachment $I, Article $IA)
+	public function canSeeAttachmentDetails(Attachment $I, Article $IA): void
 	{
 		$I->wantToTest('that the attachment details are shown.');
 
@@ -36,7 +36,7 @@ class ArticlesBlogViewCest extends BasicDPAttachmentsCestClass
 		$I->see('Trash');
 	}
 
-	public function canSeeUploadFormInArticleWhenAdmin(Article $I)
+	public function canSeeUploadFormInArticleWhenAdmin(Article $I): void
 	{
 		$I->wantToTest('that the upload form is displayed in an article.');
 
@@ -49,7 +49,7 @@ class ArticlesBlogViewCest extends BasicDPAttachmentsCestClass
 		$I->seeNumberOfElements('.com-dpattachments-layout-form', 2);
 	}
 
-	public function canSeeUploadFormInArticleWhenUser(Article $I)
+	public function canSeeUploadFormInArticleWhenUser(Article $I): void
 	{
 		$I->wantToTest('that the upload form is displayed in an article when regular user.');
 
@@ -62,7 +62,7 @@ class ArticlesBlogViewCest extends BasicDPAttachmentsCestClass
 		$I->seeNumberOfElements('.com-dpattachments-layout-form', 2);
 	}
 
-	public function cantSeeUploadFormInArticleWhenUser(Article $I)
+	public function cantSeeUploadFormInArticleWhenUser(Article $I): void
 	{
 		$I->wantToTest('that the upload form is not displayed in an article when regular user.');
 
@@ -75,7 +75,7 @@ class ArticlesBlogViewCest extends BasicDPAttachmentsCestClass
 		$I->dontSeeElement('.com-dpattachments-layout-form');
 	}
 
-	public function cantSeeUploadFormInArticleWhenGuest(Article $I)
+	public function cantSeeUploadFormInArticleWhenGuest(Article $I): void
 	{
 		$I->wantToTest('that the upload form is not displayed in an article.');
 
@@ -87,11 +87,12 @@ class ArticlesBlogViewCest extends BasicDPAttachmentsCestClass
 		$I->dontSeeElement('.com-dpattachments-layout-form');
 	}
 
-	public function canSeeUploadFormInArticleForSpecificCategory(Article $I)
+	public function canSeeUploadFormInArticleForSpecificCategory(Article $I): void
 	{
 		$I->wantToTest('that the upload form is displayed in an article for a specific category.');
 
 		$I->doAdministratorLogin();
+
 		$category = $I->createDPCategory('Test cat', 'com_content');
 		$I->setExtensionParam('cat_ids', [$category], 'plg_content_dpattachments');
 
@@ -104,11 +105,12 @@ class ArticlesBlogViewCest extends BasicDPAttachmentsCestClass
 		$I->seeNumberOfElements('.com-dpattachments-layout-form', 2);
 	}
 
-	public function cantSeeUploadFormInArticleForSpecificCategory(Article $I)
+	public function cantSeeUploadFormInArticleForSpecificCategory(Article $I): void
 	{
 		$I->wantToTest('that the upload form is displayed in an article for a specific category.');
 
 		$I->doAdministratorLogin();
+
 		$category = $I->createDPCategory('Test cat', 'com_content');
 
 		$I->setExtensionParam(
@@ -126,7 +128,7 @@ class ArticlesBlogViewCest extends BasicDPAttachmentsCestClass
 		$I->dontSeeElement('.com-dpattachments-layout-form');
 	}
 
-	public function canUploadAttachmentForCategory(Article $I)
+	public function canUploadAttachmentForCategory(Article $I): void
 	{
 		$I->wantToTest('that an attachment can be uploaded to a category.');
 
@@ -143,7 +145,7 @@ class ArticlesBlogViewCest extends BasicDPAttachmentsCestClass
 		$I->seeInDatabase('dpattachments', ['context' => 'com_categories.category']);
 	}
 
-	public function canUploadMultipleAttachmentForCategory(Article $I)
+	public function canUploadMultipleAttachmentForCategory(Article $I): void
 	{
 		$I->wantToTest('that an attachment can be uploaded to a category.');
 
@@ -163,7 +165,7 @@ class ArticlesBlogViewCest extends BasicDPAttachmentsCestClass
 		$I->assertFileEquals(codecept_data_dir() . '/test.jpg', $I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . Attachment::CATEGORIES_ATTACHMENT_DIR . 'test.jpg');
 	}
 
-	public function canUploadAttachmentToArticle(Article $I)
+	public function canUploadAttachmentToArticle(Article $I): void
 	{
 		$I->wantToTest('that an attachment can be uploaded to an article.');
 
@@ -180,7 +182,7 @@ class ArticlesBlogViewCest extends BasicDPAttachmentsCestClass
 		$I->seeInDatabase('dpattachments', ['context' => 'com_content.article']);
 	}
 
-	public function canUploadMultipleAttachmentToArticle(Article $I)
+	public function canUploadMultipleAttachmentToArticle(Article $I): void
 	{
 		$I->wantToTest('that multiple attachments can be uploaded to an article.');
 
@@ -200,7 +202,7 @@ class ArticlesBlogViewCest extends BasicDPAttachmentsCestClass
 		$I->assertFileEquals(codecept_data_dir() . '/test.jpg', $I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . Attachment::ARTICLES_ATTACHMENT_DIR . 'test.jpg');
 	}
 
-	public function canTrashAttachment(Attachment $I, Article $IA)
+	public function canTrashAttachment(Attachment $I, Article $IA): void
 	{
 		$I->wantToTest('that an attachment can be trashed.');
 

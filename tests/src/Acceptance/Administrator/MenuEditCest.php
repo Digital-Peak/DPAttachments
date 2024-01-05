@@ -13,14 +13,14 @@ use Tests\Support\Step\Attachment;
 
 class MenuEditCest extends BasicDPAttachmentsCestClass
 {
-	public function _before(AcceptanceTester $I)
+	public function _before(AcceptanceTester $I): void
 	{
 		parent::_before($I);
 
 		$I->enablePlugin('plg_content_dpattachments');
 	}
 
-	public function cantSeeAttachmentDetails(Attachment $I)
+	public function cantSeeAttachmentDetails(Attachment $I): void
 	{
 		$I->wantToTest('that the attachment details are not shown in the menu item form.');
 
