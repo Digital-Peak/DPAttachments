@@ -9,7 +9,7 @@ namespace Docs\Support;
 
 class BasicDPAttachmentsCestClass
 {
-	public function _failed(AcceptanceTester $I)
+	public function _failed(AcceptanceTester $I): void
 	{
 		$I->pause();
 	}

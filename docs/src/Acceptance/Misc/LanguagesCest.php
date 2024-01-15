@@ -12,7 +12,7 @@ use Docs\Support\BasicDPAttachmentsCestClass;
 
 class LanguagesCest extends BasicDPAttachmentsCestClass
 {
-	public function screenshotsLanguageOverrides(AcceptanceTester $I)
+	public function screenshotsLanguageOverrides(AcceptanceTester $I): void
 	{
 		$I->doAdministratorLogin();
 		$I->amOnPage('/administrator/index.php?option=com_languages&view=overrides');

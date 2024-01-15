@@ -14,7 +14,7 @@ use Tests\Support\Step\Attachment;
 
 class AttachmentEditCest extends BasicDPAttachmentsCestClass
 {
-	public function canEditAttachment(Attachment $I)
+	public function canEditAttachment(Attachment $I): void
 	{
 		$I->wantToTest('that it is possible to edit an attachment.');
 

@@ -16,20 +16,26 @@ use Joomla\Registry\Registry;
 
 class DPAttachments extends CMSPlugin
 {
+	public $params;
 	/** @var CMSApplication $app */
 	protected $app;
 
 	protected $autoloadLanguage = true;
 
-	private $FORMS_TO_EXCLUDE = ['com_users.registration'];
+	private array $FORMS_TO_EXCLUDE = ['com_users.registration'];
 
-	public function onContentAfterDisplay($context, $item, $params)
+	/**
+	 * @param string   $context
+	 * @param mixed    $item
+	 * @param Registry $params
+	 */
+	public function onContentAfterDisplay($context, $item, $params): string
 	{
 		$context = $this->transformContext($context, $item);
 
 		// Ignore DPAttachments
 		if ($context === 'com_dpattachments.attachment') {
-			return;
+			return '';
 		}
 
 		// Check if there is an ID
@@ -46,20 +52,22 @@ class DPAttachments extends CMSPlugin
 		// Get the component instance
 		$component = $this->app->bootComponent('dpattachments');
 		if (!$component instanceof DPAttachmentsComponent) {
-			return;
+			return '';
 		}
 
 		// Render the attachments and upload form
-		$buffer = $component->render(
+		return $component->render(
 			$context,
 			$item->id,
 			new Registry(['render.columns' => $this->params->get('column_count', 2), 'item' => $item])
 		);
-
-		return $buffer;
 	}
 
-	public function onContentPrepareForm(Form $form, $data)
+	/**
+	 * @param Form $form
+	 * @param mixed $data
+	 */
+	public function onContentPrepareForm(Form $form, $data): void
 	{
 		$context = $this->transformContext($form->getName(), $data);
 
@@ -82,11 +90,11 @@ class DPAttachments extends CMSPlugin
 		// Check if there are categories to filter
 		$catIds = $this->params->get('cat_ids');
 		if (!empty($catIds) && isset($data->catid) && !in_array($data->catid, $catIds)) {
-			return '';
+			return;
 		}
 
-		list($componentName) = explode('.', $context);
-		$params              = ComponentHelper::getParams('com_dpattachments');
+		[$componentName] = explode('.', $context);
+		$params          = ComponentHelper::getParams('com_dpattachments');
 
 		// Check if the component is in the list of excluded ones
 		$components = $params->get(
@@ -126,11 +134,15 @@ class DPAttachments extends CMSPlugin
 		);
 	}
 
-	public function onContentAfterDelete($context, $item)
+	/**
+	 * @param string $context
+	 * @param mixed $item
+	 */
+	public function onContentAfterDelete(string $context, $item): void
 	{
 		// Check if there is an id
 		if (empty($item->id)) {
-			return '';
+			return;
 		}
 
 		// Load the component instance
@@ -140,7 +152,7 @@ class DPAttachments extends CMSPlugin
 		}
 
 		// Delete the attachment for the item
-		return $component->delete($this->transformContext($context, $item), $item->id);
+		$component->delete($this->transformContext($context, $item), $item->id);
 	}
 
 	/**
@@ -152,7 +164,7 @@ class DPAttachments extends CMSPlugin
 	 *
 	 * @return string
 	 */
-	private function transformContext(string $context, $item)
+	private function transformContext(string $context, $item): string
 	{
 		// Categories lists
 		if ($context === 'com_content.categories') {

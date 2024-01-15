@@ -7,23 +7,28 @@
 
 namespace DigitalPeak\Component\DPAttachments\Site\Controller;
 
-use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\BaseController;
+use Joomla\CMS\User\CurrentUserInterface;
+use Joomla\CMS\User\CurrentUserTrait;
 
-class DisplayController extends BaseController
+class DisplayController extends BaseController implements CurrentUserInterface
 {
-	public function display($cachable = false, $urlparams = false)
+	use CurrentUserTrait;
+
+	public $input;
+
+	public function display($cachable = false, $urlparams = []): self
 	{
 		$cachable = true;
 
-		$id    = $this->input->getInt('id');
+		$id    = $this->input->getInt('id', 0);
 		$vName = $this->input->getCmd('view', '');
 		$this->input->set('view', $vName);
 
-		$user = Factory::getUser();
+		$user = $this->getCurrentUser();
 
-		if ($user->get('id') || $this->input->getMethod() == 'POST') {
+		if ($user->id || $this->input->getMethod() == 'POST') {
 			$cachable = false;
 		}
 

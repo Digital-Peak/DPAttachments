@@ -10,12 +10,74 @@ namespace DigitalPeak\Component\DPAttachments\Administrator\Table;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Table\Table;
+use Joomla\CMS\User\CurrentUserInterface;
+use Joomla\CMS\User\CurrentUserTrait;
+use Joomla\Database\DatabaseDriver;
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
-class AttachmentTable extends Table
+class AttachmentTable extends Table implements CurrentUserInterface
 {
-	public function __construct(&$db)
+	use CurrentUserTrait;
+
+	/** @var ?string */
+	public $publish_down;
+
+	/** @var ?string */
+	public $publish_up;
+
+	/** @var string */
+	public $title;
+
+	/** @var string */
+	public $context;
+
+	/** @var string */
+	public $item_id;
+
+	/** @var string */
+	public $path;
+
+	/** @var string */
+	public $description;
+
+	/** @var ?string */
+	public $created;
+
+	/** @var int */
+	public $created_by;
+
+	/** @var ?string */
+	public $modified;
+
+	/** @var int */
+	public $modified_by;
+
+	/** @var ?string */
+	public $checked_out_time;
+
+	/** @var int */
+	public $hits;
+
+	/** @var int */
+	public $id;
+
+	/** @var string */
+	public $created_ip;
+
+	/** @var int */
+	public $state;
+
+	/** @var int */
+	public $version;
+
+	/** @var string */
+	public $_tbl_key;
+
+	/** @var string */
+	public $_tbl;
+
+	public function __construct(DatabaseDriver &$db)
 	{
 		parent::__construct('#__dpattachments', 'id', $db);
 
@@ -33,9 +95,9 @@ class AttachmentTable extends Table
 		return parent::bind($array, $ignore);
 	}
 
-	public function check()
+	public function check(): bool
 	{
-		if ($this->publish_down && $this->publish_down < $this->publish_up) {
+		if ($this->publish_down && $this->publish_up && $this->publish_down < $this->publish_up) {
 			// Swap the dates.
 			$temp               = $this->publish_up;
 			$this->publish_up   = $this->publish_down;
@@ -72,7 +134,7 @@ class AttachmentTable extends Table
 			$this->checked_out_time = null;
 		}
 
-		if ($this->hits === '') {
+		if ((int)$this->hits === 0) {
 			$this->hits = 0;
 		}
 
@@ -82,19 +144,19 @@ class AttachmentTable extends Table
 	public function store($updateNulls = false)
 	{
 		$date = Factory::getDate();
-		$user = Factory::getUser();
+		$user = $this->getCurrentUser();
 
-		if ($this->id) {
+		if ((int)$this->id !== 0) {
 			// Existing item
 			$this->modified    = $date->toSql();
-			$this->modified_by = $user->get('id');
+			$this->modified_by = $user->id;
 		} else {
-			if (!(int)$this->created) {
+			if ((int)$this->created === 0) {
 				$this->created = $date->toSql();
 			}
 
 			if (empty($this->created_by)) {
-				$this->created_by = $user->get('id');
+				$this->created_by = $user->id;
 			}
 			$this->created_ip = $_SERVER['REMOTE_ADDR'];
 
@@ -104,7 +166,7 @@ class AttachmentTable extends Table
 		return parent::store($updateNulls);
 	}
 
-	public function publish($pks = null, $state = 1, $userId = 0)
+	public function publish($pks = null, $state = 1, $userId = 0): bool
 	{
 		$k = $this->_tbl_key;
 
@@ -129,20 +191,20 @@ class AttachmentTable extends Table
 		if (!property_exists($this, 'checked_out') || !property_exists($this, 'checked_out_time')) {
 			$checkin = '';
 		} else {
-			$checkin = ' AND (checked_out = 0 OR checked_out = ' . (int)$userId . ')';
+			$checkin = ' AND (checked_out = 0 OR checked_out = ' . $userId . ')';
 		}
 
 		// Update the publishing state for rows with the given primary keys
-		$query = $this->_db->getQuery(true)
-			->update($this->_db->quoteName($this->_tbl))
-			->set($this->_db->quoteName('state') . ' = ' . (int)$state)
+		$query = $this->getDbo()->getQuery(true)
+			->update($this->_tbl)
+			->set('state = ' . $state)
 			->where('(' . $where . ')' . $checkin);
-		$this->_db->setQuery($query);
+		$this->getDbo()->setQuery($query);
 
-		$this->_db->execute();
+		$this->getDbo()->execute();
 
 		// If checkin is supported and all rows were adjusted, check them in
-		if ($checkin && (count($pks) == $this->_db->getAffectedRows())) {
+		if ($checkin && (count($pks) == $this->getDbo()->getAffectedRows())) {
 			// Checkin the rows
 			foreach ($pks as $pk) {
 				$this->checkin($pk);

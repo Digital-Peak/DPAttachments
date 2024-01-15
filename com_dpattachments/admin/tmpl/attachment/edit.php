@@ -63,7 +63,7 @@ HTMLHelper::_('bootstrap.startTabSet');
 			<?php }?>
 
 			<input type="hidden" name="task" value="" />
-			<input type="hidden" name="return" value="<?php echo Factory::getApplication()->input->getCmd('return');?>" />
+			<input type="hidden" name="return" value="<?php echo $this->input->getCmd('return');?>" />
 			<?php echo HTMLHelper::_('form.token'); ?>
 		</div>
 	</form>

@@ -7,6 +7,7 @@
 
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\CMS\Installer\InstallerScript;
 
 class Com_DPAttachmentsInstallerScript extends InstallerScript
@@ -15,7 +16,7 @@ class Com_DPAttachmentsInstallerScript extends InstallerScript
 	protected $minimumJoomla   = '4.0.0';
 	protected $allowDowngrades = true;
 
-	public function postflight($type, $parent)
+	public function postflight(string $type, InstallerAdapter $parent): void
 	{
 		if ($parent->getElement() != 'com_dpattachments') {
 			return;

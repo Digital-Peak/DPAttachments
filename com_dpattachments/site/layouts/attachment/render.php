@@ -8,7 +8,6 @@
 defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPAttachments\Administrator\Extension\DPAttachmentsComponent;
-use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
@@ -21,7 +20,7 @@ if (!$attachment) {
 	return;
 }
 
-/** @var CMSApplicationInterface $app */
+/** @var \Joomla\CMS\Application\CMSApplicationInterface $app */
 $app = $displayData['app'] ?? Factory::getApplication();
 $app->getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR . '/components/com_dpattachments');
 
@@ -55,7 +54,7 @@ foreach (Folder::files(JPATH_SITE . '/components/com_dpattachments/tmpl/attachme
 		<div class="dp-attachment__before-display"><?php echo $attachment->event->beforeDisplayAttachment; ?></div>
 	<?php } ?>
 	<div class="dp-attachment__date">
-		<?php $author = $attachment->created_by_alias ?: (isset($attachment->author_name) ? $attachment->author_name : $attachment->created_by); ?>
+		<?php $author = $attachment->created_by_alias ?: ($attachment->author_name ?? $attachment->created_by); ?>
 		<?php echo sprintf($app->getLanguage()->_('COM_DPATTACHMENTS_TEXT_UPLOADED_LABEL'), HTMLHelper::_('date.relative', $attachment->created), $author); ?>
 	</div>
 	<?php if (!empty($attachment->event) && !empty($attachment->event->afterDisplayAttachment)) { ?>

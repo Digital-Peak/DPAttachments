@@ -13,13 +13,14 @@ use Joomla\CMS\Router\Route;
 
 class DisplayController extends BaseController
 {
+	public $input;
 	protected $default_view = 'attachments';
 
-	public function display($cachable = false, $urlparams = false)
+	public function display($cachable = false, $urlparams = []): self
 	{
 		$view   = $this->input->get('view', 'attachments');
 		$layout = $this->input->get('layout', 'attachments');
-		$id     = $this->input->getInt('id');
+		$id     = $this->input->getInt('id', 0);
 
 		// Check for edit form.
 		if ($view == 'attachment' && $layout == 'edit' && !$this->checkEditId('com_dpattachments.edit.attachment', $id)) {
@@ -27,7 +28,7 @@ class DisplayController extends BaseController
 			$this->setMessage(Text::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id), 'error');
 			$this->setRedirect(Route::_('index.php?option=com_dpattachments&view=attachments', false));
 
-			return false;
+			return $this;
 		}
 
 		parent::display();
