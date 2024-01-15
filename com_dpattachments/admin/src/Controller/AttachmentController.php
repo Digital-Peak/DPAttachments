@@ -16,12 +16,13 @@ class AttachmentController extends FormController
 {
 	public $app;
 	public $input;
+
 	protected function allowEdit($data = [], $key = 'id')
 	{
 		$recordId = (int)isset($data[$key]) !== 0 ? $data[$key] : 0;
 
 		$record = $this->getModel()->getItem($recordId);
-		if (!empty($record)) {
+		if (is_object($record)) {
 			return $this->app->bootComponent('dpattachments')->canDo('core.edit', $record->context, $record->item_id);
 		}
 
@@ -34,30 +35,33 @@ class AttachmentController extends FormController
 
 		$data       = $this->input->get('attachment', [], 'array');
 		$data['id'] = 0;
+		$data['context'] ??= '';
+		$data['item_id'] ??= '';
 
-		$model   = $this->getModel('Attachment', 'Administrator');
-		$success = $model->upload($data);
-
-		$returnData = ['html' => '', 'context' => $data['context'], 'item_id' => $data['item_id']];
-		if ($success) {
-			$this->app->enqueueMessage(Text::_('COM_DPATTACHMENTS_UPLOAD_SUCCESS'), 'success');
+		$model      = $this->getModel('Attachment', 'Administrator');
+		$returnData = ['html' => '', 'context' => $data['context'] , 'item_id' => $data['item_id'] ];
+		try {
+			$model->upload($data);
 
 			$content = $this->app->bootComponent('dpattachments')->renderLayout(
 				'attachment.render',
 				['attachment' => $model->getItem($model->getState($model->getName() . '.id'))]
 			);
 			$returnData['html'] = '<div>' . $content . '</div>';
-		} else {
-			$this->app->enqueueMessage(Text::sprintf('JLIB_APPLICATION_ERROR_SAVE_FAILED', $model->getError()), 'error');
-		}
 
-		$this->sendMessage(null, !$success, $returnData);
+			$this->app->enqueueMessage(Text::_('COM_DPATTACHMENTS_UPLOAD_SUCCESS'), 'success');
+			$this->sendMessage('', true, $returnData);
+		} catch (\Throwable $throwable) {
+			$this->app->enqueueMessage($throwable->getMessage(), 'error');
+
+			$this->sendMessage('', false, $returnData);
+		}
 	}
 
 	public function download(): void
 	{
 		$attachment = $this->getModel()->getItem($this->input->get('id'));
-		if (!$attachment) {
+		if (!is_object($attachment)) {
 			header('HTTP/1.0 404 Not Found');
 			exit(0);
 		}
@@ -136,9 +140,10 @@ class AttachmentController extends FormController
 		}
 
 		// Use 1M chunks for echoing the data to the browser
-		$chunksize = 1024 * 1024;
-		$buffer    = '';
-		$handle    = @fopen($filename, 'rb');
+		$totalLength = 0;
+		$chunksize   = 1024 * 1024;
+		$buffer      = '';
+		$handle      = @fopen($filename, 'rb');
 		if ($handle !== false) {
 			if ($isResumable) {
 				// Only send partial content header if downloading a piece of
@@ -149,7 +154,7 @@ class AttachmentController extends FormController
 
 				// Necessary headers
 				$totalLength = $seek_end - $seek_start + 1;
-				header('Content-Range: bytes ' . $seek_start . '-' . $seek_end . '/' . $size);
+				header('Content-Range: bytes ' . $seek_start . '-' . $seek_end . '/');
 				header('Content-Length: ' . $totalLength);
 
 				// Seek to start
@@ -170,7 +175,7 @@ class AttachmentController extends FormController
 						continue;
 					}
 				}
-				$buffer = fread($handle, $chunksize);
+				$buffer = fread($handle, $chunksize) ?: '';
 				if ($isResumable) {
 					$read += strlen($buffer);
 				}
@@ -199,7 +204,7 @@ class AttachmentController extends FormController
 		$success = $model->publish($id, $this->input->getInt('state', 0));
 
 		if (!$success) {
-			throw new \Exception(Text::sprintf('JLIB_APPLICATION_ERROR_SAVE_FAILED', $model->getError()));
+			throw new \Exception(Text::_('JLIB_APPLICATION_ERROR_SAVE_FAILED'));
 		}
 
 		$this->setMessage(Text::plural('COM_DPATTACHMENTS_N_ITEMS_TRASHED', 1), 'success');
@@ -207,7 +212,7 @@ class AttachmentController extends FormController
 		$this->setRedirect('index.php?option=com_dpattachments&view=attachments');
 	}
 
-	private function sendMessage($message, bool $error = false, array $data = []): void
+	private function sendMessage(string $message = '', bool $error = false, array $data = []): void
 	{
 		ob_clean();
 

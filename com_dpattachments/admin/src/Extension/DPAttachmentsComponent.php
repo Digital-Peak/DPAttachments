@@ -1,6 +1,6 @@
 <?php
 /**
- * @package    DPCases
+ * @package    DPAttachments
  * @copyright  Copyright (C) 2021 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license    https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
@@ -13,9 +13,7 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Dispatcher\ComponentDispatcherFactoryInterface;
 use Joomla\CMS\Extension\LegacyComponent;
 use Joomla\CMS\Extension\MVCComponent;
-use Joomla\CMS\Factory;
 use Joomla\CMS\Fields\FieldsServiceInterface;
-use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\MVC\Factory\MVCFactoryServiceInterface;
 use Joomla\CMS\Plugin\PluginHelper;
@@ -61,26 +59,15 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 	 *
 	 * The render form parameter defines if the upload form should be rendered when the edit
 	 * permission exists.
-	 *
-	 * @param string $context
-	 * @param string $itemId
-	 * @param mixed  $options
-	 * @param bool   $renderForm
-	 *
-	 * @return string
 	 */
-	public function render(string $context, string $itemId, $options = null, $renderForm = true): string
+	public function render(string $context, string $itemId, ?Registry $options = null, bool $renderForm = true): string
 	{
 		if (!$this->isEnabled()) {
 			return '';
 		}
 
-		if (empty($options)) {
+		if (!$options instanceof Registry) {
 			$options = new Registry();
-		}
-
-		if (is_array($options)) {
-			$options = new Registry($options);
 		}
 
 		$canEdit     = $this->canDo('core.edit', $context, $itemId);
@@ -137,16 +124,11 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			return $buffer;
 		}
 
-		return $buffer . $this->renderLayout('attachment.form', ['itemId' => $itemId, 'context' => $context]);
+		return $buffer . $this->renderLayout('attachment.form', ['itemId' => $itemId, 'context' => $context, 'app' => $this->app]);
 	}
 
 	/**
 	 * Deletes the attachment for the given context and item ID. Returns true on success, false otherwise.
-	 *
-	 * @param string $context
-	 * @param string $itemId
-	 *
-	 * @return bool
 	 */
 	public function delete(string $context, string $itemId): bool
 	{
@@ -174,12 +156,6 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 	 * For example for the context com_dpcalendar.event a table with the name DPCalendarTableEvent will be loaded. On a second step
 	 * the loaded table instance will be checked if it has an asset_id or catid field to check permissions against them. If this is not
 	 * the case a fallback will be done to the DPAttachments options permission configuration.
-	 *
-	 * @param string $action
-	 * @param string $context
-	 * @param string $itemId
-	 *
-	 * @return bool
 	 */
 	public function canDo(string $action, string $context, string $itemId): bool
 	{
@@ -190,6 +166,10 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			return true;
 		}
 
+		if ($action === '' || $action === '0' || $context === '' || $context === '0' || $itemId === '' || $itemId === '0') {
+			return false;
+		}
+
 		$key = $context . '.' . $itemId;
 
 		[$component, $modelName] = explode('.', $context);
@@ -198,6 +178,8 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 
 			$table = null;
 			if ($instance instanceof LegacyComponent) {
+				// Is needed as long as J3 extensions are supported
+				// @phpstan-ignore-next-line
 				Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/' . $component . '/tables');
 				$table = $instance->getMVCFactory()->createTable(ucfirst($modelName), ucfirst(str_replace('com_', '', $component) . 'Table'));
 			} elseif ($instance instanceof MVCFactoryServiceInterface) {
@@ -212,6 +194,9 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 		}
 
 		$user = $this->app->getIdentity();
+		if ($user === null) {
+			return false;
+		}
 
 		$item = $this->itemCache[$key];
 
@@ -251,11 +236,6 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 
 	/**
 	 * Returns a local file system path for the given filename and context.
-	 *
-	 * @param string $attachmentPath
-	 * @param string $context
-	 *
-	 * @return string
 	 */
 	public function getPath(string $attachmentPath, string $context): string
 	{
@@ -267,16 +247,12 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 
 	/**
 	 * Helper function to create a human readable size string for the given size which is in bytes.
-	 *
-	 * @param integer $size
-	 *
-	 * @return string
 	 */
 	public function size(int $size): string
 	{
 		// Size in bytes
 		if ($size <= 1024) {
-			return $size . Text::_('COM_DPATTACHMENTS_BYTE_SHORT');
+			return $size . $this->app->getLanguage()->_('COM_DPATTACHMENTS_BYTE_SHORT');
 		}
 
 		// Size in kilo bytes
@@ -284,23 +260,18 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 		if ($filekb <= 1024) {
 			$flieinkb = round($filekb, 2);
 
-			return $flieinkb . Text::_('COM_DPATTACHMENTS_KILOBYTE_SHORT');
+			return $flieinkb . $this->app->getLanguage()->_('COM_DPATTACHMENTS_KILOBYTE_SHORT');
 		}
 
 		// Size in mega bytes
 		$filemb   = $filekb / 1024;
 		$fileinmb = round($filemb, 2);
 
-		return $fileinmb . Text::_('COM_DPATTACHMENTS_MEGA_BYTE_SHORT');
+		return $fileinmb . $this->app->getLanguage()->_('COM_DPATTACHMENTS_MEGA_BYTE_SHORT');
 	}
 
 	/**
 	 * Shortcut function to render layouts from dpattachments.
-	 *
-	 * @param string $name
-	 * @param array $data
-	 *
-	 * @return string
 	 */
 	public function renderLayout(string $name, array $data): string
 	{
@@ -313,7 +284,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 		$content = LayoutHelper::render(
 			$name,
 			$data,
-			null,
+			'',
 			['component' => 'com_dpattachments', 'client' => 0]
 		);
 
@@ -328,7 +299,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 
 	public function validateSection($section, $item = null): ?string
 	{
-		if (Factory::getApplication()->isClient('site') && $section === 'form') {
+		if ($this->app->isClient('site') && $section === 'form') {
 			$section = 'attachment';
 		}
 
@@ -341,17 +312,15 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 
 	public function getContexts(): array
 	{
-		Factory::getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR);
+		$this->app->getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR);
 
 		return [
-			'com_dpattachments.attachment' => Text::_('COM_DPATTACHMENTS')
+			'com_dpattachments.attachment' => $this->app->getLanguage()->_('COM_DPATTACHMENTS')
 		];
 	}
 
 	/**
 	 * Internal helper function to check if the actual menu item or component is enabled for attachment support.
-	 *
-	 * @return bool
 	 */
 	private function isEnabled(): bool
 	{
@@ -412,11 +381,6 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 
 	/**
 	 * Internal helper function to get the attachments for the given context and item ID.
-	 *
-	 * @param string $context
-	 * @param string $itemId
-	 *
-	 * @return array
 	 */
 	private function getAttachments(string $context, string $itemId): array
 	{

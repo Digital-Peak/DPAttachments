@@ -16,5 +16,5 @@ HTMLHelper::_('stylesheet', 'com_dpattachments/dpattachments/views/attachment/tx
 ?>
 <div class="com-dpattachments-attachment com-dpattachments-attachment-txt">
 	<h3 class="com-dpattachments-attachment__header"><?php echo $this->escape($this->item->title); ?></h3>
-	<div class="com-dpattachments-attachment__content"><?php echo htmlentities($content); ?></div>
+	<div class="com-dpattachments-attachment__content"><?php echo htmlentities($content ?: ''); ?></div>
 </div>

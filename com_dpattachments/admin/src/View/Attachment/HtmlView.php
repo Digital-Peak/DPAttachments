@@ -8,24 +8,39 @@
 namespace DigitalPeak\Component\DPAttachments\Administrator\View\Attachment;
 
 use DigitalPeak\Component\DPAttachments\Administrator\Helper\DPAttachmentsHelper;
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Form;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
 use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\Input\Input;
+use Joomla\Registry\Registry;
 
 class HtmlView extends BaseHtmlView
 {
-	public $canDo;
+	/** @var Form */
 	protected $form;
+
+	/** @var \stdClass */
 	protected $item;
+
+	/** @var Registry */
 	protected $state;
+
+	/** @var Input */
+	protected $input;
 
 	public function display($tpl = null): void
 	{
 		$this->form  = $this->get('Form');
 		$this->item  = $this->get('Item');
 		$this->state = $this->get('State');
-		$this->canDo = DPAttachmentsHelper::getActions();
+
+		$app = Factory::getApplication();
+		if ($app instanceof CMSApplication) {
+			$this->input = $app->getInput();
+		}
 
 		// Check for errors.
 		if ($errors = $this->get('Errors')) {
@@ -33,16 +48,18 @@ class HtmlView extends BaseHtmlView
 		}
 
 		$this->addToolbar();
+
 		parent::display($tpl);
 	}
 
-	protected function addToolbar()
+	private function addToolbar(): void
 	{
-		Factory::getApplication()->input->set('hidemainmenu', true);
-		$user       = Factory::getUser();
+		$this->input->set('hidemainmenu', true);
+
+		$user       = $this->getCurrentUser();
 		$isNew      = ($this->item->id == 0);
 		$checkedOut = $this->item->checked_out != 0 && $this->item->checked_out != $user->id;
-		$canDo      = DPAttachmentsHelper::getActions();
+		$canDo      = DPAttachmentsHelper::getActions($user);
 		ToolbarHelper::title(
 			Text::_('COM_DPATTACHMENTS_VIEW_ATTACHMENT_' . ($checkedOut ? 'ATTACHMENT' : ($isNew ? 'ADD_ATTACHMENT' : 'EDIT_ATTACHMENT')))
 		);

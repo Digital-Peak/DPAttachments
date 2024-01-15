@@ -19,7 +19,7 @@ if (!$options) {
 	$options = new Registry();
 }
 
-/** @var CMSApplicationInterface $app */
+/** @var \Joomla\CMS\Application\CMSApplicationInterface $app */
 $app = $displayData['app'] ?? Factory::getApplication();
 $app->getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR . '/components/com_dpattachments');
 
