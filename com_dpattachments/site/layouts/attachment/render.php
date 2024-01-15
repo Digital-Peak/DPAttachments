@@ -8,7 +8,6 @@
 defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPAttachments\Administrator\Extension\DPAttachmentsComponent;
-use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
@@ -21,7 +20,7 @@ if (!$attachment) {
 	return;
 }
 
-/** @var CMSApplicationInterface $app */
+/** @var \Joomla\CMS\Application\CMSApplicationInterface $app */
 $app = $displayData['app'] ?? Factory::getApplication();
 $app->getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR . '/components/com_dpattachments');
 

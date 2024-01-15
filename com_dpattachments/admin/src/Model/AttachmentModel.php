@@ -8,20 +8,25 @@
 namespace DigitalPeak\Component\DPAttachments\Administrator\Model;
 
 use DigitalPeak\Component\DPAttachments\Administrator\Extension\DPAttachmentsComponent;
+use DigitalPeak\Component\DPAttachments\Administrator\Table\AttachmentTable;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Filter\InputFilter;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\Filesystem\File;
 use Joomla\Utilities\ArrayHelper;
 
 class AttachmentModel extends AdminModel
 {
 	protected $text_prefix = 'COM_DPATTACHMENTS';
 
+	/**
+	 * @param AttachmentTable $record
+	 */
 	protected function canDelete($record)
 	{
 		if (!empty($record->id)) {
@@ -35,6 +40,9 @@ class AttachmentModel extends AdminModel
 		return parent::canDelete($record);
 	}
 
+	/**
+	 * @param AttachmentTable $record
+	 */
 	protected function canEditState($record)
 	{
 		if (!empty($record->id)) {
@@ -44,13 +52,16 @@ class AttachmentModel extends AdminModel
 		return parent::canEditState($record);
 	}
 
+	/**
+	 * @param AttachmentTable $table
+	 */
 	protected function prepareTable($table)
 	{
 		// Increment the content version number.
 		$table->version++;
 	}
 
-	public function upload(array $data)
+	public function upload(array $data): bool
 	{
 		if (!$this->bootComponent('dpattachments')->canDo('core.edit', $data['context'], $data['item_id'])) {
 			throw new \Exception(Text::_('COM_DPATTACHMENTS_UPLOAD_NO_PERMISSION'));
@@ -94,19 +105,24 @@ class AttachmentModel extends AdminModel
 			$targetFile = $this->bootComponent('dpattachments')->getPath($fileName, $data['context']);
 		}
 
-		if (!File::upload(
-			$_FILES['file']['tmp_name'],
-			$targetFile,
-			false,
-			ComponentHelper::getParams('com_dpattachments')->get('allow_unsafe_uploads', 0)
-		)) {
+		$descriptor = ['tmp_name' => $_FILES['file']['tmp_name'], 'name' => basename($targetFile)];
+		if (!ComponentHelper::getParams('com_dpattachments')->get('allow_unsafe_uploads', 0) && !InputFilter::isSafeFile($descriptor)) {
+			throw new \Exception(Text::_('COM_DPATTACHMENTS_UPLOAD_ERROR'));
+		}
+
+		if (!File::upload($_FILES['file']['tmp_name'], $targetFile)) {
 			throw new \Exception(Text::_('COM_DPATTACHMENTS_UPLOAD_ERROR'));
 		}
 
 		$data['path'] = $fileName;
 		$data['size'] = $_FILES['file']['size'];
 
-		return parent::save($data);
+		$result = parent::save($data);
+		if (!$result) {
+			throw new \Exception(Text::_('COM_DPATTACHMENTS_UPLOAD_ERROR'));
+		}
+
+		return $result;
 	}
 
 	public function getTable($type = 'Attachment', $prefix = 'DPAttachmentsTable', $config = [])
@@ -121,11 +137,8 @@ class AttachmentModel extends AdminModel
 		// Get the form.
 		Form::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpattachments/forms');
 		$form = $this->loadForm('com_dpattachments.attachment', 'attachment', ['control' => 'jform', 'load_data' => $loadData]);
-		if (empty($form)) {
-			return false;
-		}
 
-		$user = Factory::getUser();
+		$user = $this->getCurrentUser();
 
 		// Check for existing dpattachment.
 		// Modify the form based on Edit State access controls.
@@ -149,9 +162,8 @@ class AttachmentModel extends AdminModel
 	{
 		// Check the session for previously entered form data.
 		$app = Factory::getApplication();
-
 		if (!$app instanceof CMSApplication) {
-			return new \stdClass();
+			return [];
 		}
 
 		$data = $app->getUserState('com_dpattachments.edit.attachment.data', []);
@@ -160,7 +172,7 @@ class AttachmentModel extends AdminModel
 			$data = $this->getItem();
 
 			// Prime some default values.
-			if ($this->getState('attachment.id') == 0) {
+			if (is_object($data) && $this->getState('attachment.id') == 0) {
 				$data->set('itemid', $app->input->getInt('itemid', $app->getUserState('com_dpattachments.item.filter.itemid', 0)));
 			}
 		}
@@ -170,19 +182,20 @@ class AttachmentModel extends AdminModel
 		return $data;
 	}
 
-	public function hit($pk = 0): bool
+	public function hit(int $pk = 0): bool
 	{
-		$input    = Factory::getApplication()->input;
-		$hitcount = $input->getInt('hitcount', 1);
-
-		if ($hitcount) {
-			$pk = (empty($pk)) ? (int)$this->getState('case.id') : $pk;
-			$db = $this->getDbo();
-
-			$db->setQuery('UPDATE #__dpattachments SET hits = hits + 1 WHERE id = ' . (int)$pk);
-
-			$db->execute();
+		$app = Factory::getApplication();
+		if (!$app instanceof CMSApplication) {
+			return true;
 		}
+
+		if ($app->input->getInt('hitcount', 1) === 0) {
+			return true;
+		}
+
+		$pk = $pk === 0 ? $this->getState('case.id') : $pk;
+
+		$this->getDatabase()->setQuery('UPDATE #__dpattachments SET hits = hits + 1 WHERE id = ' . (int)$pk)->execute();
 
 		return true;
 	}
@@ -191,7 +204,12 @@ class AttachmentModel extends AdminModel
 	{
 		$attachments = [];
 		foreach (ArrayHelper::toInteger((array) $pks) as $id) {
-			$attachments[] = $this->getItem($id);
+			$attachment = $this->getItem($id);
+			if (!$attachment) {
+				continue;
+			}
+
+			$attachments[] = $attachment;
 		}
 
 		$success = parent::delete($pks);

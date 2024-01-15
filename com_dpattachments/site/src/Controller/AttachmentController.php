@@ -15,11 +15,13 @@ class AttachmentController extends BaseAttachmentController
 	public $input;
 	protected $view_item = 'form';
 
-	public function cancel($key = 'id'): void
+	public function cancel($key = 'id')
 	{
-		parent::cancel($key);
+		$result = parent::cancel($key);
 
 		$this->setRedirect($this->getReturnPage());
+
+		return $result;
 	}
 
 	public function save($key = null, $urlVar = 'id')
@@ -63,14 +65,14 @@ class AttachmentController extends BaseAttachmentController
 			$append .= '&Itemid=' . $itemId;
 		}
 
-		if ($return) {
+		if ($return !== '' && $return !== '0') {
 			$append .= '&return=' . base64_encode($return . ($tmpl ? (strpos($return, '?') === false ? '?' : '&') . 'tmpl=' . $tmpl : ''));
 		}
 
 		return $append;
 	}
 
-	protected function getReturnPage()
+	protected function getReturnPage(): string
 	{
 		$return = $this->input->get('return', null, 'base64');
 		if (empty($return) || !Uri::isInternal(base64_decode($return))) {

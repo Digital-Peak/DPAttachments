@@ -33,6 +33,7 @@ return new class () implements ServiceProviderInterface {
 					$container->get(ComponentDispatcherFactoryInterface::class)
 				);
 				$component->setMVCFactory($container->get(MVCFactoryInterface::class));
+
 				return $component;
 			}
 		);

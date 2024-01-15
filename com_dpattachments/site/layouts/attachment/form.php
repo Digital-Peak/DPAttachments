@@ -20,7 +20,7 @@ $context = $displayData['context'];
 if (!$context) {
 	return;
 }
-Factory::getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR . '/components/com_dpattachments');
+$displayData['app']->getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR . '/components/com_dpattachments');
 
 HTMLHelper::_('stylesheet', 'com_dpattachments/dpattachments/layouts/attachment/form.min.css', ['relative' => true]);
 

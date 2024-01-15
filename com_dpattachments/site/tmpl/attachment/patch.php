@@ -12,8 +12,6 @@ use Joomla\CMS\HTML\HTMLHelper;
 use ptlis\DiffParser\Line;
 use ptlis\DiffParser\Parser;
 
-JLoader::import('components.com_dpattachments.vendor.autoload', JPATH_ADMINISTRATOR);
-
 HTMLHelper::_('stylesheet', 'com_dpattachments/dpattachments/views/attachment/patch.min.css', ['relative' => true]);
 
 $parser  = new Parser();

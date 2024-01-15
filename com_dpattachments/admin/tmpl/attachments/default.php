@@ -19,7 +19,6 @@ HTMLHelper::_('script', 'com_dpattachments/dpattachments/views/attachments/defau
 			<?php echo $this->loadTemplate('filters'); ?>
 			<?php echo $this->loadTemplate('attachments'); ?>
 		</div>
-		<?php echo $this->loadTemplate('batch'); ?>
 		<input type="hidden" name="task" value=""/>
 		<input type="hidden" name="boxchecked" value="0"/>
 		<?php echo HTMLHelper::_('form.token'); ?>
