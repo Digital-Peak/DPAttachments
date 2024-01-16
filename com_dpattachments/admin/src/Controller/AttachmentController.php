@@ -22,7 +22,7 @@ class AttachmentController extends FormController
 		$recordId = (int)isset($data[$key]) !== 0 ? $data[$key] : 0;
 
 		$record = $this->getModel()->getItem($recordId);
-		if (!empty($record)) {
+		if (is_object($record)) {
 			return $this->app->bootComponent('dpattachments')->canDo('core.edit', $record->context, $record->item_id);
 		}
 
@@ -61,7 +61,7 @@ class AttachmentController extends FormController
 	public function download(): void
 	{
 		$attachment = $this->getModel()->getItem($this->input->get('id'));
-		if (!$attachment) {
+		if (!is_object($attachment)) {
 			header('HTTP/1.0 404 Not Found');
 			exit(0);
 		}

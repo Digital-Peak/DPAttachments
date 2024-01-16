@@ -173,6 +173,7 @@ class AttachmentModel extends AdminModel
 
 			// Prime some default values.
 			if (is_object($data) && $this->getState('attachment.id') == 0) {
+				// @phpstan-ignore-next-line
 				$data->set('itemid', $app->input->getInt('itemid', $app->getUserState('com_dpattachments.item.filter.itemid', 0)));
 			}
 		}
@@ -205,7 +206,7 @@ class AttachmentModel extends AdminModel
 		$attachments = [];
 		foreach (ArrayHelper::toInteger((array) $pks) as $id) {
 			$attachment = $this->getItem($id);
-			if (!$attachment) {
+			if (!is_object($attachment)) {
 				continue;
 			}
 
