@@ -14,9 +14,6 @@ use Joomla\CMS\Session\Session;
 
 class AttachmentController extends FormController
 {
-	public $app;
-	public $input;
-
 	protected function allowEdit($data = [], $key = 'id')
 	{
 		$recordId = (int)isset($data[$key]) !== 0 ? $data[$key] : 0;

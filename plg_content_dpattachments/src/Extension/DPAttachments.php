@@ -8,7 +8,7 @@
 namespace DigitalPeak\Plugin\Content\DPAttachments\Extension;
 
 use DigitalPeak\Component\DPAttachments\Administrator\Extension\DPAttachmentsComponent;
-use Joomla\CMS\Application\CMSApplication;
+use Joomla\CMS\Application\CMSWebApplicationInterface;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Plugin\CMSPlugin;
@@ -16,10 +16,6 @@ use Joomla\Registry\Registry;
 
 class DPAttachments extends CMSPlugin
 {
-	public $params;
-	/** @var CMSApplication $app */
-	protected $app;
-
 	protected $autoloadLanguage = true;
 
 	private array $FORMS_TO_EXCLUDE = ['com_users.registration'];
@@ -49,8 +45,13 @@ class DPAttachments extends CMSPlugin
 			return '';
 		}
 
+		$app = $this->getApplication();
+		if (!$app instanceof CMSWebApplicationInterface) {
+			return '';
+		}
+
 		// Get the component instance
-		$component = $this->app->bootComponent('dpattachments');
+		$component = $app->bootComponent('dpattachments');
 		if (!$component instanceof DPAttachmentsComponent) {
 			return '';
 		}
@@ -81,8 +82,13 @@ class DPAttachments extends CMSPlugin
 			return;
 		}
 
+		$app = $this->getApplication();
+		if (!$app instanceof CMSWebApplicationInterface) {
+			return;
+		}
+
 		// The component instance
-		$component = $this->app->bootComponent('dpattachments');
+		$component = $app->bootComponent('dpattachments');
 		if (!$component instanceof DPAttachmentsComponent) {
 			return;
 		}
@@ -145,14 +151,19 @@ class DPAttachments extends CMSPlugin
 			return;
 		}
 
+		$app = $this->getApplication();
+		if (!$app instanceof CMSWebApplicationInterface) {
+			return;
+		}
+
 		// Load the component instance
-		$component = $this->app->bootComponent('dpattachments');
+		$component = $app->bootComponent('dpattachments');
 		if (!$component instanceof DPAttachmentsComponent) {
 			return;
 		}
 
 		// Delete the attachment for the item
-		$component->delete($this->transformContext($context, $item), $item->id);
+		$app->bootComponent('dpattachments')->delete($this->transformContext($context, $item), $item->id);
 	}
 
 	/**

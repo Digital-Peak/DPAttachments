@@ -9,6 +9,7 @@ defined('_JEXEC') or die;
 
 use DigitalPeak\Plugin\Content\DPAttachments\Extension\DPAttachments;
 use Joomla\CMS\Extension\PluginInterface;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
@@ -21,10 +22,13 @@ return new class () implements ServiceProviderInterface {
 			PluginInterface::class,
 			static function (Container $container): DPAttachments {
 				$dispatcher = $container->get(DispatcherInterface::class);
-				return new DPAttachments(
+				$plugin     = new DPAttachments(
 					$dispatcher,
 					(array) PluginHelper::getPlugin('content', 'dpattachments')
 				);
+				$plugin->setApplication(Factory::getApplication());
+
+				return $plugin;
 			}
 		);
 	}
