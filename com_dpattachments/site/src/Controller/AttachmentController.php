@@ -12,7 +12,6 @@ use Joomla\CMS\Uri\Uri;
 
 class AttachmentController extends BaseAttachmentController
 {
-	public $input;
 	protected $view_item = 'form';
 
 	public function cancel($key = 'id')

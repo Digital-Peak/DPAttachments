@@ -13,7 +13,6 @@ use Joomla\CMS\Router\Route;
 
 class DisplayController extends BaseController
 {
-	public $input;
 	protected $default_view = 'attachments';
 
 	public function display($cachable = false, $urlparams = []): self

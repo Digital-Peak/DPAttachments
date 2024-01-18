@@ -16,8 +16,6 @@ class DisplayController extends BaseController implements CurrentUserInterface
 {
 	use CurrentUserTrait;
 
-	public $input;
-
 	public function display($cachable = false, $urlparams = []): self
 	{
 		$cachable = true;
