@@ -17,6 +17,6 @@
 	<scriptfile>script.php</scriptfile>
 	<updateservers>
 		<server type="extension" priority="1" name="DPAttachments Free">
-			<![CDATA[https://joomla.digital-peak.com/index.php?option=com_ars&view=update&task=stream&format=xml&id=3&ext=extension.xml]]></server>
+			<![CDATA[https://cdn.digital-peak.com/update/stream.php?id=3]]></server>
 	</updateservers>
 </extension>
