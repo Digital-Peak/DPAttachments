@@ -15,7 +15,7 @@ use Tests\Support\Step\Attachment;
 
 class MediaListCest extends BasicDPAttachmentsCestClass
 {
-	public function _before(AcceptanceTester $I)
+	public function _before(AcceptanceTester $I): void
 	{
 		parent::_before($I);
 
@@ -30,7 +30,7 @@ class MediaListCest extends BasicDPAttachmentsCestClass
 		copy(codecept_data_dir('test.jpg'), $I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . '/images/test/test.jpg');
 	}
 
-	public function _after(AcceptanceTester $I)
+	public function _after(AcceptanceTester $I): void
 	{
 		parent::_after($I);
 
@@ -39,7 +39,7 @@ class MediaListCest extends BasicDPAttachmentsCestClass
 		}
 	}
 
-	public function canDeleteFile(Attachment $I)
+	public function canDeleteFile(Attachment $I): void
 	{
 		$I->wantToTest('that it is possible to delete a file in the media manager.');
 
@@ -54,7 +54,7 @@ class MediaListCest extends BasicDPAttachmentsCestClass
 		$I->dontSeeFileFound($I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . '/images/test/test.jpg');
 	}
 
-	public function canDeleteFolder(Attachment $I)
+	public function canDeleteFolder(Attachment $I): void
 	{
 		$I->wantToTest('that it is possible to delete a folder in the media manager.');
 

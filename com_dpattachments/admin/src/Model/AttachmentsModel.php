@@ -7,6 +7,8 @@
 
 namespace DigitalPeak\Component\DPAttachments\Administrator\Model;
 
+use Joomla\CMS\Application\CMSApplication;
+use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
@@ -16,6 +18,9 @@ use Joomla\Utilities\ArrayHelper;
 
 class AttachmentsModel extends ListModel
 {
+	public $context;
+	public $state;
+
 	public function __construct($config = [], MVCFactoryInterface $factory = null)
 	{
 		if (empty($config['filter_fields'])) {
@@ -54,6 +59,9 @@ class AttachmentsModel extends ListModel
 	protected function populateState($ordering = null, $direction = null)
 	{
 		$app = Factory::getApplication();
+		if (!$app instanceof CMSApplication) {
+			return;
+		}
 
 		// Adjust the context to support modal layouts.
 		if ($layout = $app->input->get('layout')) {
@@ -79,7 +87,7 @@ class AttachmentsModel extends ListModel
 		$this->setState('filter.state', $state);
 
 		$params = ComponentHelper::getParams('com_dpattachments');
-		if ($app->isClient('site')) {
+		if ($app instanceof SiteApplication) {
 			$params = $app->getParams();
 		}
 		$this->setState('params', $params);
@@ -113,9 +121,9 @@ class AttachmentsModel extends ListModel
 	protected function getListQuery()
 	{
 		// Create a new query object.
-		$db    = $this->getDbo();
+		$db    = $this->getDatabase();
 		$query = $db->getQuery(true);
-		$user  = Factory::getUser();
+		$user  = $this->getCurrentUser();
 		$app   = Factory::getApplication();
 
 		// Select the required fields from the table.
@@ -144,7 +152,7 @@ class AttachmentsModel extends ListModel
 		// Filter by language
 		if ($this->getState('filter.language')) {
 			$subQuery->where(
-				'(contact.language in (' . $db->quote(Factory::getLanguage()->getTag()) . ',' . $db->quote('*') . ') OR contact.language IS NULL)'
+				'(contact.language in (' . $db->quote($app->getLanguage()->getTag()) . ',' . $db->quote('*') . ') OR contact.language IS NULL)'
 			);
 		}
 		$query->select('(' . $subQuery . ') as contactid');
@@ -222,10 +230,10 @@ class AttachmentsModel extends ListModel
 		return $query;
 	}
 
-	public function getAuthors()
+	public function getAuthors(): array
 	{
 		// Create a new query object.
-		$db    = $this->getDbo();
+		$db    = $this->getDatabase();
 		$query = $db->getQuery(true);
 
 		// Construct the query

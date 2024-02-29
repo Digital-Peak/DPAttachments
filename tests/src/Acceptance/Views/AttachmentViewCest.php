@@ -13,12 +13,12 @@ use Tests\Support\Step\Attachment;
 
 class AttachmentViewCest extends BasicDPAttachmentsCestClass
 {
-	private $url = '/index.php?option=com_dpattachments&view=attachment&id=';
+	private string $url = '/index.php?option=com_dpattachments&view=attachment&id=';
 
 	/**
 	 * @dataProvider getImageFiles
 	 */
-	public function canOpenImageAttachmentDetailsPage(Attachment $I, Example $provider)
+	public function canOpenImageAttachmentDetailsPage(Attachment $I, Example $provider): void
 	{
 		$I->wantToTest('that an image attachment can be displayed.');
 
@@ -35,7 +35,7 @@ class AttachmentViewCest extends BasicDPAttachmentsCestClass
 	/**
 	 * @dataProvider getTextFiles
 	 */
-	public function canOpenTextAttachmentDetailsPage(Attachment $I, Example $provider)
+	public function canOpenTextAttachmentDetailsPage(Attachment $I, Example $provider): void
 	{
 		$I->wantToTest('that a text attachment can be displayed.');
 
@@ -49,7 +49,7 @@ class AttachmentViewCest extends BasicDPAttachmentsCestClass
 		$I->seeElement('.com-dpattachments-attachment__content');
 	}
 
-	protected function getImageFiles()
+	protected function getImageFiles(): array
 	{
 		return [
 			['extension' => 'gif'],
@@ -59,7 +59,7 @@ class AttachmentViewCest extends BasicDPAttachmentsCestClass
 		];
 	}
 
-	protected function getTextFiles()
+	protected function getTextFiles(): array
 	{
 		return [
 			['extension' => 'txt'],

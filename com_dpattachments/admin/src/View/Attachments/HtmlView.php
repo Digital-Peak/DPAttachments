@@ -8,21 +8,37 @@
 namespace DigitalPeak\Component\DPAttachments\Administrator\View\Attachments;
 
 use DigitalPeak\Component\DPAttachments\Administrator\Helper\DPAttachmentsHelper;
-use Joomla\CMS\Factory;
-use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Form\Form;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
-use Joomla\CMS\Toolbar\Toolbar;
+use Joomla\CMS\Pagination\Pagination;
 use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\Registry\Registry;
 
 class HtmlView extends BaseHtmlView
 {
-	protected $items;
+	/** @var Form */
+	public $filterForm;
+
+	/** @var array */
+	protected $authors;
+
+	/** @var array */
+	protected $activeFilters;
+
+	/** @var Pagination */
 	protected $pagination;
+
+	/** @var Registry */
+	protected $canDo;
+
+	/** @var array */
+	protected $items;
+
+	/** @var Registry */
 	protected $state;
 
-	public function display($tpl = null)
+	public function display($tpl = null): void
 	{
 		$this->items      = $this->get('Items');
 		$this->pagination = $this->get('Pagination');
@@ -39,13 +55,9 @@ class HtmlView extends BaseHtmlView
 		parent::display($tpl);
 	}
 
-	protected function addToolbar()
+	private function addToolbar(): void
 	{
-		$canDo = DPAttachmentsHelper::getActions();
-		$user  = Factory::getUser();
-
-		// Get the toolbar object instance
-		$bar = Toolbar::getInstance('toolbar');
+		$canDo = DPAttachmentsHelper::getActions($this->getCurrentUser());
 
 		ToolbarHelper::title(Text::_('COM_DPATTACHMENTS_VIEW_ATTACHMENTS_TITLE'));
 
@@ -66,33 +78,15 @@ class HtmlView extends BaseHtmlView
 			ToolbarHelper::trash('attachments.trash');
 		}
 
-		// Add a batch button
-		$asset = 'com_dpattachments';
-		if ($user->authorise('core.create', $asset) && $user->authorise('core.edit', $asset) && $user->authorise('core.edit.state', $asset) && version_compare(JVERSION, '4', '<')) {
-			HTMLHelper::_('bootstrap.modal', 'collapseModal');
-			$title = Text::_('JTOOLBAR_BATCH');
-
-			// Instantiate a new JLayoutFile instance and render the batch button
-			$layout = new FileLayout('joomla.toolbar.batch');
-
-			$bar->appendButton('Custom', $layout->render(['title' => $title]), 'batch');
-		}
-
 		if ($canDo->get('core.admin')) {
 			ToolbarHelper::preferences('com_dpattachments');
 		}
 
-		// Only render the sidebar when we are not editing a form, modal or Joomla 4
-		if (version_compare(JVERSION, '4', '<')) {
-			$this->sidebar = \JHtmlSidebar::render();
-		} else {
-			$this->sidebar = null;
-		}
 		$this->filterForm    = $this->get('FilterForm');
 		$this->activeFilters = $this->get('ActiveFilters');
 	}
 
-	public function renderContext($context)
+	public function renderContext(string $context): string
 	{
 		$context = str_replace('com_', '', strtolower($context));
 

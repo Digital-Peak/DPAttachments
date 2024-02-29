@@ -11,7 +11,7 @@ use Docs\Support\AcceptanceTester;
 
 class InstallDPAttachmentsCest
 {
-	public function checkDPAttachmentsDefaults(AcceptanceTester $I)
+	public function checkDPAttachmentsDefaults(AcceptanceTester $I): void
 	{
 		// Disable stats
 		$I->updateInDatabase('extensions', ['params' => '{"mode":"3"}'], ['name' => 'plg_system_stats']);

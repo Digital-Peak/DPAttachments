@@ -14,14 +14,14 @@ use Tests\Support\Step\Attachment;
 
 class ArticleEditCest extends BasicDPAttachmentsCestClass
 {
-	public function _before(AcceptanceTester $I)
+	public function _before(AcceptanceTester $I): void
 	{
 		parent::_before($I);
 
 		$I->enablePlugin('plg_content_dpattachments');
 	}
 
-	public function canSeeAttachmentDetails(Attachment $I, Article $IA)
+	public function canSeeAttachmentDetails(Attachment $I, Article $IA): void
 	{
 		$I->wantToTest('that the attachment details are shown in the article form.');
 
@@ -37,7 +37,7 @@ class ArticleEditCest extends BasicDPAttachmentsCestClass
 		$I->see('Trash');
 	}
 
-	public function canSeeUploadFormInArticleForm(Article $I)
+	public function canSeeUploadFormInArticleForm(Article $I): void
 	{
 		$I->wantToTest('that the upload form is displayed in an article form.');
 
@@ -50,7 +50,7 @@ class ArticleEditCest extends BasicDPAttachmentsCestClass
 		$I->seeElement('.com-dpattachments-layout-form');
 	}
 
-	public function cantSeeUploadFormInArticleFormWhenDisabledExtension(Article $I)
+	public function cantSeeUploadFormInArticleFormWhenDisabledExtension(Article $I): void
 	{
 		$I->wantToTest('that the upload form is not displayed in an article form when disabled.');
 
@@ -64,11 +64,12 @@ class ArticleEditCest extends BasicDPAttachmentsCestClass
 		$I->dontSee('Attachments');
 	}
 
-	public function canSeeUploadFormInArticleFormForSpecificCategory(Article $I)
+	public function canSeeUploadFormInArticleFormForSpecificCategory(Article $I): void
 	{
 		$I->wantToTest('that the upload form is displayed in an article form for a specific category.');
 
 		$I->doAdministratorLogin();
+
 		$category = $I->createDPCategory('Test cat', 'com_content');
 		$I->setExtensionParam('cat_ids', [$category], 'plg_content_dpattachments');
 
@@ -80,11 +81,12 @@ class ArticleEditCest extends BasicDPAttachmentsCestClass
 		$I->seeElement('.com-dpattachments-layout-form');
 	}
 
-	public function cantSeeUploadFormInArticleFormForSpecificCategory(Article $I)
+	public function cantSeeUploadFormInArticleFormForSpecificCategory(Article $I): void
 	{
 		$I->wantToTest('that the upload form is displayed in an article form for a specific category.');
 
 		$I->doAdministratorLogin();
+
 		$category = $I->createDPCategory('Test cat', 'com_content');
 
 		$I->setExtensionParam(
@@ -100,7 +102,7 @@ class ArticleEditCest extends BasicDPAttachmentsCestClass
 		$I->dontSeeElement('Attachments');
 	}
 
-	public function canUploadAttachmentOnArticleFormPage(Article $I)
+	public function canUploadAttachmentOnArticleFormPage(Article $I): void
 	{
 		$I->wantToTest('that an attachment can be uploaded to an article in the form.');
 
@@ -118,7 +120,7 @@ class ArticleEditCest extends BasicDPAttachmentsCestClass
 		$I->seeInDatabase('dpattachments', ['context' => 'com_content.article']);
 	}
 
-	public function canUploadMultipleAttachmentOnArticleFormPage(Article $I)
+	public function canUploadMultipleAttachmentOnArticleFormPage(Article $I): void
 	{
 		$I->wantToTest('that an attachment can be uploaded to an article in the form.');
 
@@ -139,7 +141,7 @@ class ArticleEditCest extends BasicDPAttachmentsCestClass
 		$I->assertFileEquals(codecept_data_dir() . '/test.jpg', $I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . Attachment::ARTICLES_ATTACHMENT_DIR . 'test.jpg');
 	}
 
-	public function canTrashAttachment(Attachment $I, Article $IA)
+	public function canTrashAttachment(Attachment $I, Article $IA): void
 	{
 		$I->wantToTest('that an attachment can be trashed.');
 
@@ -156,7 +158,7 @@ class ArticleEditCest extends BasicDPAttachmentsCestClass
 		$I->seeInDatabase('dpattachments', ['context' => 'com_content.article', 'path' => 'test.txt', 'state' => -2]);
 	}
 
-	public function canSeeInformationMessageWhenArticleIsNotSaved(Article $I)
+	public function canSeeInformationMessageWhenArticleIsNotSaved(Article $I): void
 	{
 		$I->wantToTest('that an information message is shown when an article is not saved.');
 

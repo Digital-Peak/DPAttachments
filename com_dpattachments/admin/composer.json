@@ -5,7 +5,8 @@
 		}
 	},
 	"require": {
-		"parsecsv/php-parsecsv": "^1.3",
-		"ptlis/diff-parser": "^1.0"
-	}
+		"parsecsv/php-parsecsv": "^1.3.2",
+		"ptlis/diff-parser": "^1.0.2"
+	},
+	"type": "project"
 }

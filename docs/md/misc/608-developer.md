@@ -9,12 +9,9 @@ If you are not the developer of a Joomla extension but you want to integrate DPA
 ```
 class AwesomeImages extends CMSPlugin
 {
-	/** @var CMSApplication $app */
-	protected $app;
-
 	public function onImageAfterDisplay($image)
 	{
-		return $this->app->bootComponent('dpattachments')->render('com_awesomeimages.image', $image->id);
+		return $this->getApplication()->bootComponent('dpattachments')->render('com_awesomeimages.image', $image->id);
 	}
 }
 ```

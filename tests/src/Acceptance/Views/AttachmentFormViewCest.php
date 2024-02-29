@@ -14,16 +14,16 @@ use Tests\Support\Step\Attachment;
 
 class AttachmentFormViewCest extends BasicDPAttachmentsCestClass
 {
-	private $url = '/index.php?option=com_dpattachments&task=attachment.edit&id=';
+	private string $url = '/index.php?option=com_dpattachments&task=attachment.edit&id=';
 
-	public function _before(AcceptanceTester $I)
+	public function _before(AcceptanceTester $I): void
 	{
 		parent::_before($I);
 
 		$I->enablePlugin('plg_content_dpattachments');
 	}
 
-	public function canOpenFormFromArticle(Attachment $I, Article $IA)
+	public function canOpenFormFromArticle(Attachment $I, Article $IA): void
 	{
 		$I->wantToTest('that the attachment form can be opened from an article view.');
 
@@ -39,7 +39,7 @@ class AttachmentFormViewCest extends BasicDPAttachmentsCestClass
 		$I->seeInField('#jform_path', 'test.txt');
 	}
 
-	public function canEditAttachment(Attachment $I, Article $IA)
+	public function canEditAttachment(Attachment $I, Article $IA): void
 	{
 		$I->wantToTest('that an attachment can be edited.');
 

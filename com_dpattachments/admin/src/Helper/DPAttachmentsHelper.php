@@ -7,18 +7,15 @@
 
 namespace DigitalPeak\Component\DPAttachments\Administrator\Helper;
 
-use Joomla\CMS\Factory;
-use Joomla\CMS\Object\CMSObject;
+use Joomla\CMS\User\User;
+use Joomla\Registry\Registry;
 
 class DPAttachmentsHelper
 {
-	public static $extension = 'com_dpattachments';
+	public static string $extension = 'com_dpattachments';
 
-	public static function getActions()
+	public static function getActions(User $user): Registry
 	{
-		$user   = Factory::getUser();
-		$result = new CMSObject();
-
 		$assetName = 'com_dpattachments';
 
 		$actions = [
@@ -31,6 +28,7 @@ class DPAttachmentsHelper
 			'core.delete'
 		];
 
+		$result = new Registry();
 		foreach ($actions as $action) {
 			$result->set($action, $user->authorise($action, $assetName));
 		}

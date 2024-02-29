@@ -7,11 +7,17 @@
 
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Factory;
 
-$path = JPATH_ROOT . '/templates/' . Factory::getApplication()->getTemplate() . '/images/com_dpattachments/icons/' . $displayData['icon'] . '.svg';
+$app = Factory::getApplication();
+if (!$app instanceof SiteApplication) {
+	return;
+}
+
+$path = JPATH_ROOT . '/templates/' . $app->getTemplate() . '/images/com_dpattachments/icons/' . $displayData['icon'] . '.svg';
 if (!file_exists($path)) {
-	$path = JPATH_ROOT . '/templates/' . Factory::getApplication()->getTemplate() . '/images/icons/' . $displayData['icon'] . '.svg';
+	$path = JPATH_ROOT . '/templates/' . $app->getTemplate() . '/images/icons/' . $displayData['icon'] . '.svg';
 }
 if (!file_exists($path)) {
 	$path = JPATH_ROOT . '/media/com_dpattachments/images/icons/' . $displayData['icon'] . '.svg';
@@ -20,12 +26,12 @@ if (!file_exists($path)) {
 	$path = JPATH_ROOT . '/media/com_dpattachments/images/icons/' . $displayData['icon'] . '-solid.svg';
 }
 if (!file_exists($path)) {
-	return '';
+	return ;
 }
 
-$content = @file_get_contents($path);
+$content = file_get_contents($path);
 if (!empty($displayData['title'])) {
-	$content = str_replace('><path', '><title>' . $displayData['title'] . '</title><path', $content);
+	$content = str_replace('><path', '><title>' . $displayData['title'] . '</title><path', $content ?: '');
 }
 ?>
 <span class="dp-icon dp-icon_<?php echo $displayData['icon']; ?>"><?php echo $content; ?></span>

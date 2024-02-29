@@ -8,63 +8,59 @@
 namespace DigitalPeak\Component\DPAttachments\Site\Model;
 
 use DigitalPeak\Component\DPAttachments\Administrator\Model\AttachmentModel;
+use Joomla\CMS\Application\CMSApplication;
+use Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\Registry\Registry;
-use Joomla\Utilities\ArrayHelper;
 
 class FormModel extends AttachmentModel
 {
 	protected function populateState()
 	{
 		$app = Factory::getApplication();
+		if (!$app instanceof CMSApplication) {
+			return;
+		}
 
 		// Load state from the request.
-		$pk = $app->input->getInt('id');
+		$pk = $app->input->getInt('id', 0);
 		$this->setState('attachment.id', $pk);
 
 		$return = $app->input->get('return', null, 'base64');
 		$this->setState('return_page', base64_decode($return));
 
-		// Load the parameters.
-		$params = $app->getParams();
+		// Load the parameters
+		$params = ComponentHelper::getParams('com_dpattachments');
+		if ($app instanceof SiteApplication) {
+			$params = $app->getParams();
+		}
 		$this->setState('params', $params);
 
 		$this->setState('layout', $app->input->get('layout'));
 	}
 
-	public function getItem($itemId = null)
+	public function getItem($pk = null)
 	{
-		$itemId = (int)(!empty($itemId)) ? $itemId : $this->getState('attachment.id');
+		$pk = (int)(!empty($pk)) !== 0 ? $pk : $this->getState('attachment.id');
 
-		// Get a row instance.
-		$table = $this->getTable();
-
-		// Attempt to load the row.
-		$return = $table->load($itemId);
-
-		// Check for a table object error.
-		if ($return === false && $table->getError()) {
-			$this->setError($table->getError());
-
-			return false;
+		$item = parent::getItem($pk);
+		if (!is_object($item)) {
+			return $item;
 		}
 
-		$properties = $table->getProperties(1);
-		$value      = ArrayHelper::toObject($properties, 'JObject');
-
-		// Convert attrib field to Registry.
-		$value->params = new Registry($value->params);
+		$item->params = new Registry($item->params);
 
 		// Check edit state permission.
-		if ($itemId) {
-			$value->params->set('access-edit', Factory::getApplication()->bootComponent('dpattachments')->canDo('core.edit', $value->context, $value->item_id));
-			$value->params->set('access-change', Factory::getApplication()->bootComponent('dpattachments')->canDo('core.edit.state', $value->context, $value->item_id));
+		if ($pk) {
+			$item->params->set('access-edit', Factory::getApplication()->bootComponent('dpattachments')->canDo('core.edit', $item->context, $item->item_id));
+			$item->params->set('access-change', Factory::getApplication()->bootComponent('dpattachments')->canDo('core.edit.state', $item->context, $item->item_id));
 		}
 
-		return $value;
+		return $item;
 	}
 
-	public function getReturnPage()
+	public function getReturnPage(): string
 	{
 		return base64_encode($this->getState('return_page'));
 	}
