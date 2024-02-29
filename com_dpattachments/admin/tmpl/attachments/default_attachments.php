@@ -13,7 +13,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 
 $app       = Factory::getApplication();
-$user      = Factory::getUser();
+$user      = $this->getCurrentUser();
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
 ?>
@@ -100,5 +100,4 @@ $listDirn  = $this->escape($this->state->get('list.direction'));
 		</tbody>
 	</table>
 	<?php echo $this->pagination->getListFooter(); ?>
-	<?php echo $this->loadTemplate('batch'); ?>
 </div>

@@ -14,9 +14,9 @@ class Attachment extends AcceptanceTester
 	public const ARTICLES_ATTACHMENT_DIR   = '/images/com_content.article/';
 	public const CATEGORIES_ATTACHMENT_DIR = '/images/com_categories.category/';
 
-	private $article = null;
+	private ?Article $article = null;
 
-	public function _inject(Article $article)
+	public function _inject(Article $article): void
 	{
 		$this->article = $article;
 	}

@@ -13,20 +13,20 @@ use Tests\Support\Step\Attachment;
 
 class TaskEditCest extends BasicDPAttachmentsCestClass
 {
-	public function _before(AcceptanceTester $I)
+	public function _before(AcceptanceTester $I): void
 	{
 		parent::_before($I);
 
 		$I->enablePlugin('plg_content_dpattachments');
 	}
 
-	public function cantSeeAttachmentDetails(Attachment $I)
+	public function cantSeeAttachmentDetails(Attachment $I): void
 	{
 		$I->wantToTest('that the attachment details are not shown in the task form.');
 
 		$I->doAdministratorLogin();
 		$I->amOnPage('/administrator/index.php?option=com_scheduler&view=select&layout=default');
-		$I->click('Demo Task');
+		$I->click('GET Request');
 
 		$I->dontSee('Attachments');
 	}

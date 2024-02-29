@@ -22,7 +22,7 @@ class Acceptance extends Module
 		if (strpos($link, MediaPage::$mediaUrl . '&path=') !== false) {
 			parse_str($link, $result);
 			$dir = addslashes(json_encode(['selectedDirectory' => $result['path']]));
-			$browser->executeJS('sessionStorage.setItem("joomla.mediamanager", "' . $dir .'")');
+			$browser->executeJS('sessionStorage.setItem("joomla.mediamanager", "' . $dir . '")');
 			$clearSession = false;
 		}
 

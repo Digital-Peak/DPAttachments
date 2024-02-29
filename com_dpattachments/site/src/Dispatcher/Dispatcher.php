@@ -11,7 +11,7 @@ use Joomla\CMS\Dispatcher\ComponentDispatcher;
 
 class Dispatcher extends ComponentDispatcher
 {
-	public function dispatch()
+	public function dispatch(): void
 	{
 		$this->getApplication()->getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR . '/components/com_dpattachments');
 		parent::dispatch();

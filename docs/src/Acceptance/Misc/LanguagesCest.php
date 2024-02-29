@@ -12,7 +12,7 @@ use Docs\Support\BasicDPAttachmentsCestClass;
 
 class LanguagesCest extends BasicDPAttachmentsCestClass
 {
-	public function screenshotsLanguageOverrides(AcceptanceTester $I)
+	public function screenshotsLanguageOverrides(AcceptanceTester $I): void
 	{
 		$I->doAdministratorLogin();
 		$I->amOnPage('/administrator/index.php?option=com_languages&view=overrides');
@@ -21,7 +21,7 @@ class LanguagesCest extends BasicDPAttachmentsCestClass
 		$I->selectOption('#language_client', 'English (United Kingdom) - Administrator');
 		$I->clickJoomlaToolbarButton('New');
 		$I->fillField('#jform_searchstring', 'filename');
-		$I->waitForElementNotVisible('#refresh-status');
+		$I->waitForElementNotVisible('#refresh-status', 60);
 		$I->click('Search');
 		$I->wait(1);
 		$I->waitForElementVisible('.language-results', 60);

@@ -11,13 +11,11 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use ParseCsv\Csv;
 
-JLoader::import('components.com_dpattachments.vendor.autoload', JPATH_ADMINISTRATOR);
-
 $content        = file_get_contents(Factory::getApplication()->bootComponent('dpattachments')->getPath($this->item->path, $this->item->context));
 $delimiter      = ',';
 $delimiterCount = 0;
 foreach ([',', ';', "\t"] as $char) {
-	$tmp = substr_count($content, $char);
+	$tmp = substr_count($content ?: '', $char);
 	if ($tmp > $delimiterCount) {
 		$delimiter      = $char;
 		$delimiterCount = $tmp;
@@ -26,7 +24,7 @@ foreach ([',', ';', "\t"] as $char) {
 $csv = new Csv();
 $csv->encoding('UTF-16', 'UTF-8');
 $csv->delimiter = $delimiter;
-$csv->parse($content);
+$csv->parse($content ?: '');
 
 HTMLHelper::_('stylesheet', 'com_dpattachments/dpattachments/views/attachment/csv.min.css', ['relative' => true]);
 ?>

@@ -8,38 +8,49 @@
 namespace DigitalPeak\Component\DPAttachments\Site\View\Attachment;
 
 use DigitalPeak\Component\DPAttachments\Administrator\Model\AttachmentModel;
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
+use Joomla\Input\Input;
+use Joomla\Registry\Registry;
 
 class HtmlView extends BaseHtmlView
 {
+	/** @var \stdClass */
 	protected $item;
+
+	/** @var Registry */
 	protected $params;
+
+	/** @var Registry */
 	protected $state;
-	protected $user;
+
+	/** @var Input */
 	protected $input;
 
-	public function display($tpl = null)
+	public function display($tpl = null): void
 	{
 		$this->setModel(new AttachmentModel(), true);
-		$app        = Factory::getApplication();
-		$this->user = Factory::getUser();
+		$app = Factory::getApplication();
 
-		$this->input = $app->input;
+		if ($app instanceof CMSApplication) {
+			$this->input = $app->input;
+		}
 		$this->item  = $this->get('Item');
 		$this->state = $this->get('State');
 
 		// Check for errors.
-		if (count($errors = $this->get('Errors'))) {
+		if (count($errors = $this->get('Errors')) > 0) {
 			throw new \Exception(implode('\n', $errors));
 		}
 
 		$this->params = $this->state->get('params');
 
-		// Increment the hit counter of the attachment.
 		$model = $this->getModel();
 		$model->hit($this->item->id);
 		$this->setLayout(strtolower(pathinfo($this->item->path, PATHINFO_EXTENSION)));
+
+		require_once JPATH_ADMINISTRATOR . '/components/com_dpattachments/vendor/autoload.php';
 
 		parent::display($tpl);
 	}
