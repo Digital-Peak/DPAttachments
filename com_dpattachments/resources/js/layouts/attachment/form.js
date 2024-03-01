@@ -94,8 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 			}, false);
 		}
-
-		[].slice.call(document.querySelectorAll('.com-dpattachments-layout-form')).forEach((form) => {
+	});
+	[].slice.call(document.querySelectorAll('.com-dpattachments-layout-form')).forEach((form) => {
 			// Copied from https://github.com/bgrins/filereader.js
 			let initializedOnBody = false;
 
@@ -143,6 +143,5 @@ document.addEventListener('DOMContentLoaded', () => {
 					e.preventDefault();
 				}
 			}, false);
-		});
 	});
 });
