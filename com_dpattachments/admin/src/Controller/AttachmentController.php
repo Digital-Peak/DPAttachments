@@ -47,7 +47,8 @@ class AttachmentController extends FormController
 			$content = $this->app->bootComponent('dpattachments')->renderLayout(
 				'attachment.render',
 				['attachment' => $item]
-			);			$returnData['html'] = '<div>' . $content . '</div>';
+			);
+			$returnData['html'] = '<div>' . $content . '</div>';
 
 			$this->app->enqueueMessage(Text::_('COM_DPATTACHMENTS_UPLOAD_SUCCESS'), 'success');
 			$this->sendMessage('', true, $returnData);
