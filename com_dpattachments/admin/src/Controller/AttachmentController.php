@@ -41,6 +41,7 @@ class AttachmentController extends FormController
 			$model->upload($data);
 
 			$item = $model->getItem($model->getState($model->getName() . '.id'));
+			// if no "created_by_alias" is stored in DB, we need to load creator user info (name and email) to avoid showing user id
 			if( $item->created_by_alias == "" ){
 				$item = (object) \array_merge((array)$item, $model->getAuthor($item->created_by));
 			}
