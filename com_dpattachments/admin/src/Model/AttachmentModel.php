@@ -17,6 +17,7 @@ use Joomla\CMS\Form\Form;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\User\UserFactoryInterface;
 use Joomla\Filesystem\File;
 use Joomla\Utilities\ArrayHelper;
 
@@ -226,5 +227,16 @@ class AttachmentModel extends AdminModel
 		}
 
 		return $success;
+	}
+
+	public function getAuthor(int $userId): array {
+		$userInfo = array();
+		$user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($userId);
+		// "loadUserById" always returns a "User" object, even if no user found, no need to check for null		
+		$userInfo['author_id'] = $user->id;
+		$userInfo['author_name'] = $user->name;
+		$userInfo['author_email'] = $user->email;
+
+		return $userInfo;
 	}
 }

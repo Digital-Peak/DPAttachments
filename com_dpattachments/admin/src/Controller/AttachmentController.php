@@ -40,11 +40,14 @@ class AttachmentController extends FormController
 		try {
 			$model->upload($data);
 
+			$item = $model->getItem($model->getState($model->getName() . '.id'));
+			if( $item->created_by_alias == "" ){
+				$item = (object) \array_merge((array)$item, $model->getAuthor($item->created_by));
+			}
 			$content = $this->app->bootComponent('dpattachments')->renderLayout(
 				'attachment.render',
-				['attachment' => $model->getItem($model->getState($model->getName() . '.id'))]
-			);
-			$returnData['html'] = '<div>' . $content . '</div>';
+				['attachment' => $item]
+			);			$returnData['html'] = '<div>' . $content . '</div>';
 
 			$this->app->enqueueMessage(Text::_('COM_DPATTACHMENTS_UPLOAD_SUCCESS'), 'success');
 			$this->sendMessage('', true, $returnData);
