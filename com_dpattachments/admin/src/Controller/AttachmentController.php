@@ -41,10 +41,15 @@ class AttachmentController extends FormController
 			$model->upload($data);
 
 			$item = $model->getItem($model->getState($model->getName() . '.id'));
-			// if no "created_by_alias" is stored in DB, we need to load creator user info (name and email) to avoid showing user id
-			if( $item->created_by_alias == "" ){
-				$item = (object) \array_merge((array)$item, $model->getAuthor($item->created_by));
+
+			// If no "created_by_alias" is available, we need to load the creator user info (name and email) to avoid showing user id
+			if (is_object($item) && empty($item->created_by_alias) && !empty($item->created_by)) {
+				$author             = $model->getAuthor($item->created_by);
+				$item->author_id    = $author['author_id'];
+				$item->author_name  = $author['author_name'];
+				$item->author_email = $author['author_email'];
 			}
+
 			$content = $this->app->bootComponent('dpattachments')->renderLayout(
 				'attachment.render',
 				['attachment' => $item]

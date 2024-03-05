@@ -232,12 +232,12 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 		return $success;
 	}
 
-	public function getAuthor(int $userId): array {
-		$userInfo = array();
-		$user = $this->getUserFactory()->loadUserById($userId);
-		// "loadUserById" always returns a "User" object, even if no user found, no need to check for null
-		$userInfo['author_id'] = $user->id;
-		$userInfo['author_name'] = $user->name;
+	public function getAuthor(int $userId): array
+	{
+		$userInfo                 = [];
+		$user                     = $this->getUserFactory()->loadUserById($userId);
+		$userInfo['author_id']    = $user->id;
+		$userInfo['author_name']  = $user->name;
 		$userInfo['author_email'] = $user->email;
 
 		return $userInfo;
