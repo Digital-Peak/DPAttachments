@@ -50,6 +50,11 @@ Creates the installable packages with version 4.0.0. Change the version string w
 
 `DPDocker/build/run.sh DPAttachments 4.0.0`
 
+### Fix code style
+If you made some changes and want to contribute them back as a pr, please fix any code style issues.
+
+`DPDocker/code/run-fix.sh DPAttachments`
+
 ### Run system tests
 Runs the system tests.
 
