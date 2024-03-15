@@ -35,7 +35,7 @@ foreach (Folder::files(JPATH_SITE . '/components/com_dpattachments/tmpl/attachme
 }
 ?>
 <div class="dp-attachment">
-	<?php if (in_array(strtolower(pathinfo($attachment->path, PATHINFO_EXTENSION)), $previewExtensions)) { ?>
+	<?php if (in_array(strtolower(pathinfo((string) $attachment->path, PATHINFO_EXTENSION)), $previewExtensions)) { ?>
 		<a href="<?php echo Route::link('site', 'index.php?option=com_dpattachments&view=attachment&tmpl=component&id=' . (int)$attachment->id); ?>"
 		   class="dp-attachment__link">
 			<?php echo $attachment->title; ?>

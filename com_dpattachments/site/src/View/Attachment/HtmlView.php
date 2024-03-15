@@ -48,7 +48,7 @@ class HtmlView extends BaseHtmlView
 
 		$model = $this->getModel();
 		$model->hit($this->item->id);
-		$this->setLayout(strtolower(pathinfo($this->item->path, PATHINFO_EXTENSION)));
+		$this->setLayout(strtolower(pathinfo((string) $this->item->path, PATHINFO_EXTENSION)));
 
 		require_once JPATH_ADMINISTRATOR . '/components/com_dpattachments/vendor/autoload.php';
 

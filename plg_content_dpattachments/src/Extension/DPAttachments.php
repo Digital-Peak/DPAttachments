@@ -22,10 +22,9 @@ class DPAttachments extends CMSPlugin
 
 	/**
 	 * @param string   $context
-	 * @param mixed    $item
 	 * @param Registry $params
 	 */
-	public function onContentAfterDisplay($context, $item, $params): string
+	public function onContentAfterDisplay($context, mixed $item, $params): string
 	{
 		$context = $this->transformContext($context, $item);
 
@@ -64,11 +63,7 @@ class DPAttachments extends CMSPlugin
 		);
 	}
 
-	/**
-	 * @param Form $form
-	 * @param mixed $data
-	 */
-	public function onContentPrepareForm(Form $form, $data): void
+	public function onContentPrepareForm(Form $form, mixed $data): void
 	{
 		$context = $this->transformContext($form->getName(), $data);
 
@@ -140,11 +135,7 @@ class DPAttachments extends CMSPlugin
 		);
 	}
 
-	/**
-	 * @param string $context
-	 * @param mixed $item
-	 */
-	public function onContentAfterDelete(string $context, $item): void
+	public function onContentAfterDelete(string $context, mixed $item): void
 	{
 		// Check if there is an id
 		if (empty($item->id)) {
@@ -170,12 +161,10 @@ class DPAttachments extends CMSPlugin
 	 * Transforms the given context for the given item into a default one. Like
 	 * that we ensure the same context across different views for the same entity.
 	 *
-	 * @param string $context
-	 * @param mixed  $item
 	 *
 	 * @return string
 	 */
-	private function transformContext(string $context, $item): string
+	private function transformContext(string $context, mixed $item): string
 	{
 		// Categories lists
 		if ($context === 'com_content.categories') {

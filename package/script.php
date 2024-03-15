@@ -49,7 +49,7 @@ class Pkg_DPAttachmentsInstallerScript extends InstallerScript implements Databa
 				}
 
 				foreach (Folder::files($folder . '/language', '.', true, true) as $file) {
-					if (strpos(basename($file), basename(dirname($file))) === 0) {
+					if (str_starts_with(basename((string) $file), basename(dirname((string) $file)))) {
 						unlink($file);
 					}
 				}

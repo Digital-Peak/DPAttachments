@@ -38,16 +38,9 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 	 */
 	private array $itemCache = [];
 
-	private DatabaseInterface $db;
-
-	private CMSApplicationInterface $app;
-
-	public function __construct(CMSApplicationInterface $app, DatabaseInterface $db, ComponentDispatcherFactoryInterface $dispatcherFactory)
+	public function __construct(private readonly CMSApplicationInterface $app, private readonly DatabaseInterface $db, ComponentDispatcherFactoryInterface $dispatcherFactory)
 	{
 		parent::__construct($dispatcherFactory);
-
-		$this->app = $app;
-		$this->db  = $db;
 	}
 
 	/**
@@ -240,7 +233,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 	public function getPath(string $attachmentPath, string $context): string
 	{
 		$folder = ComponentHelper::getParams('com_dpattachments')->get('attachment_path', 'media/com_dpattachments/attachments/');
-		$folder = trim($folder, '/');
+		$folder = trim((string) $folder, '/');
 
 		return JPATH_ROOT . '/' . $folder . '/' . $context . '/' . $attachmentPath;
 	}
