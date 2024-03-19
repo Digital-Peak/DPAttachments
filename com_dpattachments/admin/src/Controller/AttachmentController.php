@@ -124,7 +124,7 @@ class AttachmentController extends FormController
 		if (isset($_SERVER['HTTP_RANGE'])) {
 			[$size_unit, $range_orig] = explode('=', (string) $_SERVER['HTTP_RANGE'], 2);
 
-			if ($size_unit == 'bytes') {
+			if ($size_unit === 'bytes') {
 				// Multiple ranges could be specified at the same time, but for
 				// simplicity only serve the first range
 				[$range, $extra_ranges] = explode(',', $range_orig, 2);

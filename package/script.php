@@ -17,8 +17,8 @@ class Pkg_DPAttachmentsInstallerScript extends InstallerScript implements Databa
 {
 	use DatabaseAwareTrait;
 
-	protected $minimumPhp    = '7.4.0';
-	protected $minimumJoomla = '4.2.0';
+	protected $minimumPhp    = '8.1.0';
+	protected $minimumJoomla = '4.4.0';
 
 	public function update(InstallerAdapter $parent): void
 	{
@@ -37,7 +37,7 @@ class Pkg_DPAttachmentsInstallerScript extends InstallerScript implements Databa
 			}
 		}
 
-		if ($version === null || $version === '' || $version === '0' || $version == 'DP_DEPLOY_VERSION') {
+		if ($version === null || $version === '' || $version === '0' || $version === 'DP_DEPLOY_VERSION') {
 			return;
 		}
 
