@@ -141,6 +141,7 @@ class ArticleViewCest extends BasicDPAttachmentsCestClass
 		$I->waitForElement('.dp-attachment');
 
 		$I->see('test.txt');
+		$I->see('by Admin');
 		$I->seeElement('.dp-attachment__link');
 		$I->seeInDatabase('dpattachments', ['context' => 'com_content.article']);
 	}

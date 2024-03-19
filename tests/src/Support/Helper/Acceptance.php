@@ -19,8 +19,8 @@ class Acceptance extends Module
 		$browser = $this->getModule(DPBrowser::class);
 
 		// Temporary fix till https://github.com/joomla/joomla-cms/issues/40690 is solved
-		if (strpos($link, MediaPage::$mediaUrl . '&path=') !== false) {
-			parse_str($link, $result);
+		if (str_contains((string) $link, MediaPage::$mediaUrl . '&path=')) {
+			parse_str((string) $link, $result);
 			$dir = addslashes(json_encode(['selectedDirectory' => $result['path']]));
 			$browser->executeJS('sessionStorage.setItem("joomla.mediamanager", "' . $dir . '")');
 			$clearSession = false;

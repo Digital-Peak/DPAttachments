@@ -7,4 +7,5 @@
 
 defined('_JEXEC') or die();
 
-echo trim(preg_replace("/\([^)]+\)/", "", $this->file->getOriginalFilename()));
+$file = preg_replace("/\([^)]+\)/", "", (string)$this->file->getOriginalFilename());
+echo trim((string) ($file !== '' && $file !== '0' && $file !== [] ? $file : ''));

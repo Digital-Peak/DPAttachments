@@ -96,52 +96,52 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	});
 	[].slice.call(document.querySelectorAll('.com-dpattachments-layout-form')).forEach((form) => {
-			// Copied from https://github.com/bgrins/filereader.js
-			let initializedOnBody = false;
+		// Copied from https://github.com/bgrins/filereader.js
+		let initializedOnBody = false;
 
-			// Bind drag events to the form to add the class while dragging, and accept the drop data transfer
-			form.addEventListener('dragenter', (e) => {
-				if (initializedOnBody) {
-					return;
-				}
-				e.stopPropagation();
-				e.preventDefault();
-				form.classList.add('com-dpattachments-layout-form_drag');
-			}, false);
-			form.addEventListener('dragleave', (e) => {
-				if (initializedOnBody) {
-					return;
-				}
-				e.stopPropagation();
-				e.preventDefault();
-				form.classList.remove('com-dpattachments-layout-form_drag');
-			}, false);
-			form.addEventListener('dragover', (e) => {
-				if (initializedOnBody) {
-					return;
-				}
-				e.stopPropagation();
-				e.preventDefault();
-				form.classList.add('com-dpattachments-layout-form_drag');
-			}, false);
-			form.addEventListener('drop', (e) => {
-				if (initializedOnBody) {
-					return;
-				}
-				e.stopPropagation();
-				e.preventDefault();
-				form.classList.remove('com-dpattachments-layout-form_drag');
-				processFileList(form.querySelector('.dp-input__file'), e.dataTransfer.files);
-			}, false);
+		// Bind drag events to the form to add the class while dragging, and accept the drop data transfer
+		form.addEventListener('dragenter', (e) => {
+			if (initializedOnBody) {
+				return;
+			}
+			e.stopPropagation();
+			e.preventDefault();
+			form.classList.add('com-dpattachments-layout-form_drag');
+		}, false);
+		form.addEventListener('dragleave', (e) => {
+			if (initializedOnBody) {
+				return;
+			}
+			e.stopPropagation();
+			e.preventDefault();
+			form.classList.remove('com-dpattachments-layout-form_drag');
+		}, false);
+		form.addEventListener('dragover', (e) => {
+			if (initializedOnBody) {
+				return;
+			}
+			e.stopPropagation();
+			e.preventDefault();
+			form.classList.add('com-dpattachments-layout-form_drag');
+		}, false);
+		form.addEventListener('drop', (e) => {
+			if (initializedOnBody) {
+				return;
+			}
+			e.stopPropagation();
+			e.preventDefault();
+			form.classList.remove('com-dpattachments-layout-form_drag');
+			processFileList(form.querySelector('.dp-input__file'), e.dataTransfer.files);
+		}, false);
 
-			// Bind to body to prevent the form events from firing when it was initialized on the page
-			document.body.addEventListener('dragstart', () => initializedOnBody = true, true);
-			document.body.addEventListener('dragend', () => initializedOnBody = false, true);
-			document.body.addEventListener('drop', (e) => {
-				if (e.dataTransfer.files && e.dataTransfer.files.length) {
-					e.stopPropagation();
-					e.preventDefault();
-				}
-			}, false);
+		// Bind to body to prevent the form events from firing when it was initialized on the page
+		document.body.addEventListener('dragstart', () => initializedOnBody = true, true);
+		document.body.addEventListener('dragend', () => initializedOnBody = false, true);
+		document.body.addEventListener('drop', (e) => {
+			if (e.dataTransfer.files && e.dataTransfer.files.length) {
+				e.stopPropagation();
+				e.preventDefault();
+			}
+		}, false);
 	});
 });

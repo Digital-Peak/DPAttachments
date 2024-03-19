@@ -7,11 +7,11 @@
 
 defined('_JEXEC') or die();
 
-use Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory;
 
 $app = Factory::getApplication();
-if (!$app instanceof SiteApplication) {
+if (!$app instanceof CMSApplication) {
 	return;
 }
 

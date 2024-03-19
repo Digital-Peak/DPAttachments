@@ -28,7 +28,7 @@ class FormModel extends AttachmentModel
 		$this->setState('attachment.id', $pk);
 
 		$return = $app->input->get('return', null, 'base64');
-		$this->setState('return_page', base64_decode($return));
+		$this->setState('return_page', base64_decode((string) $return));
 
 		// Load the parameters
 		$params = ComponentHelper::getParams('com_dpattachments');
@@ -62,6 +62,6 @@ class FormModel extends AttachmentModel
 
 	public function getReturnPage(): string
 	{
-		return base64_encode($this->getState('return_page'));
+		return base64_encode((string) $this->getState('return_page'));
 	}
 }

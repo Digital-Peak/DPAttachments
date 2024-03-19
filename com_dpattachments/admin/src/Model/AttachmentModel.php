@@ -74,18 +74,18 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 		$fileName = $_FILES['file']['name'];
 
 		if ($fileName == 'blob') {
-			$extension = explode('/', $_FILES['file']['type']);
+			$extension = explode('/', (string) $_FILES['file']['type']);
 			if (count($extension) > 1) {
 				$fileName = 'clipboard.' . $extension[1];
 			}
 		}
 
-		$uploadedFileNameParts = explode('.', $fileName);
+		$uploadedFileNameParts = explode('.', (string) $fileName);
 		$uploadedFileExtension = array_pop($uploadedFileNameParts);
 
 		$validFileExts = explode(
 			',',
-			ComponentHelper::getParams('com_dpattachments')->get('attachment_extensions', 'gif,jpg,jpeg,png,zip,rar,csv,txt,pdf')
+			(string) ComponentHelper::getParams('com_dpattachments')->get('attachment_extensions', 'gif,jpg,jpeg,png,zip,rar,csv,txt,pdf')
 		);
 
 		$extOk = false;
@@ -100,7 +100,7 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 			throw new \Exception(Text::sprintf('COM_DPATTACHMENTS_UPLOAD_INVALID_EXTENSION', implode(',', $validFileExts)));
 		}
 
-		$fileName = preg_replace("/[^\p{L}|0-9]+/u", "-", substr($fileName, 0, strlen($fileName) - strlen($uploadedFileExtension) - 1)) . '.' .
+		$fileName = preg_replace("/[^\p{L}|0-9]+/u", "-", substr((string) $fileName, 0, strlen((string) $fileName) - strlen($uploadedFileExtension) - 1)) . '.' .
 			$uploadedFileExtension;
 
 		$targetFile = $this->bootComponent('dpattachments')->getPath($fileName, $data['context']);
@@ -109,7 +109,7 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 			$targetFile = $this->bootComponent('dpattachments')->getPath($fileName, $data['context']);
 		}
 
-		$descriptor = ['tmp_name' => $_FILES['file']['tmp_name'], 'name' => basename($targetFile)];
+		$descriptor = ['tmp_name' => $_FILES['file']['tmp_name'], 'name' => basename((string) $targetFile)];
 		if (!ComponentHelper::getParams('com_dpattachments')->get('allow_unsafe_uploads', 0) && !InputFilter::isSafeFile($descriptor)) {
 			throw new \Exception(Text::_('COM_DPATTACHMENTS_UPLOAD_ERROR'));
 		}
@@ -232,12 +232,12 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 		return $success;
 	}
 
-	public function getAuthor(int $userId): array {
-		$userInfo = array();
-		$user = $this->getUserFactory()->loadUserById($userId);
-		// "loadUserById" always returns a "User" object, even if no user found, no need to check for null
-		$userInfo['author_id'] = $user->id;
-		$userInfo['author_name'] = $user->name;
+	public function getAuthor(int $userId): array
+	{
+		$userInfo                 = [];
+		$user                     = $this->getUserFactory()->loadUserById($userId);
+		$userInfo['author_id']    = $user->id;
+		$userInfo['author_name']  = $user->name;
 		$userInfo['author_email'] = $user->email;
 
 		return $userInfo;
