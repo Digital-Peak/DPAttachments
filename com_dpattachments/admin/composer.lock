@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ee99a449fc8d912f23526d8d28d4750d",
+    "content-hash": "3a4abc8b6b3bd896c3c71c3a9d63c5fe",
     "packages": [
         {
             "name": "parsecsv/php-parsecsv",
@@ -72,23 +72,25 @@
         },
         {
             "name": "ptlis/diff-parser",
-            "version": "1.0.2",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ptlis/diff-parser.git",
-                "reference": "24b8d6c545ccf84bf131b49550c19e358d53ef02"
+                "reference": "07189a105800d6074f3189ce8381944d511fcb26"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ptlis/diff-parser/zipball/24b8d6c545ccf84bf131b49550c19e358d53ef02",
-                "reference": "24b8d6c545ccf84bf131b49550c19e358d53ef02",
+                "url": "https://api.github.com/repos/ptlis/diff-parser/zipball/07189a105800d6074f3189ce8381944d511fcb26",
+                "reference": "07189a105800d6074f3189ce8381944d511fcb26",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2.0"
+                "php": ">=8.1.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^8.0.0"
+                "phpstan/phpstan": "^1.6",
+                "phpunit/phpunit": "^9.5.0",
+                "squizlabs/php_codesniffer": "^3.6"
             },
             "type": "library",
             "autoload": {
@@ -115,9 +117,9 @@
             ],
             "support": {
                 "issues": "https://github.com/ptlis/diff-parser/issues",
-                "source": "https://github.com/ptlis/diff-parser/tree/1.0.2"
+                "source": "https://github.com/ptlis/diff-parser/tree/1.1.0"
             },
-            "time": "2021-09-11T14:08:02+00:00"
+            "time": "2022-05-22T21:06:50+00:00"
         }
     ],
     "packages-dev": [],
@@ -129,7 +131,7 @@
     "platform": [],
     "platform-dev": [],
     "platform-overrides": {
-        "php": "7.4"
+        "php": "8.1"
     },
     "plugin-api-version": "2.6.0"
 }

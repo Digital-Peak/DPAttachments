@@ -53,7 +53,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 	 * The render form parameter defines if the upload form should be rendered when the edit
 	 * permission exists.
 	 */
-	public function render(string $context, string $itemId, ?Registry $options = null, bool $renderForm = true): string
+	public function render(string $context, string $itemId, ?Registry $options = null, ?bool $renderForm = true): string
 	{
 		if (!$this->isEnabled()) {
 			return '';
@@ -113,7 +113,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			['context' => $context, 'itemid' => $itemId, 'attachments' => $event->getArgument('attachments'), 'options' => $options]
 		);
 
-		if (!$canEdit || !$renderForm) {
+		if (!$canEdit || $renderForm !== true) {
 			return $buffer;
 		}
 

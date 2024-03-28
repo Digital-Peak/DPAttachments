@@ -37,7 +37,7 @@ class Pkg_DPAttachmentsInstallerScript extends InstallerScript implements Databa
 			}
 		}
 
-		if ($version === null || $version === '' || $version === '0' || $version == 'DP_DEPLOY_VERSION') {
+		if ($version === null || $version === '' || $version === '0' || $version === 'DP_DEPLOY_VERSION') {
 			return;
 		}
 

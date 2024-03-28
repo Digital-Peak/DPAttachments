@@ -22,7 +22,7 @@ class Com_DPAttachmentsInstallerScript extends InstallerScript
 			return;
 		}
 
-		if ($type != 'install' && $type != 'discover_install') {
+		if ($type !== 'install' && $type !== 'discover_install') {
 			return;
 		}
 
