@@ -4,19 +4,24 @@
  * @copyright Copyright (C) 2022 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-$finder = PhpCsFixer\Finder::create()
+
+use PhpCsFixer\Config;
+use PhpCsFixer\Finder;
+
+$finder = Finder::create()
 	->in(__DIR__)
 	->notPath('/tmpl/')
 	->notPath('/layouts/')
 	->notName('AcceptanceTesterActions.php');
 
-$config = new PhpCsFixer\Config();
+$config = new Config();
 
 $config->setRules([
 		'@PSR12'                          => true,
 		'array_syntax'                    => ['syntax' => 'short'],
 		'whitespace_after_comma_in_array' => true,
 		'concat_space'                    => ['spacing' => 'one'],
+		'cast_spaces'                     => ['space' => 'none'],
 		'indentation_type'                => true,
 		'single_space_around_construct'   => true,
 		'no_break_comment'                => false,

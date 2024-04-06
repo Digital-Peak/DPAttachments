@@ -189,10 +189,10 @@ class AttachmentsModel extends ListModel
 		// Filter by search in title.
 		$search = $this->getState('filter.search');
 		if (!empty($search)) {
-			if (stripos((string) $search, 'id:') === 0) {
-				$query->where('a.id = ' . (int)substr((string) $search, 3));
-			} elseif (stripos((string) $search, 'author:') === 0) {
-				$search = $db->quote('%' . $db->escape(substr((string) $search, 7), true) . '%');
+			if (stripos((string)$search, 'id:') === 0) {
+				$query->where('a.id = ' . (int)substr((string)$search, 3));
+			} elseif (stripos((string)$search, 'author:') === 0) {
+				$search = $db->quote('%' . $db->escape(substr((string)$search, 7), true) . '%');
 				$query->where('(ua.name LIKE ' . $search . ' OR ua.username LIKE ' . $search . ')');
 			} else {
 				$search = $db->quote('%' . $db->escape($search, true) . '%');

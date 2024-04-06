@@ -81,12 +81,12 @@ class AttachmentController extends FormController
 
 		$this->getModel()->hit($attachment->id);
 
-		$basename  = @basename((string) $filename);
+		$basename  = @basename((string)$filename);
 		$filesize  = @filesize($filename);
 		$mime_type = 'application/octet-stream';
 
 		// Fix IE bugs
-		if (isset($_SERVER['HTTP_USER_AGENT']) && strstr((string) $_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
+		if (isset($_SERVER['HTTP_USER_AGENT']) && strstr((string)$_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
 			$header_file = preg_replace('/\./', '%2e', $basename, substr_count($basename, '.') - 1);
 
 			if (ini_get('zlib.output_compression')) {
@@ -122,7 +122,7 @@ class AttachmentController extends FormController
 		$seek_start  = 0;
 		$seek_end    = $filesize - 1;
 		if (isset($_SERVER['HTTP_RANGE'])) {
-			[$size_unit, $range_orig] = explode('=', (string) $_SERVER['HTTP_RANGE'], 2);
+			[$size_unit, $range_orig] = explode('=', (string)$_SERVER['HTTP_RANGE'], 2);
 
 			if ($size_unit === 'bytes') {
 				// Multiple ranges could be specified at the same time, but for
@@ -140,8 +140,8 @@ class AttachmentController extends FormController
 			[$seek_start, $seek_end] = explode('-', $range, 2);
 
 			// Set start and end based on range (if set), else set defaults also check for invalid ranges
-			$seek_end   = ($seek_end === '' || $seek_end === '0') ? -1 : min(abs((int) $seek_end), ($filesize - 1));
-			$seek_start = ($seek_start === '' || $seek_start === '0' || $seek_end < abs((int) $seek_start)) ? 0 : max(abs((int) $seek_start), 0);
+			$seek_end   = ($seek_end === '' || $seek_end === '0') ? -1 : min(abs((int)$seek_end), ($filesize - 1));
+			$seek_start = ($seek_start === '' || $seek_start === '0' || $seek_end < abs((int)$seek_start)) ? 0 : max(abs((int)$seek_start), 0);
 
 			$isResumable = true;
 		}
