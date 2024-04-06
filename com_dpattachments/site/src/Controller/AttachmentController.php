@@ -74,11 +74,11 @@ class AttachmentController extends BaseAttachmentController
 	protected function getReturnPage(): string
 	{
 		$return = $this->input->get('return', null, 'base64');
-		if (empty($return) || !Uri::isInternal(base64_decode((string) $return))) {
+		if (empty($return) || !Uri::isInternal(base64_decode((string)$return))) {
 			return Uri::base();
 		}
 
-		return base64_decode((string) $return);
+		return base64_decode((string)$return);
 	}
 
 	public function getModel($name = 'Form', $prefix = 'Site', $config = ['ignore_request' => true])

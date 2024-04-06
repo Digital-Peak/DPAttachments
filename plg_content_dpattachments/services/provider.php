@@ -24,7 +24,7 @@ return new class () implements ServiceProviderInterface {
 				$dispatcher = $container->get(DispatcherInterface::class);
 				$plugin     = new DPAttachments(
 					$dispatcher,
-					(array) PluginHelper::getPlugin('content', 'dpattachments')
+					(array)PluginHelper::getPlugin('content', 'dpattachments')
 				);
 				$plugin->setApplication(Factory::getApplication());
 

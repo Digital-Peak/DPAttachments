@@ -198,7 +198,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			if ($user->authorise($action, $component)) {
 				return true;
 			}
-			return (bool) $user->authorise($action, 'com_dpattachments');
+			return (bool)$user->authorise($action, 'com_dpattachments');
 		}
 
 		$asset = $component;
@@ -233,7 +233,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 	public function getPath(string $attachmentPath, string $context): string
 	{
 		$folder = ComponentHelper::getParams('com_dpattachments')->get('attachment_path', 'media/com_dpattachments/attachments/');
-		$folder = trim((string) $folder, '/');
+		$folder = trim((string)$folder, '/');
 
 		return JPATH_ROOT . '/' . $folder . '/' . $context . '/' . $attachmentPath;
 	}
