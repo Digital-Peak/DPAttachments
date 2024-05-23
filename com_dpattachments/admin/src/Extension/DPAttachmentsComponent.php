@@ -179,7 +179,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 				$table = $instance->getMVCFactory()->createTable(ucfirst($modelName), 'Administrator');
 			}
 
-			if ($table !== null) {
+			if (!empty($table)) {
 				$table->load($itemId);
 			}
 

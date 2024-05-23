@@ -1,13 +1,13 @@
 <?php
-
-use PhpCsFixer\Config;
-use PhpCsFixer\Finder;
-
 /**
  * @package   DPAttachments
  * @copyright Copyright (C) 2022 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
+use PhpCsFixer\Config;
+use PhpCsFixer\Finder;
+
 $finder = Finder::create()
 	->in(__DIR__)
 	->notPath('/tmpl/')
