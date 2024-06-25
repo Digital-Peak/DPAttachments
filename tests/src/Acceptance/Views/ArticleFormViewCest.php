@@ -103,9 +103,25 @@ class ArticleFormViewCest extends BasicDPAttachmentsCestClass
 		$I->dontSeeElement('Attachments');
 	}
 
-	public function canUploadAttachmentOnArticleFormPage(Article $I): void
+	public function canUploadAttachmentOnArticleFormPageNotSaved(Article $I): void
 	{
-		$I->wantToTest('that an attachment can be uploaded to an article in the form.');
+		$I->wantToTest('that an attachment can be uploaded to an article in the form for a new article.');
+
+		$I->doFrontEndLogin();
+		$I->amOnPage('index.php?option=com_content&task=article.edit');
+		$I->click('Attachments');
+
+		$I->attachFile('.com-dpattachments-layout-form .dp-input__file', 'test.txt');
+		$I->waitForElement('.dp-attachment');
+
+		$I->see('test.txt');
+		$I->seeElement('.dp-attachment__link');
+		$I->seeInDatabase('dpattachments', ['context' => 'com_content.article', 'item_id like' => 'tmp-%']);
+	}
+
+	public function canUploadAttachmentOnArticleFormPageSaved(Article $I): void
+	{
+		$I->wantToTest('that an attachment can be uploaded to an article in the form for an existing article.');
 
 		$article = $I->createArticle(['title' => 'Test title']);
 
@@ -118,7 +134,7 @@ class ArticleFormViewCest extends BasicDPAttachmentsCestClass
 
 		$I->see('test.txt');
 		$I->seeElement('.dp-attachment__link');
-		$I->seeInDatabase('dpattachments', ['context' => 'com_content.article']);
+		$I->seeInDatabase('dpattachments', ['context' => 'com_content.article', 'item_id' => $article['id']]);
 	}
 
 	public function canUploadMultipleAttachmentOnArticleFormPage(Article $I): void
@@ -142,6 +158,25 @@ class ArticleFormViewCest extends BasicDPAttachmentsCestClass
 		$I->assertFileEquals(codecept_data_dir() . '/test.jpg', $I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . Attachment::ARTICLES_ATTACHMENT_DIR . 'test.jpg');
 	}
 
+	public function canUploadAttachmentOnArticleFormAndAssign(Article $I): void
+	{
+		$I->wantToTest('that an attachment can be uploaded to an article in the form for a new article and correctly be assigned.');
+
+		$I->doFrontEndLogin();
+		$I->amOnPage('index.php?option=com_content&task=article.edit');
+		$I->fillField('#jform_title', 'Test article');
+		$I->click('Attachments');
+
+		$I->attachFile('.com-dpattachments-layout-form .dp-input__file', 'test.txt');
+		$I->waitForElement('.dp-attachment');
+		$I->click('Save');
+		$I->click('Attachments');
+
+		$I->see('test.txt');
+		$I->seeElement('.dp-attachment__link');
+		$I->dontSeeInDatabase('dpattachments', ['context' => 'com_content.article', 'item_id like' => 'tmp-%']);
+	}
+
 	public function canTrashAttachment(Attachment $I, Article $IA): void
 	{
 		$I->wantToTest('that an attachment can be trashed.');
@@ -157,16 +192,5 @@ class ArticleFormViewCest extends BasicDPAttachmentsCestClass
 
 		$I->dontSee('test.txt');
 		$I->seeInDatabase('dpattachments', ['context' => 'com_content.article', 'path' => 'test.txt', 'state' => -2]);
-	}
-
-	public function canSeeInformationMessageWhenArticleIsNotSaved(Article $I): void
-	{
-		$I->wantToTest('that an information message is shown when an article is not saved.');
-
-		$I->doFrontEndLogin();
-		$I->amOnPage('index.php?option=com_content&task=article.edit');
-		$I->click('Attachments');
-
-		$I->see('Attachments can be uploaded when the form has been saved');
 	}
 }

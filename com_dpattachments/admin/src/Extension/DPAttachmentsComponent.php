@@ -152,6 +152,8 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 	 */
 	public function canDo(string $action, string $context, string $itemId): bool
 	{
+		$action = $action === 'core.edit' && str_contains($itemId, 'tmp-') ? 'core.create' : $action;
+
 		PluginHelper::importPlugin('dpattachments');
 		$event = new Event('onDPAttachmentsCheckPermission', ['action' => $action, 'context' => $context, 'item_id' => $itemId]);
 		$this->app->getDispatcher()->dispatch('onDPAttachmentsCheckPermission', $event);
@@ -159,6 +161,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			return true;
 		}
 
+		// Check if there is enough information
 		if ($action === '' || $action === '0' || $context === '' || $context === '0' || $itemId === '' || $itemId === '0') {
 			return false;
 		}
