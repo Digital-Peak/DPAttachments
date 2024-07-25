@@ -175,13 +175,15 @@ class AttachmentController extends FormController
 				}
 			}
 			$read = 0;
-			while (!feof($handle) && ($chunksize > 0)) {
+			while (!feof($handle)) {
 				if ($isResumable && $totalLength - $read < $chunksize) {
 					$chunksize = $totalLength - $read;
-					if ($chunksize < 0) {
-						continue;
-					}
 				}
+
+				if ($chunksize < 1) {
+					break;
+				}
+
 				$buffer = fread($handle, $chunksize) ?: '';
 				if ($isResumable) {
 					$read += strlen($buffer);
