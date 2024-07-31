@@ -13,12 +13,12 @@
 
 .com-dpattachments-attachment-patch {
 	.dp-patch-file {
-		border: 1px solid #cbcbcb;
 		margin: 10px 0;
+		border: 1px solid #cbcbcb;
 
 		&__name {
-			padding: 10px 5px;
 			margin: 0;
+			padding: 10px 5px;
 			background-color: #fafbfc;
 		}
 	}
@@ -53,9 +53,9 @@
 
 		&__content {
 			width: 90%;
+			word-wrap: break-word;
 			white-space: pre-wrap;
 			overflow-wrap: break-word;
-			word-wrap: break-word;
 		}
 	}
 }
