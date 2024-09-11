@@ -19,7 +19,7 @@ class AttachmentController extends FormController
 		$recordId = (int)isset($data[$key]) !== 0 ? $data[$key] : 0;
 
 		$record = $this->getModel()->getItem($recordId);
-		if (is_object($record)) {
+		if (\is_object($record)) {
 			return $this->app->bootComponent('dpattachments')->canDo('core.edit', $record->context, $record->item_id);
 		}
 
@@ -43,7 +43,7 @@ class AttachmentController extends FormController
 			$item = $model->getItem($model->getState($model->getName() . '.id'));
 
 			// If no "created_by_alias" is available, we need to load the creator user info (name and email) to avoid showing user id
-			if (is_object($item) && empty($item->created_by_alias) && !empty($item->created_by)) {
+			if (\is_object($item) && empty($item->created_by_alias) && !empty($item->created_by)) {
 				$author             = $model->getAuthor($item->created_by);
 				$item->author_id    = $author['author_id'];
 				$item->author_name  = $author['author_name'];
@@ -68,7 +68,7 @@ class AttachmentController extends FormController
 	public function download(): void
 	{
 		$attachment = $this->getModel()->getItem($this->input->get('id'));
-		if (!is_object($attachment)) {
+		if (!\is_object($attachment)) {
 			header('HTTP/1.0 404 Not Found');
 			exit(0);
 		}
@@ -89,7 +89,7 @@ class AttachmentController extends FormController
 		if (isset($_SERVER['HTTP_USER_AGENT']) && strstr((string)$_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
 			$header_file = preg_replace('/\./', '%2e', $basename, substr_count($basename, '.') - 1);
 
-			if (ini_get('zlib.output_compression')) {
+			if (\ini_get('zlib.output_compression')) {
 				ini_set('zlib.output_compression', 'Off');
 			}
 		} else {
@@ -113,7 +113,7 @@ class AttachmentController extends FormController
 		header('Connection: close');
 
 		error_reporting(0);
-		if (ini_get('safe_mode') === '' || ini_get('safe_mode') === '0' || ini_get('safe_mode') === false) {
+		if (\ini_get('safe_mode') === '' || \ini_get('safe_mode') === '0' || \ini_get('safe_mode') === false) {
 			set_time_limit(0);
 		}
 
@@ -186,7 +186,7 @@ class AttachmentController extends FormController
 
 				$buffer = fread($handle, $chunksize) ?: '';
 				if ($isResumable) {
-					$read += strlen($buffer);
+					$read += \strlen($buffer);
 				}
 				echo $buffer;
 				@ob_flush();

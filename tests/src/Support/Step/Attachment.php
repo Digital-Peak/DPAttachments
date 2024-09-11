@@ -44,7 +44,7 @@ class Attachment extends AcceptanceTester
 			'created_by'   => $I->grabFromDatabase('users', 'id', ['username' => 'admin']),
 		];
 
-		if (is_array($data)) {
+		if (\is_array($data)) {
 			$attachment = array_merge($attachment, $data);
 		}
 

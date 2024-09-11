@@ -5,7 +5,7 @@
  * @license    https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\CMS\Installer\InstallerScript;
@@ -49,7 +49,7 @@ class Pkg_DPAttachmentsInstallerScript extends InstallerScript implements Databa
 				}
 
 				foreach (Folder::files($folder . '/language', '.', true, true) as $file) {
-					if (str_starts_with(basename((string)$file), basename(dirname((string)$file)))) {
+					if (str_starts_with(basename((string)$file), basename(\dirname((string)$file)))) {
 						unlink($file);
 					}
 				}

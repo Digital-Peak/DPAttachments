@@ -55,7 +55,7 @@ class DPAttachments extends CMSPlugin implements SubscriberInterface
 
 		// Filter by category ids
 		$catIds = $this->params->get('cat_ids');
-		if (isset($item->catid) && !empty($catIds) && !in_array($item->catid, $catIds)) {
+		if (isset($item->catid) && !empty($catIds) && !\in_array($item->catid, $catIds)) {
 			return;
 		}
 
@@ -94,7 +94,7 @@ class DPAttachments extends CMSPlugin implements SubscriberInterface
 		}
 
 		// Check if the context belongs to a form we don't want
-		if (in_array($context, $this->FORMS_TO_EXCLUDE)) {
+		if (\in_array($context, $this->FORMS_TO_EXCLUDE)) {
 			return;
 		}
 
@@ -111,7 +111,7 @@ class DPAttachments extends CMSPlugin implements SubscriberInterface
 
 		// Check if there are categories to filter
 		$catIds = $this->params->get('cat_ids');
-		if (!empty($catIds) && isset($data->catid) && !in_array($data->catid, $catIds)) {
+		if (!empty($catIds) && isset($data->catid) && !\in_array($data->catid, $catIds)) {
 			return;
 		}
 
@@ -123,13 +123,13 @@ class DPAttachments extends CMSPlugin implements SubscriberInterface
 			'components_exclude',
 			['com_cache', 'com_actionlogs', 'com_menus', 'com_config', 'com_scheduler', 'com_plugins', 'com_media']
 		);
-		if (!empty($components) && in_array($componentName, (array)$components)) {
+		if (!empty($components) && \in_array($componentName, (array)$components)) {
 			return;
 		}
 
 		// Check if the component is in the list of the selected ones
 		$components = $params->get('components');
-		if (!empty($components) && !in_array($componentName, (array)$components)) {
+		if (!empty($components) && !\in_array($componentName, (array)$components)) {
 			return;
 		}
 
@@ -140,12 +140,12 @@ class DPAttachments extends CMSPlugin implements SubscriberInterface
 		$id = 'tmp-' . $app->getSession()->getId();
 
 		// Determine the id when it is an object
-		if (is_object($data) && !empty($data->id)) {
+		if (\is_object($data) && !empty($data->id)) {
 			$id = $data->id;
 		}
 
 		// Determine the id when it is an array
-		if (is_array($data) && !empty($data['id'])) {
+		if (\is_array($data) && !empty($data['id'])) {
 			$id = $data['id'];
 		}
 
@@ -234,7 +234,7 @@ class DPAttachments extends CMSPlugin implements SubscriberInterface
 	{
 		// Use help from fields as we have the same issue there
 		$parts = FieldsHelper::extract($context, $item) ?: [];
-		if (count($parts) === 2) {
+		if (\count($parts) === 2) {
 			$context = implode('.', $parts);
 		}
 

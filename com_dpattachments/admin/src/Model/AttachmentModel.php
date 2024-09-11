@@ -75,7 +75,7 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 
 		if ($fileName == 'blob') {
 			$extension = explode('/', (string)$_FILES['file']['type']);
-			if (count($extension) > 1) {
+			if (\count($extension) > 1) {
 				$fileName = 'clipboard.' . $extension[1];
 			}
 		}
@@ -91,7 +91,7 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 		$extOk = false;
 
 		foreach ($validFileExts as $value) {
-			if (preg_match(sprintf('/%s/i', $value), $uploadedFileExtension)) {
+			if (preg_match(\sprintf('/%s/i', $value), $uploadedFileExtension)) {
 				$extOk = true;
 			}
 		}
@@ -100,7 +100,7 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 			throw new \Exception(Text::sprintf('COM_DPATTACHMENTS_UPLOAD_INVALID_EXTENSION', implode(',', $validFileExts)));
 		}
 
-		$fileName = preg_replace("/[^\p{L}|0-9]+/u", "-", substr((string)$fileName, 0, strlen((string)$fileName) - strlen($uploadedFileExtension) - 1)) . '.' .
+		$fileName = preg_replace("/[^\p{L}|0-9]+/u", "-", substr((string)$fileName, 0, \strlen((string)$fileName) - \strlen($uploadedFileExtension) - 1)) . '.' .
 			$uploadedFileExtension;
 
 		$targetFile = $this->bootComponent('dpattachments')->getPath($fileName, $data['context']);
@@ -176,7 +176,7 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 			$data = $this->getItem();
 
 			// Prime some default values.
-			if (is_object($data) && $this->getState('attachment.id') == 0) {
+			if (\is_object($data) && $this->getState('attachment.id') == 0) {
 				// @phpstan-ignore-next-line
 				$data->set('itemid', $app->input->getInt('itemid', $app->getUserState('com_dpattachments.item.filter.itemid', 0)));
 			}
@@ -210,7 +210,7 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 		$attachments = [];
 		foreach (ArrayHelper::toInteger((array)$pks) as $id) {
 			$attachment = $this->getItem($id);
-			if (!is_object($attachment)) {
+			if (!\is_object($attachment)) {
 				continue;
 			}
 

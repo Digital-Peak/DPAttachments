@@ -169,7 +169,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 		$key = $context . '.' . $itemId;
 
 		[$component, $modelName] = explode('.', $context);
-		if (!array_key_exists($key, $this->itemCache)) {
+		if (!\array_key_exists($key, $this->itemCache)) {
 			$instance = $this->app->bootComponent($component);
 
 			$table = null;
@@ -326,22 +326,22 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 		// Check for menu items to include
 		$menuItems = $params->get('menuitems');
 		if (!empty($menuItems)) {
-			if (!is_array($menuItems)) {
+			if (!\is_array($menuItems)) {
 				$menuItems = [$menuItems];
 			}
 
-			if (!in_array($input->getInt('Itemid', 0), $menuItems)) {
+			if (!\in_array($input->getInt('Itemid', 0), $menuItems)) {
 				return false;
 			}
 		}
 
 		$menuItems = $params->get('menuitems_exclude');
 		if (!empty($menuItems)) {
-			if (!is_array($menuItems)) {
+			if (!\is_array($menuItems)) {
 				$menuItems = [$menuItems];
 			}
 
-			if (in_array($input->getInt('Itemid', 0), $menuItems)) {
+			if (\in_array($input->getInt('Itemid', 0), $menuItems)) {
 				return false;
 			}
 		}
@@ -349,11 +349,11 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 		// Check for components to include
 		$components = $params->get('components');
 		if (!empty($components)) {
-			if (!is_array($components)) {
+			if (!\is_array($components)) {
 				$components = [$components];
 			}
 
-			if (!in_array($input->getCmd('option'), $components)) {
+			if (!\in_array($input->getCmd('option'), $components)) {
 				return false;
 			}
 		}
@@ -363,11 +363,11 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			['com_cache', 'com_actionlogs', 'com_menus', 'com_config', 'com_scheduler', 'com_plugins', 'com_media']
 		);
 		if (!empty($components)) {
-			if (!is_array($components)) {
+			if (!\is_array($components)) {
 				$components = [$components];
 			}
 
-			if (in_array($input->getCmd('option'), $components)) {
+			if (\in_array($input->getCmd('option'), $components)) {
 				return false;
 			}
 		}

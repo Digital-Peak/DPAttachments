@@ -67,7 +67,7 @@ class HtmlView extends BaseHtmlView
 		// Built the actions for new and existing records.
 
 		// For new records, check the create permission.
-		if ($isNew && (count($user->getAuthorisedCategories('com_dpattachments', 'core.create')) > 0)) {
+		if ($isNew && (\count($user->getAuthorisedCategories('com_dpattachments', 'core.create')) > 0)) {
 			ToolbarHelper::apply('attachment.apply');
 			ToolbarHelper::save('attachment.save');
 			ToolbarHelper::cancel('attachment.cancel');

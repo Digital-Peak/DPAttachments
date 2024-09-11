@@ -170,7 +170,7 @@ class AttachmentsModel extends ListModel
 
 		// Filter by state state
 		$state = $this->getState('filter.state');
-		if (is_array($state)) {
+		if (\is_array($state)) {
 			$state = ArrayHelper::toInteger($state);
 			$query->where('a.state in (' . implode(',', $state) . ')');
 		} elseif (is_numeric($state)) {
