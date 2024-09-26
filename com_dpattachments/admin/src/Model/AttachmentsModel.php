@@ -21,7 +21,7 @@ class AttachmentsModel extends ListModel
 	public $context;
 	public $state;
 
-	public function __construct($config = [], MVCFactoryInterface $factory = null)
+	public function __construct($config = [], ?MVCFactoryInterface $factory = null)
 	{
 		if (empty($config['filter_fields'])) {
 			$config['filter_fields'] = [
@@ -170,7 +170,7 @@ class AttachmentsModel extends ListModel
 
 		// Filter by state state
 		$state = $this->getState('filter.state');
-		if (is_array($state)) {
+		if (\is_array($state)) {
 			$state = ArrayHelper::toInteger($state);
 			$query->where('a.state in (' . implode(',', $state) . ')');
 		} elseif (is_numeric($state)) {

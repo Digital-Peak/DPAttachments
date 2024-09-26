@@ -86,7 +86,7 @@ class AttachmentTable extends Table implements CurrentUserInterface
 
 	public function bind($array, $ignore = '')
 	{
-		if (is_array($array) && isset($array['params']) && is_array($array['params'])) {
+		if (\is_array($array) && isset($array['params']) && \is_array($array['params'])) {
 			$registry = new Registry();
 			$registry->loadArray($array['params']);
 			$array['params'] = (string)$registry;
@@ -204,7 +204,7 @@ class AttachmentTable extends Table implements CurrentUserInterface
 		$this->getDbo()->execute();
 
 		// If checkin is supported and all rows were adjusted, check them in
-		if ($checkin && (count($pks) == $this->getDbo()->getAffectedRows())) {
+		if ($checkin && (\count($pks) == $this->getDbo()->getAffectedRows())) {
 			// Checkin the rows
 			foreach ($pks as $pk) {
 				$this->checkin($pk);
@@ -212,7 +212,7 @@ class AttachmentTable extends Table implements CurrentUserInterface
 		}
 
 		// If the JTable instance value is in the list of primary keys that were set, set the instance
-		if (in_array($this->$k, $pks)) {
+		if (\in_array($this->$k, $pks)) {
 			$this->state = $state;
 		}
 

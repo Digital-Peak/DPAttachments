@@ -13,21 +13,27 @@
 
 .com-dpattachments-attachment-patch {
 	.dp-patch-file {
-		border: 1px solid #cbcbcb;
-		margin: 10px 0;
+		& {
+			margin: 10px 0;
+			border: 1px solid #cbcbcb;
+		}
 
 		&__name {
-			padding: 10px 5px;
 			margin: 0;
+			padding: 10px 5px;
 			background-color: #fafbfc;
 		}
 	}
 
 	.dp-patch-hunk {
-		width: 100%;
+		& {
+			width: 100%;
+		}
 
 		&__line {
-			border-top: 1px solid #ddd;
+			& {
+				border-top: 1px solid #ddd;
+			}
 
 			td {
 				padding: 4px 5px;
@@ -45,6 +51,7 @@
 	}
 
 	.dp-line {
+
 		&__original-nr,
 		&__new-nr,
 		&__operation {
@@ -53,9 +60,9 @@
 
 		&__content {
 			width: 90%;
+			word-wrap: break-word;
 			white-space: pre-wrap;
 			overflow-wrap: break-word;
-			word-wrap: break-word;
 		}
 	}
 }

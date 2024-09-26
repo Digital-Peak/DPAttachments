@@ -5,9 +5,11 @@
  */
 
 .com-dpattachments-layout-form {
-	padding: 10px;
-	margin: 5px 0;
-	border: 1px solid #cbcbcb;
+	& {
+		margin: 5px 0;
+		padding: 10px;
+		border: 1px solid #cbcbcb;
+	}
 
 	&_drag {
 		border: 5px dashed #007bff;
@@ -23,26 +25,28 @@
 	}
 
 	.dp-input {
-		margin-top: 10px;
+		& {
+			margin-top: 10px;
+		}
 
 		&__file {
+			z-index: -1;
+			position: absolute;
 			width: 0.1px;
 			height: 0.1px;
-			opacity: 0;
 			overflow: hidden;
-			position: absolute;
-			z-index: -1;
+			opacity: 0;
 		}
 
 		&__label {
-			text-overflow: ellipsis;
-			white-space: nowrap;
-			cursor: pointer;
 			display: inline-block;
 			overflow: hidden;
 			padding: 10px;
-			border: 1px solid #cbcbcb;
 			background-color: whitesmoke;
+			border: 1px solid #cbcbcb;
+			white-space: nowrap;
+			cursor: pointer;
+			text-overflow: ellipsis;
 
 			svg {
 				width: 1em;

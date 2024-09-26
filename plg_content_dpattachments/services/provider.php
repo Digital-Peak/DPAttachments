@@ -5,7 +5,7 @@
  * @license    https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die;
+\defined('_JEXEC') or die;
 
 use DigitalPeak\Plugin\Content\DPAttachments\Extension\DPAttachments;
 use Joomla\CMS\Extension\PluginInterface;

@@ -10,19 +10,19 @@
 
 .dp-button {
 	display: inline-block;
-	font-weight: 400;
+	margin: 3px 0;
+	padding: 4px 10px;
+	background-color: #fefefe;
+	color: #212529;
+	border: 1px solid #c0c0c0;
 	text-align: center;
+	font-weight: 400;
+	box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
 	white-space: nowrap;
 	vertical-align: middle;
 	user-select: none;
-	border: 1px solid #c0c0c0;
 	border-radius: 0.1rem;
 	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-	padding: 4px 10px;
-	margin: 3px 0;
-	color: #212529;
-	background-color: #fefefe;
-	box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
 }
 
 .dp-button:disabled,

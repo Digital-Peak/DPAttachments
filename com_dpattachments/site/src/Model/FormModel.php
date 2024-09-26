@@ -45,7 +45,7 @@ class FormModel extends AttachmentModel
 		$pk = (int)(!empty($pk)) !== 0 ? $pk : $this->getState('attachment.id');
 
 		$item = parent::getItem($pk);
-		if (!is_object($item)) {
+		if (!\is_object($item)) {
 			return $item;
 		}
 
