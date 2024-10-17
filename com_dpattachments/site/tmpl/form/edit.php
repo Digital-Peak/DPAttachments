@@ -14,7 +14,7 @@ HTMLHelper::_('stylesheet', 'com_dpattachments/dpattachments/views/form/edit.min
 HTMLHelper::_('behavior.core');
 HTMLHelper::_('behavior.keepalive');
 HTMLHelper::_('behavior.formvalidator');
-HTMLHelper::_('script', 'com_dpattachments/dpattachments/views/form/edit.min.js', ['relative' => true, 'version' => 'auto'], ['defer' => true]);
+HTMLHelper::_('script', 'com_dpattachments/views/form/edit.js', ['relative' => true, 'version' => 'auto'], ['defer' => true, 'type' => 'module']);
 ?>
 <div class="com-dpattachments-attachment-form<?php echo $this->pageclass_sfx ? ' com-dpattachments-attachment-form-' . $this->pageclass_sfx : ''; ?>">
 	<?php echo $this->loadtemplate('heading'); ?>

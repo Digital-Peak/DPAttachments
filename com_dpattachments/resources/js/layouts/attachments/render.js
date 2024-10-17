@@ -6,58 +6,58 @@
 
 let dpattachmentsModal = null;
 
-document.addEventListener('DOMContentLoaded', () => {
-	window.document.addEventListener('dpattachmentSaved', (e) => {
-		if (!dpattachmentsModal) {
+window.document.addEventListener('dpattachmentSaved', (e) => {
+	if (!dpattachmentsModal) {
+		return;
+	}
+
+	// Just close when the attachment form is cancelled
+	if (e.detail === 'attachment.cancel') {
+		dpattachmentsModal.close();
+		return;
+	}
+
+	const iframe = document.querySelector('.dp-attachment-modal__content');
+	if (!iframe) {
+		return;
+	}
+
+	iframe.addEventListener('load', () => setTimeout(() => location.reload(), 2000));
+});
+
+delegateSelector('.com-dpattachments-layout-attachments', 'click', '.dp-button-edit', (e) => {
+	e.preventDefault();
+
+	openModal(e.target.href);
+
+	return false;
+});
+
+delegateSelector('.com-dpattachments-layout-attachments', 'click', '.dp-button-trash', (e) => {
+	e.preventDefault();
+
+	fetch(e.target.href).then((response) => {
+		if (!response.ok) {
 			return;
 		}
 
-		// Just close when the attachment form is cancelled
-		if (e.detail === 'attachment.cancel') {
-			dpattachmentsModal.close();
-			return;
-		}
-
-		const iframe = document.querySelector('.dp-attachment-modal__content');
-		if (!iframe) {
-			return;
-		}
-
-		iframe.addEventListener('load', () => setTimeout(() => location.reload(), 2000));
+		e.target.closest('.dp-attachment').remove();
 	});
 
-	delegateSelector('.com-dpattachments-layout-attachments', 'click', '.dp-button-edit', (e) => {
-		e.preventDefault();
+	return false;
+});
 
-		openModal(e.target.href);
+delegateSelector('.com-dpattachments-layout-attachments', 'click', '.dp-attachment__link', (e) => {
+	e.preventDefault();
 
-		return false;
-	});
+	openModal(e.target.getAttribute('href'));
 
-	delegateSelector('.com-dpattachments-layout-attachments', 'click', '.dp-button-trash', (e) => {
-		e.preventDefault();
+	return false;
+});
 
-		fetch(e.target.href).then((response) => {
-			if (!response.ok) {
-				return;
-			}
-
-			e.target.closest('.dp-attachment').remove();
-		});
-
-		return false;
-	});
-
-	delegateSelector('.com-dpattachments-layout-attachments', 'click', '.dp-attachment__link', (e) => {
-		e.preventDefault();
-
-		openModal(e.target.getAttribute('href'));
-
-		return false;
-	});
-
-	function openModal(link) {
-		const modalFunction = (src) => {
+function openModal(link) {
+	if (!dpattachmentsModal) {
+		import('tingle.js').then(() => {
 			dpattachmentsModal = new tingle.modal({
 				footer: false,
 				stickyFooter: false,
@@ -66,34 +66,28 @@ document.addEventListener('DOMContentLoaded', () => {
 				closeLabel: Joomla.JText._('TMPL_DPSTRAP_CLOSE', 'Close'),
 				onClose: function () {
 					dpattachmentsModal.destroy();
+					dpattachmentsModal = null;
 				}
 			});
 
-			dpattachmentsModal.setContent('<iframe class="dp-attachment-modal__content" src="' + src + '"></iframe>');
+			dpattachmentsModal.setContent('<iframe class="dp-attachment-modal__content" src="' + link + '"></iframe>');
 			dpattachmentsModal.open();
-		};
-
-		if (typeof tingle === 'undefined' || !tingle) {
-			const resource = document.createElement('script');
-			resource.type = 'text/javascript';
-			resource.src = Joomla.getOptions('system.paths').root + '/media/com_dpattachments/js/vendor/tingle/tingle.min.js';
-			resource.addEventListener('load', () => modalFunction(link));
-			document.head.appendChild(resource);
-
-			const l = document.createElement('link');
-			l.rel = 'stylesheet';
-			l.href = Joomla.getOptions('system.paths').root + '/media/com_dpattachments/css/vendor/tingle/tingle.min.css';
-			document.head.appendChild(l);
-
-			return false;
-		}
-
-		modalFunction(link);
-	}
-
-	function delegateSelector(selector, event, childSelector, handler) {
-		Array.from(document.querySelectorAll(selector)).forEach((el) => {
-			el.addEventListener(event, (e) => e.target.matches(childSelector) ? handler(e) : null);
 		});
+
+		const l = document.createElement('link');
+		l.rel = 'stylesheet';
+		l.href = Joomla.getOptions('system.paths').root + '/media/com_dpattachments/css/vendor/tingle/tingle.min.css';
+		document.head.appendChild(l);
+
+		return;
 	}
-});
+
+	dpattachmentsModal.setContent('<iframe class="dp-attachment-modal__content" src="' + link + '"></iframe>');
+	//dpattachmentsModal.open();
+}
+
+function delegateSelector(selector, event, childSelector, handler) {
+	document.querySelectorAll(selector).forEach((el) => {
+		el.addEventListener(event, (e) => e.target.matches(childSelector) ? handler(e) : null);
+	});
+}

@@ -25,7 +25,7 @@ $displayData['app']->getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATO
 HTMLHelper::_('stylesheet', 'com_dpattachments/dpattachments/layouts/attachment/form.min.css', ['relative' => true]);
 
 HTMLHelper::_('behavior.core');
-HTMLHelper::_('script', 'com_dpattachments/dpattachments/layouts/attachment/form.min.js', ['relative' => true], ['defer' => true]);
+HTMLHelper::_('script', 'com_dpattachments/layouts/attachment/form.js', ['relative' => true], ['defer' => true, 'type' => 'module']);
 ?>
 <div class="com-dpattachments-layout-form"
 	data-upload-url="<?php echo Route::_('index.php?option=com_dpattachments&task=attachment.upload'); ?>"

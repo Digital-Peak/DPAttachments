@@ -7,14 +7,13 @@
 
 defined('_JEXEC') or die();
 
-use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Router\Route;
 
 HTMLHelper::_('behavior.keepalive');
 HTMLHelper::_('behavior.formvalidator');
-HTMLHelper::_('script', 'com_dpattachments/dpattachments/views/form/edit.min.js', ['relative' => true, 'version' => 'auto'], ['defer' => true]);
+HTMLHelper::_('script', 'com_dpattachments/views/form/edit.js', ['relative' => true, 'version' => 'auto'], ['defer' => true, 'type' => 'module']);
 
 $hiddenSets = [];
 // Custom fields are rendered as normal fields
