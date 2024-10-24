@@ -30,9 +30,7 @@ $files = [
 '/media/com_dpattachments/css/layouts',
 '/media/com_dpattachments/css/tingle',
 '/media/com_dpattachments/css/views',
-'/media/com_dpattachments/js/layouts',
 '/media/com_dpattachments/js/tingle',
-'/media/com_dpattachments/js/views',
 '/plugins/content/dpattachments/src/DPAttachments.php',
 
 // From v5.0.0 to v5.1.0
@@ -45,6 +43,34 @@ $files = [
 '/media/com_dpattachments/images/icons/pencil-alt-solid.svg',
 '/media/com_dpattachments/images/icons/trash-alt-solid.svg',
 '/media/com_dpattachments/images/icons/upload-solid.svg',
+
+// From v5.7.1 to case 11157
+'/media/com_dpattachments/css/dpattachments/block/button.css',
+'/media/com_dpattachments/css/dpattachments/block/button.css.map',
+'/media/com_dpattachments/css/dpattachments/block/form.css',
+'/media/com_dpattachments/css/dpattachments/block/form.css.map',
+'/media/com_dpattachments/css/dpattachments/block/icon.css',
+'/media/com_dpattachments/css/dpattachments/block/icon.css.map',
+'/media/com_dpattachments/css/dpattachments/block/table.css',
+'/media/com_dpattachments/css/dpattachments/block/table.css.map',
+'/media/com_dpattachments/css/dpattachments/layouts/attachment/form.css',
+'/media/com_dpattachments/css/dpattachments/layouts/attachment/form.css.map',
+'/media/com_dpattachments/css/dpattachments/layouts/attachments/render.css',
+'/media/com_dpattachments/css/dpattachments/layouts/attachments/render.css.map',
+'/media/com_dpattachments/css/dpattachments/views/attachment/csv.css',
+'/media/com_dpattachments/css/dpattachments/views/attachment/csv.css.map',
+'/media/com_dpattachments/css/dpattachments/views/attachment/image.css',
+'/media/com_dpattachments/css/dpattachments/views/attachment/image.css.map',
+'/media/com_dpattachments/css/dpattachments/views/attachment/patch.css',
+'/media/com_dpattachments/css/dpattachments/views/attachment/patch.css.map',
+'/media/com_dpattachments/css/dpattachments/views/attachment/pdf.css',
+'/media/com_dpattachments/css/dpattachments/views/attachment/pdf.css.map',
+'/media/com_dpattachments/css/dpattachments/views/attachment/txt.css',
+'/media/com_dpattachments/css/dpattachments/views/attachment/txt.css.map',
+'/media/com_dpattachments/css/dpattachments/views/form/edit.css',
+'/media/com_dpattachments/css/dpattachments/views/form/edit.css.map',
+'/media/com_dpattachments/js/dpattachments',
+'/media/com_dpattachments/js/vendor/tingle',
 ];
 
 foreach ($files as $file) {
