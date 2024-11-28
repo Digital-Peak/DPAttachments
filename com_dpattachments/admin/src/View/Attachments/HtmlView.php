@@ -40,13 +40,13 @@ class HtmlView extends BaseHtmlView
 
 	public function display($tpl = null): void
 	{
-		$this->items      = $this->get('Items');
-		$this->pagination = $this->get('Pagination');
-		$this->state      = $this->get('State');
-		$this->authors    = $this->get('Authors');
+		$this->items      = $this->getModel()->getItems();
+		$this->pagination = $this->getModel()->getPagination();
+		$this->state      = $this->getModel()->getState();
+		$this->authors    = $this->getModel()->getAuthors();
 
 		// Check for errors.
-		if ($errors = $this->get('Errors')) {
+		if ($errors = $this->getModel()->getErrors()) {
 			throw new \Exception(implode('\n', $errors));
 		}
 
@@ -82,8 +82,8 @@ class HtmlView extends BaseHtmlView
 			ToolbarHelper::preferences('com_dpattachments');
 		}
 
-		$this->filterForm    = $this->get('FilterForm');
-		$this->activeFilters = $this->get('ActiveFilters');
+		$this->filterForm    = $this->getModel()->getFilterForm();
+		$this->activeFilters = $this->getModel()->getActiveFilters();
 	}
 
 	public function renderContext(string $context): string

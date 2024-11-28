@@ -33,9 +33,9 @@ class HtmlView extends BaseHtmlView
 
 	public function display($tpl = null): void
 	{
-		$this->form  = $this->get('Form');
-		$this->item  = $this->get('Item');
-		$this->state = $this->get('State');
+		$this->form  = $this->getModel()->getForm();
+		$this->item  = $this->getModel()->getItem() ?: new \stdClass();
+		$this->state = $this->getModel()->getState();
 
 		$app = Factory::getApplication();
 		if ($app instanceof CMSApplication) {
@@ -43,8 +43,8 @@ class HtmlView extends BaseHtmlView
 		}
 
 		// Check for errors.
-		if ($errors = $this->get('Errors')) {
-			throw new \Exception($errors);
+		if ($errors = $this->getModel()->getErrors()) {
+			throw new \Exception(implode(',', $errors));
 		}
 
 		$this->addToolbar();

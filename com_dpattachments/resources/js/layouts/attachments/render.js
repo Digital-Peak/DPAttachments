@@ -74,10 +74,7 @@ function openModal(link) {
 			dpattachmentsModal.open();
 		});
 
-		const l = document.createElement('link');
-		l.rel = 'stylesheet';
-		l.href = Joomla.getOptions('system.paths').root + '/media/com_dpattachments/css/vendor/tingle/tingle.min.css';
-		document.head.appendChild(l);
+		import('tingle.js/src/tingle.css');
 
 		return;
 	}

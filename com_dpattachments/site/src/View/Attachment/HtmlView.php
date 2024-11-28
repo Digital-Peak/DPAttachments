@@ -36,11 +36,11 @@ class HtmlView extends BaseHtmlView
 		if ($app instanceof CMSApplication) {
 			$this->input = $app->input;
 		}
-		$this->item  = $this->get('Item');
-		$this->state = $this->get('State');
+		$this->item  = $this->getModel()->getItem() ?: new \stdClass();
+		$this->state = $this->getModel()->getState();
 
 		// Check for errors.
-		if (\count($errors = $this->get('Errors')) > 0) {
+		if (\count($errors = $this->getModel()->getErrors()) > 0) {
 			throw new \Exception(implode('\n', $errors));
 		}
 
