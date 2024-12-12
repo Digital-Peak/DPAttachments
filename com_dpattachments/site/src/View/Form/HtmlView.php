@@ -102,7 +102,7 @@ class HtmlView extends BaseHtmlView
 			$title = Text::sprintf('JPAGETITLE', $title, $app->get('sitename'));
 		}
 
-		$document = method_exists($this, 'getDocument') ? $this->getDocument() : $app->getDocument();
+		$document = $this->getDocument();
 		$document->setTitle($title);
 
 		$pathway = $app->getPathWay();

@@ -25,9 +25,6 @@ $app = $displayData['app'] ?? Factory::getApplication();
 $app->getLanguage()->load('com_dpattachments', JPATH_ADMINISTRATOR . '/components/com_dpattachments');
 
 $component = $app->bootComponent('dpattachments');
-if (!$component instanceof DPAttachmentsComponent) {
-	return;
-}
 
 $previewExtensions = [];
 foreach (Folder::files(JPATH_SITE . '/components/com_dpattachments/tmpl/attachment') as $file) {
