@@ -17,6 +17,7 @@ use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\Database\DatabaseInterface;
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
+use Joomla\Event\DispatcherInterface;
 
 return new class () implements ServiceProviderInterface {
 	public function register(Container $container): void
@@ -30,6 +31,7 @@ return new class () implements ServiceProviderInterface {
 				$component = new DPAttachmentsComponent(
 					Factory::getApplication(),
 					$container->get(DatabaseInterface::class),
+					$container->get(DispatcherInterface::class),
 					$container->get(ComponentDispatcherFactoryInterface::class)
 				);
 				$component->setMVCFactory($container->get(MVCFactoryInterface::class));

@@ -19,6 +19,7 @@ use Joomla\CMS\MVC\Factory\MVCFactoryServiceInterface;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Table\Table;
 use Joomla\Database\DatabaseInterface;
+use Joomla\Event\DispatcherInterface;
 use Joomla\Event\Event;
 use Joomla\Registry\Registry;
 
@@ -38,7 +39,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 	 */
 	private array $itemCache = [];
 
-	public function __construct(private readonly CMSApplicationInterface $app, private readonly DatabaseInterface $db, ComponentDispatcherFactoryInterface $dispatcherFactory)
+	public function __construct(private readonly CMSApplicationInterface $app, private readonly DatabaseInterface $db, private readonly DispatcherInterface $dispatcher, ComponentDispatcherFactoryInterface $dispatcherFactory)
 	{
 		parent::__construct($dispatcherFactory);
 	}
@@ -76,7 +77,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			'onDPAttachmentsBeforeProcessList',
 			['context' => $context, 'item_id' => $itemId, 'attachments' => $attachments, 'component' => $this, 'options' => $options]
 		);
-		$this->app->getDispatcher()->dispatch('onDPAttachmentsBeforeProcessList', $event);
+		$this->dispatcher->dispatch('onDPAttachmentsBeforeProcessList', $event);
 
 		foreach ($event->getArgument('attachments') as $attachment) {
 			$attachment->text = '';
@@ -106,7 +107,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			'onDPAttachmentsAfterProcessList',
 			['context' => $context, 'item_id' => $itemId, 'attachments' => $event->getArgument('attachments'), 'component' => $this, 'options' => $options]
 		);
-		$this->app->getDispatcher()->dispatch('onDPAttachmentsAfterProcessList', $event);
+		$this->dispatcher->dispatch('onDPAttachmentsAfterProcessList', $event);
 
 		$buffer = $this->renderLayout(
 			'attachments.render',
@@ -156,7 +157,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 
 		PluginHelper::importPlugin('dpattachments');
 		$event = new Event('onDPAttachmentsCheckPermission', ['action' => $action, 'context' => $context, 'item_id' => $itemId]);
-		$this->app->getDispatcher()->dispatch('onDPAttachmentsCheckPermission', $event);
+		$this->dispatcher->dispatch('onDPAttachmentsCheckPermission', $event);
 		if ($event->hasArgument('allowed') && $event->getArgument('allowed') === true) {
 			return true;
 		}
@@ -275,7 +276,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			'onDPAttachmentsBeforeRenderLayout',
 			['name' => $name, 'data' => $data, 'component' => $this]
 		);
-		$this->app->getDispatcher()->dispatch('onDPAttachmentsBeforeRenderLayout', $event);
+		$this->dispatcher->dispatch('onDPAttachmentsBeforeRenderLayout', $event);
 
 		$content = LayoutHelper::render(
 			$name,
@@ -288,7 +289,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			'onDPAttachmentsAfterRenderLayout',
 			['name' => $name, 'data' => $data, 'content' => $content, 'component' => $this]
 		);
-		$this->app->getDispatcher()->dispatch('onDPAttachmentsAfterRenderLayout', $event);
+		$this->dispatcher->dispatch('onDPAttachmentsAfterRenderLayout', $event);
 
 		return $event->getArgument('content');
 	}
