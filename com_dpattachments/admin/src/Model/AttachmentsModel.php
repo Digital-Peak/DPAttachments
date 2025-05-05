@@ -209,7 +209,7 @@ class AttachmentsModel extends ListModel
 			$query->where('a.context = ' . $db->quote($context));
 		}
 
-		if ($app->isClient('site')) {
+		if ($app instanceof SiteApplication) {
 			// Filter by start and end dates.
 			$nowDate = $db->quote(Factory::getDate()->toSql());
 

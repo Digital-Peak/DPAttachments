@@ -9,6 +9,7 @@ namespace DigitalPeak\Component\DPAttachments\Administrator\Extension;
 
 use DigitalPeak\Component\DPAttachments\Administrator\Model\AttachmentsModel;
 use Joomla\CMS\Application\CMSApplicationInterface;
+use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Dispatcher\ComponentDispatcherFactoryInterface;
 use Joomla\CMS\Extension\LegacyComponent;
@@ -296,7 +297,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 
 	public function validateSection($section, $item = null): ?string
 	{
-		if ($this->app->isClient('site') && $section === 'form') {
+		if ($this->app instanceof SiteApplication && $section === 'form') {
 			$section = 'attachment';
 		}
 
