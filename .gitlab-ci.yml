@@ -1,0 +1,3 @@
+include:
+  - project: 'Digital-Peak/DPCIComponents'
+    file: '/templates/Digital-Peak-Joomla-Extension.yml'
