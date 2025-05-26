@@ -169,8 +169,8 @@ class ArticleFormViewCest extends BasicDPAttachmentsCestClass
 
 		$I->attachFile('.com-dpattachments-layout-form .dp-input__file', 'test.txt');
 		$I->waitForElement('.dp-attachment');
-		$I->waitForElement('button[aria-controls="attrib-dpattachments"]');
 		$I->click('Save');
+		$I->waitForElement('button[aria-controls="attrib-dpattachments"]');
 		$I->click('Attachments');
 
 		$I->see('test.txt');
