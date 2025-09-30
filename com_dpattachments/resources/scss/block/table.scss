@@ -54,16 +54,14 @@
 		}
 	}
 
-	& {
-		display: block;
-		width: 100%;
-		border: 1px solid #cbcbcb;
-		white-space: nowrap;
-		overflow-x: auto;
-		border-collapse: collapse;
-		border-spacing: 0;
-		empty-cells: show;
-	}
+	display: block;
+	width: 100%;
+	border: 1px solid #cbcbcb;
+	white-space: nowrap;
+	overflow-x: auto;
+	border-collapse: collapse;
+	border-spacing: 0;
+	empty-cells: show;
 
 	& caption {
 		padding: 1em 0;

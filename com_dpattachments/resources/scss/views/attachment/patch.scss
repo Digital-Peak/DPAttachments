@@ -13,10 +13,8 @@
 
 .com-dpattachments-attachment-patch {
 	.dp-patch-file {
-		& {
-			margin: 10px 0;
-			border: 1px solid #cbcbcb;
-		}
+		margin: 10px 0;
+		border: 1px solid #cbcbcb;
 
 		&__name {
 			margin: 0;
@@ -26,14 +24,10 @@
 	}
 
 	.dp-patch-hunk {
-		& {
-			width: 100%;
-		}
+		width: 100%;
 
 		&__line {
-			& {
-				border-top: 1px solid #ddd;
-			}
+			border-top: 1px solid #ddd;
 
 			td {
 				padding: 4px 5px;
@@ -60,7 +54,6 @@
 
 		&__content {
 			width: 90%;
-			word-wrap: break-word;
 			white-space: pre-wrap;
 			overflow-wrap: break-word;
 		}

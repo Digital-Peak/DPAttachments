@@ -5,11 +5,9 @@
  */
 
 .com-dpattachments-layout-form {
-	& {
-		margin: 5px 0;
-		padding: 10px;
-		border: 1px solid #cbcbcb;
-	}
+	margin: 5px 0;
+	padding: 10px;
+	border: 1px solid #cbcbcb;
 
 	&_drag {
 		border: 5px dashed #007bff;
@@ -25,9 +23,7 @@
 	}
 
 	.dp-input {
-		& {
-			margin-top: 10px;
-		}
+		margin-top: 10px;
 
 		&__file {
 			z-index: -1;
