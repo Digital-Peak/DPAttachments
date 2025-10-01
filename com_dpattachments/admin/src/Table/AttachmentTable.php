@@ -116,19 +116,19 @@ class AttachmentTable extends Table implements CurrentUserInterface
 			$this->description = '';
 		}
 
-		if (empty($this->created) || $this->created === $this->getDbo()->getNullDate()) {
+		if (empty($this->created)) {
 			$this->created = null;
 		}
-		if (empty($this->modified) || $this->modified === $this->getDbo()->getNullDate()) {
+		if (empty($this->modified)) {
 			$this->modified = null;
 		}
-		if (empty($this->publish_up) || $this->publish_up === $this->getDbo()->getNullDate()) {
+		if (empty($this->publish_up)) {
 			$this->publish_up = null;
 		}
-		if (empty($this->publish_down) || $this->publish_down === $this->getDbo()->getNullDate()) {
+		if (empty($this->publish_down)) {
 			$this->publish_down = null;
 		}
-		if (empty($this->checked_out_time) || $this->checked_out_time === $this->getDbo()->getNullDate()) {
+		if (empty($this->checked_out_time)) {
 			$this->checked_out_time = null;
 		}
 
