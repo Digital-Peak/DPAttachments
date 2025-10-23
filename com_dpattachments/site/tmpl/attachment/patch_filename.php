@@ -8,4 +8,4 @@
 \defined('_JEXEC') or die();
 
 $file = preg_replace("/\([^)]+\)/", "", (string)$this->file->getOriginalFilename());
-echo trim((string) ($file !== '' && $file !== '0' && $file !== [] ? $file : ''));
+echo trim((string)($file !== '' && $file !== '0'? $file : ''));

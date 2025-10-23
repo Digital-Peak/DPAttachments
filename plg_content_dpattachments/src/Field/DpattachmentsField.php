@@ -7,7 +7,6 @@
 
 namespace DigitalPeak\Plugin\Content\DPAttachments\Field;
 
-use DigitalPeak\Component\DPAttachments\Administrator\Extension\DPAttachmentsComponent;
 use Joomla\CMS\Application\CMSWebApplicationInterface;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\FormField;
@@ -19,14 +18,12 @@ class DpattachmentsField extends FormField
 	protected function getInput(): string
 	{
 		$app = Factory::getApplication();
-
-		$component = $app->bootComponent('dpattachments');
-		if (!$component instanceof DPAttachmentsComponent || !$app instanceof CMSWebApplicationInterface) {
+		if (!$app instanceof CMSWebApplicationInterface) {
 			return '';
 		}
 
 		$app->getDocument()->getWebAssetManager()->addInlineStyle('.com-dpattachments-layout-attachments__header { display: none }');
 
-		return $component->render($this->form->getName(), (string)$this->element['item_id']);
+		return $app->bootComponent('dpattachments')->render($this->form->getName(), (string)$this->element['item_id']);
 	}
 }
