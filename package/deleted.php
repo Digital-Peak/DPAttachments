@@ -71,6 +71,9 @@ $files = [
 '/media/com_dpattachments/css/dpattachments/views/form/edit.css.map',
 '/media/com_dpattachments/js/dpattachments',
 '/media/com_dpattachments/js/vendor/tingle',
+
+// From main to case 11799
+'/media/com_dpattachments/css/vendor',
 ];
 
 foreach ($files as $file) {

@@ -12,6 +12,7 @@
 	<version>DP_DEPLOY_VERSION</version>
 	<files>
 		<file id="plg_content_dpattachments" type="plugin" group="content" client="site">plg_content_dpattachments.zip</file>
+		<file id="plg_installer_dpattachments" type="plugin" group="installer" client="site">plg_installer_dpattachments.zip</file>
 		<file id="com_dpattachments" type="component">com_dpattachments.zip</file>
 	</files>
 	<scriptfile>script.php</scriptfile>

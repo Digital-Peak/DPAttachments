@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<extension type="plugin" group="installer" method="upgrade">
+	<name>plg_installer_dpattachments</name>
+	<author>Digital Peak</author>
+	<creationDate>DP_DEPLOY_DATE</creationDate>
+	<copyright>(C) 2025 Digital Peak GmbH</copyright>
+	<license>https://www.gnu.org/licenses/gpl-3.0.html</license>
+	<authorEmail>info@digital-peak.com</authorEmail>
+	<authorUrl>joomla.digital-peak.com</authorUrl>
+	<version>DP_DEPLOY_VERSION</version>
+	<description>PLG_INSTALLER_DPATTACHMENTS_XML_DESCRIPTION</description>
+	<namespace path="src">DigitalPeak\Plugin\Installer\DPAttachments</namespace>
+	<files>
+		<folder>language</folder>
+		<folder plugin="dpattachments">services</folder>
+		<folder>src</folder>
+	</files>
+</extension>

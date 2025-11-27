@@ -21,10 +21,6 @@
 				"@fortawesome/fontawesome-free/svgs/solid/upload.svg"
 			],
 			"dest": "../media/images/icons"
-		},
-		{
-			"src": "tingle.js/dist/tingle.css",
-			"dest": "../media/css/vendor/tingle/tingle.css"
 		}
 	],
 	"config": {
