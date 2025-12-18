@@ -13,6 +13,7 @@ use Joomla\CMS\Event\Installer\BeforeUpdateSiteDownloadEvent;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Database\DatabaseAwareTrait;
+use Joomla\Registry\Registry;
 
 class DPAttachments extends CMSPlugin
 {
@@ -25,27 +26,29 @@ class DPAttachments extends CMSPlugin
 			return;
 		}
 
-		$query = $this->getDatabase()->getQuery(true);
-		$query->select('name')->from('#__update_sites');
-		$query->where('location = :location')->bind(':location', $url);
+		$db    = $this->getDatabase();
+		$query = $db->getQuery(true);
+		$query->select('ext.manifest_cache, u.name')->from('#__update_sites u');
+		$query->where('u.location = :location')->bind(':location', $url);
+		$query->join('right', '#__update_sites_extensions AS usext ON usext.update_site_id = u.update_site_id');
+		$query->join('right', '#__extensions AS ext ON ext.extension_id = usext.extension_id');
 
-		$this->getDatabase()->setQuery($query);
-		if (!str_contains((string)$this->getDatabase()->loadResult(), 'DPAttachments')) {
+		$db->setQuery($query);
+		$row = $db->loadObject();
+		if (!str_contains((string)$row->name, 'DPAttachments')) {
 			return;
 		}
 
-		$uri = Uri::getInstance($url);
-
 		// Set versions, so we get a compact update XML back with only versions greater than whats installed
 		// to prevent timeouts and other network issues
+		$uri = Uri::getInstance($url);
 		$uri->setVar('j', JVERSION);
 		$uri->setVar('p', phpversion());
-		$uri->setVar('m', $this->getDatabase()->getVersion());
+		$uri->setVar('m', $db->getVersion());
 
-		$path = JPATH_ADMINISTRATOR . '/components/com_dpattachments/dpattachments.xml';
-		if (file_exists($path)) {
-			$manifest = simplexml_load_file($path);
-			$uri->setVar('v', $manifest instanceof \SimpleXMLElement ? (string)$manifest->version : '');
+		$manifestData = new Registry($row->manifest_cache ?? '');
+		if ($version = $manifestData->get('version')) {
+			$uri->setVar('v', $version);
 		}
 
 		if ($uri->getVar('v') === 'DP_DEPLOY_VERSION') {
