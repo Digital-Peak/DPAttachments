@@ -19,6 +19,7 @@ use Joomla\Utilities\ArrayHelper;
 class AttachmentsModel extends ListModel
 {
 	public $context;
+
 	public $state;
 
 	public function __construct($config = [], ?MVCFactoryInterface $factory = null)

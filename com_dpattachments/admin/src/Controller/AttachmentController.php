@@ -113,7 +113,7 @@ class AttachmentController extends FormController
 		header('Connection: close');
 
 		error_reporting(0);
-		if (\ini_get('safe_mode') === '' || \ini_get('safe_mode') === '0' || \ini_get('safe_mode') === false) {
+		if (\in_array(\ini_get('safe_mode'), ['', '0', false], true)) {
 			set_time_limit(0);
 		}
 

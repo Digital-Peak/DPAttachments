@@ -12,8 +12,10 @@ use Joomla\CMS\Installer\InstallerScript;
 
 class Com_DPAttachmentsInstallerScript extends InstallerScript
 {
-	protected $minimumPhp      = '8.1.0';
-	protected $minimumJoomla   = '4.4.0';
+	protected $minimumPhp = '8.1.0';
+
+	protected $minimumJoomla = '4.4.0';
+
 	protected $allowDowngrades = true;
 
 	public function postflight(string $type, InstallerAdapter $parent): void

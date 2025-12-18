@@ -96,7 +96,7 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 			}
 		}
 
-		if ($extOk == false) {
+		if ($extOk === false) {
 			throw new \Exception(Text::sprintf('COM_DPATTACHMENTS_UPLOAD_INVALID_EXTENSION', implode(',', $validFileExts)));
 		}
 

@@ -11,7 +11,8 @@ use Tests\Support\AcceptanceTester;
 
 class Attachment extends AcceptanceTester
 {
-	public const ARTICLES_ATTACHMENT_DIR   = '/images/com_content.article/';
+	public const ARTICLES_ATTACHMENT_DIR = '/images/com_content.article/';
+
 	public const CATEGORIES_ATTACHMENT_DIR = '/images/com_categories.category/';
 
 	private ?Article $article = null;

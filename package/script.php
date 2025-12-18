@@ -17,7 +17,8 @@ class Pkg_DPAttachmentsInstallerScript extends InstallerScript implements Databa
 {
 	use DatabaseAwareTrait;
 
-	protected $minimumPhp    = '8.1.0';
+	protected $minimumPhp = '8.1.0';
+
 	protected $minimumJoomla = '4.4.0';
 
 	public function update(InstallerAdapter $parent): void
@@ -37,11 +38,11 @@ class Pkg_DPAttachmentsInstallerScript extends InstallerScript implements Databa
 			}
 		}
 
-		if ($version === null || $version === '' || $version === '0' || $version === 'DP_DEPLOY_VERSION') {
+		if (\in_array($version, [null, '', '0', 'DP_DEPLOY_VERSION'], true)) {
 			return;
 		}
 
-		if (version_compare($version, '5.4.0') == -1) {
+		if (version_compare($version, '5.4.0') === -1) {
 			$folders = Folder::folders(JPATH_ROOT, 'dpattachments', true, true, ['api', 'cache', 'cli', 'images', 'layouts', 'libraries', 'media', 'templates', 'test']);
 			foreach ($folders as $folder) {
 				if (!is_dir($folder . '/language')) {
@@ -54,6 +55,12 @@ class Pkg_DPAttachmentsInstallerScript extends InstallerScript implements Databa
 					}
 				}
 			}
+		}
+
+		if (version_compare($version, '5.7.6') === -1) {
+			$db = $this->getDatabase();
+			$db->setQuery("update #__extensions set enabled=1 where type = 'plugin' and element = 'dpattachments'");
+			$db->execute();
 		}
 	}
 

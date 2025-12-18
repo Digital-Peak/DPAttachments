@@ -11,6 +11,7 @@ use Tests\Support\AcceptanceTester;
 
 class AttachmentFormPage extends AcceptanceTester
 {
-	public static $url       = '/administrator/index.php?option=com_dpattachments&view=attachment';
+	public static $url = '/administrator/index.php?option=com_dpattachments&view=attachment';
+
 	public static $rootClass = '.com-dpattachments-attachment-form';
 }
