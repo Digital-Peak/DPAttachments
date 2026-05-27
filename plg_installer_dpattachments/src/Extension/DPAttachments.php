@@ -30,8 +30,8 @@ class DPAttachments extends CMSPlugin
 		$query = $db->getQuery(true);
 		$query->select('ext.manifest_cache, u.name')->from('#__update_sites u');
 		$query->where('u.location = :location')->bind(':location', $url);
-		$query->join('right', '#__update_sites_extensions AS usext ON usext.update_site_id = u.update_site_id');
-		$query->join('right', '#__extensions AS ext ON ext.extension_id = usext.extension_id');
+		$query->join('left', '#__update_sites_extensions AS usext ON usext.update_site_id = u.update_site_id');
+		$query->join('left', '#__extensions AS ext ON ext.extension_id = usext.extension_id');
 
 		$db->setQuery($query);
 		$row = $db->loadObject();
