@@ -29,6 +29,7 @@ HTMLHelper::_('script', 'com_dpattachments/layouts/attachment/form.min.js', ['re
 ?>
 <div class="com-dpattachments-layout-form"
 	data-upload-url="<?php echo Route::_('index.php?option=com_dpattachments&task=attachment.upload'); ?>"
+	data-id=<?php echo $displayData['id'] ?? 0; ?>
 	data-context=<?php echo $context; ?>
 	data-item=<?php echo $itemId; ?>>
 	<div class="dp-form__upload dp-upload">

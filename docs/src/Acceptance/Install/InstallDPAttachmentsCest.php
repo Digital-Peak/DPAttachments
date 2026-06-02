@@ -18,5 +18,7 @@ class InstallDPAttachmentsCest
 
 		// Set upload directory
 		$I->updateInDatabase('extensions', ['params' => '{"attachment_path":"/tmp/tests"}'], ['name' => 'com_dpattachments']);
+
+		$I->enablePlugin('plg_content_dpattachments');
 	}
 }

@@ -7,7 +7,7 @@
 
 \defined('_JEXEC') or die();
 
-if (!$this->params->get('show_page_heading')) {
+if (!$this->params->get('show_page_heading') || $this->app->getInput()->get('tmpl') === 'component') {
 	return;
 }
 ?>
