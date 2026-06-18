@@ -30,8 +30,8 @@ class AttachmentController extends FormController
 	{
 		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
-		$data       = $this->input->get('attachment', [], 'array');
-		$data['id'] = 0;
+		$data = $this->input->get('attachment', [], 'array');
+		$data['id'] ??= 0;
 		$data['context'] ??= '';
 		$data['item_id'] ??= '';
 

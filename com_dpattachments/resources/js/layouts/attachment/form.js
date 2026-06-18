@@ -34,8 +34,10 @@ const processFileList = function (input, files) {
 				const container = document.querySelector(
 					'.com-dpattachments-layout-attachments__attachments[data-context="' + json.data.context + '"][data-item="' + json.data.item_id + '"]'
 				);
-				container.parentElement.classList.remove('com-dpattachments-layout-attachments_empty');
-				container.innerHTML += json.data.html;
+				if (container) {
+					container.parentElement.classList.remove('com-dpattachments-layout-attachments_empty');
+					container.innerHTML += json.data.html;
+				}
 
 				input.value = '';
 			}
@@ -51,6 +53,7 @@ const processFileList = function (input, files) {
 		fd.append('file', file);
 		fd.append('attachment[context]', container.getAttribute('data-context'));
 		fd.append('attachment[item_id]', container.getAttribute('data-item'));
+		fd.append('attachment[id]', container.getAttribute('data-id'));
 		xhr.send(fd);
 	});
 };

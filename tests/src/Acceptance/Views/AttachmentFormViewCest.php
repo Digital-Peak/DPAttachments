@@ -59,4 +59,23 @@ class AttachmentFormViewCest extends BasicDPAttachmentsCestClass
 
 		$I->see('Test edit');
 	}
+
+	public function canUploadAttachmentOnEdit(Attachment $I, Article $IA): void
+	{
+		$I->wantToTest('that an attachment can be uploaded while editing it.');
+
+		$article    = $IA->createArticle(['title' => 'Test title']);
+		$attachment = $I->createAttachment(['path' => 'test.txt', 'item_id' => $article['id']]);
+		file_put_contents($I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . Attachment::ARTICLES_ATTACHMENT_DIR . 'test.txt', 'test');
+
+		$I->doFrontEndLogin();
+		$I->amOnPage($this->url . $attachment['id']);
+
+		$I->attachFile('.com-dpattachments-layout-form .dp-input__file', 'test.txt');
+		$I->waitForText('Attachment successfully uploaded.');
+
+		$I->seeNumRecords(1, 'dpattachments');
+		$I->seeInDatabase('dpattachments', ['context' => 'com_content.article']);
+		$I->assertFileEquals(codecept_data_dir() . '/test.txt', $I->getConfiguration('home_dir', 'DigitalPeak\Module\DPBrowser') . Attachment::ARTICLES_ATTACHMENT_DIR . 'test.txt');
+	}
 }

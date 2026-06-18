@@ -7,6 +7,7 @@
 
 namespace DigitalPeak\Component\DPAttachments\Site\View\Form;
 
+use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
@@ -35,8 +36,13 @@ class HtmlView extends BaseHtmlView
 	/** @var Registry */
 	protected $state;
 
+	/** @var CMSApplicationInterface */
+	protected $app;
+
 	public function display($tpl = null): void
 	{
+		$this->app = Factory::getApplication();
+
 		// Get model data
 		$this->state       = $this->getModel()->getState();
 		$this->item        = $this->getModel()->getItem() ?: new \stdClass();

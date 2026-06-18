@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	};
 
-	[].slice.call(document.querySelectorAll('.com-dpattachments-attachment-form__actions .dp-button')).forEach((button) => {
-		button.addEventListener('click', (e) => Joomla.submitbutton('attachment.' + e.target.getAttribute('data-task')));
-	});
+	document.querySelectorAll('.com-dpattachments-attachment-form__actions .dp-button').forEach((button) =>
+		button.addEventListener('click', (e) => Joomla.submitbutton('attachment.' + e.target.getAttribute('data-task')))
+	);
 });

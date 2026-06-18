@@ -9,7 +9,6 @@
 
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
-
 ?>
 <div class="com-dpattachments-attachment-form__actions">
 	<div class="dp-button-group">

@@ -67,46 +67,57 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 
 	public function upload(array $data): bool
 	{
-		if (!$this->bootComponent('dpattachments')->canDo('core.edit', $data['context'], $data['item_id'])) {
+		$component = $this->bootComponent('dpattachments');
+		if (!$component->canDo('core.edit', $data['context'], $data['item_id'])) {
 			throw new \Exception(Text::_('COM_DPATTACHMENTS_UPLOAD_NO_PERMISSION'));
 		}
 
-		$fileName = $_FILES['file']['name'];
+		$targetFile = null;
+		if (empty($data['id'])) {
+			$fileName = $_FILES['file']['name'];
 
-		if ($fileName == 'blob') {
-			$extension = explode('/', (string)$_FILES['file']['type']);
-			if (\count($extension) > 1) {
-				$fileName = 'clipboard.' . $extension[1];
+			if ($fileName == 'blob') {
+				$extension = explode('/', (string)$_FILES['file']['type']);
+				if (\count($extension) > 1) {
+					$fileName = 'clipboard.' . $extension[1];
+				}
 			}
-		}
 
-		$uploadedFileNameParts = explode('.', (string)$fileName);
-		$uploadedFileExtension = array_pop($uploadedFileNameParts);
+			$uploadedFileNameParts = explode('.', (string)$fileName);
+			$uploadedFileExtension = array_pop($uploadedFileNameParts);
 
-		$validFileExts = explode(
-			',',
-			(string)ComponentHelper::getParams('com_dpattachments')->get('attachment_extensions', 'gif,jpg,jpeg,png,zip,rar,csv,txt,pdf')
-		);
+			$validFileExts = explode(
+				',',
+				(string)ComponentHelper::getParams('com_dpattachments')->get('attachment_extensions', 'gif,jpg,jpeg,png,zip,rar,csv,txt,pdf')
+			);
 
-		$extOk = false;
+			$extOk = false;
 
-		foreach ($validFileExts as $value) {
-			if (preg_match(\sprintf('/%s/i', $value), $uploadedFileExtension)) {
-				$extOk = true;
+			foreach ($validFileExts as $value) {
+				if (preg_match(\sprintf('/%s/i', $value), $uploadedFileExtension)) {
+					$extOk = true;
+				}
 			}
+
+			if ($extOk === false) {
+				throw new \Exception(Text::sprintf('COM_DPATTACHMENTS_UPLOAD_INVALID_EXTENSION', implode(',', $validFileExts)));
+			}
+
+			$fileName = preg_replace("/[^\p{L}|0-9]+/u", "-", substr((string)$fileName, 0, \strlen((string)$fileName) - \strlen($uploadedFileExtension) - 1)) . '.' .
+				$uploadedFileExtension;
+
+			$targetFile = $component->getPath($fileName, $data['context']);
+			if (file_exists($targetFile)) {
+				$fileName   = Factory::getDate()->format('YmdHis') . '-' . $fileName;
+				$targetFile = $component->getPath($fileName, $data['context']);
+			}
+			$data['path'] = $fileName;
+		} elseif ($attachment = $this->getItem($data['id'])) {
+			$targetFile = $component->getPath($attachment->path, $data['context']);
 		}
 
-		if ($extOk === false) {
-			throw new \Exception(Text::sprintf('COM_DPATTACHMENTS_UPLOAD_INVALID_EXTENSION', implode(',', $validFileExts)));
-		}
-
-		$fileName = preg_replace("/[^\p{L}|0-9]+/u", "-", substr((string)$fileName, 0, \strlen((string)$fileName) - \strlen($uploadedFileExtension) - 1)) . '.' .
-			$uploadedFileExtension;
-
-		$targetFile = $this->bootComponent('dpattachments')->getPath($fileName, $data['context']);
-		if (file_exists($targetFile)) {
-			$fileName   = Factory::getDate()->format('YmdHis') . '-' . $fileName;
-			$targetFile = $this->bootComponent('dpattachments')->getPath($fileName, $data['context']);
+		if (!$targetFile) {
+			throw new \Exception(Text::_('COM_DPATTACHMENTS_UPLOAD_ERROR'));
 		}
 
 		$descriptor = ['tmp_name' => $_FILES['file']['tmp_name'], 'name' => basename((string)$targetFile)];
@@ -118,7 +129,6 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 			throw new \Exception(Text::_('COM_DPATTACHMENTS_UPLOAD_ERROR'));
 		}
 
-		$data['path'] = $fileName;
 		$data['size'] = $_FILES['file']['size'];
 
 		$result = parent::save($data);
