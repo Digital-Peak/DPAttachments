@@ -11,6 +11,7 @@ use DigitalPeak\Component\DPAttachments\Administrator\Model\AttachmentsModel;
 use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Date\Date;
 use Joomla\CMS\Dispatcher\ComponentDispatcherFactoryInterface;
 use Joomla\CMS\Extension\LegacyComponent;
 use Joomla\CMS\Extension\MVCComponent;
@@ -230,6 +231,33 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 
 		// Fallback to the DPAttachments permissions
 		return $user->authorise($action, 'com_dpattachments');
+	}
+
+	/**
+	 * Checks if the given attachment may be accessed by the current user.
+	 */
+	public function canView(\stdClass $attachment): bool
+	{
+		if ($this->canDo('core.edit', $attachment->context, $attachment->item_id)) {
+			return true;
+		}
+
+		$user = $this->app->getIdentity();
+		if ($user === null || (int)$attachment->state !== 1) {
+			return false;
+		}
+
+		if (!\in_array((int)$attachment->access, $user->getAuthorisedViewLevels(), true)) {
+			return false;
+		}
+
+		$now = (new Date())->toSql();
+
+		if (!empty($attachment->publish_up) && $attachment->publish_up > $now) {
+			return false;
+		}
+
+		return empty($attachment->publish_down) || $attachment->publish_down >= $now;
 	}
 
 	/**

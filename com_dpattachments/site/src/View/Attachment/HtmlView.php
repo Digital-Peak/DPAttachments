@@ -10,6 +10,7 @@ namespace DigitalPeak\Component\DPAttachments\Site\View\Attachment;
 use DigitalPeak\Component\DPAttachments\Administrator\Model\AttachmentModel;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
 use Joomla\Input\Input;
 use Joomla\Registry\Registry;
@@ -42,6 +43,10 @@ class HtmlView extends BaseHtmlView
 		// Check for errors.
 		if (\count($errors = $this->getModel()->getErrors()) > 0) {
 			throw new \Exception(implode('\n', $errors));
+		}
+
+		if (!$app->bootComponent('dpattachments')->canView($this->item)) {
+			throw new \Exception(Text::_('JERROR_ALERTNOAUTHOR'), 404);
 		}
 
 		$this->params = $this->state->get('params');
