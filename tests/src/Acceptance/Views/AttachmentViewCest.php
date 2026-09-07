@@ -49,6 +49,19 @@ class AttachmentViewCest extends BasicDPAttachmentsCestClass
 		$I->seeElement('.com-dpattachments-attachment__content');
 	}
 
+	public function canNotSeeUnescapedCSVHeader(Attachment $I): void
+	{
+		$I->wantToTest('that a malicious csv header value is escaped and not executed.');
+
+		$attachment = $I->createAttachment(['path' => 'test-xss.csv']);
+
+		$I->amOnPage($this->url . $attachment['id']);
+
+		$I->seeInSource('&lt;script&gt;window.dpXssExecuted = true&lt;/script&gt;');
+		$I->dontSeeInSource('<script>window.dpXssExecuted = true</script>');
+		$I->assertFalse($I->executeJS('return window.dpXssExecuted === true'));
+	}
+
 	protected function getImageFiles(): array
 	{
 		return [

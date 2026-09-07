@@ -33,13 +33,13 @@ HTMLHelper::_('stylesheet', 'com_dpattachments/dpattachments/views/attachment/cs
 	<table class="com-dpattachments-attachment__content dp-table">
 		<tr>
 			<?php foreach ($csv->titles as $title) { ?>
-				<td><?php echo $title; ?></td>
+				<td><?php echo $this->escape((string)$title); ?></td>
 			<?php } ?>
 		</tr>
 		<?php foreach ($csv->data as $row) { ?>
 			<tr>
 				<?php foreach ($row as $value) { ?>
-					<td><?php echo nl2br(htmlentities((string) $value)); ?></td>
+					<td><?php echo nl2br($this->escape((string)$value)); ?></td>
 				<?php } ?>
 			</tr>
 		<?php } ?>
