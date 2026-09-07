@@ -67,6 +67,10 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 
 	public function upload(array $data): bool
 	{
+		if (!preg_match('/^[a-zA-Z][a-zA-Z0-9_]*\.[a-zA-Z][a-zA-Z0-9_]*$/', (string)$data['context'])) {
+			throw new \Exception(Text::_('COM_DPATTACHMENTS_UPLOAD_ERROR'));
+		}
+
 		$component = $this->bootComponent('dpattachments');
 		if (!$component->canDo('core.edit', $data['context'], $data['item_id'])) {
 			throw new \Exception(Text::_('COM_DPATTACHMENTS_UPLOAD_NO_PERMISSION'));

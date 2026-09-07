@@ -30,8 +30,8 @@ HTMLHelper::_('script', 'com_dpattachments/layouts/attachments/render.min.js', [
 ?>
 <div class="com-dpattachments-layout-attachments<?php echo $attachments ? '' : ' com-dpattachments-layout-attachments_empty'; ?>">
 	<div class="com-dpattachments-layout-attachments__header"><?php echo Text::_('COM_DPATTACHMENTS_ATTACHMENTS'); ?></div>
-	<div class="com-dpattachments-layout-attachments__attachments" data-context="<?php echo $displayData['context']; ?>"
-		 data-item="<?php echo $displayData['itemid']; ?>">
+	<div class="com-dpattachments-layout-attachments__attachments" data-context="<?php echo htmlspecialchars($displayData['context'], ENT_COMPAT, 'UTF-8'); ?>"
+		 data-item="<?php echo htmlspecialchars($displayData['itemid'], ENT_COMPAT, 'UTF-8'); ?>">
 		<?php foreach ($attachments as $attachment) { ?>
 			<?php echo $app->bootComponent('dpattachments')->renderLayout('attachment.render', ['attachment' => $attachment]); ?>
 		<?php } ?>
