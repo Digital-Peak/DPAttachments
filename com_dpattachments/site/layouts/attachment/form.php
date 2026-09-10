@@ -30,15 +30,15 @@ HTMLHelper::_('script', 'com_dpattachments/layouts/attachment/form.min.js', ['re
 <div class="com-dpattachments-layout-form"
 	data-upload-url="<?php echo Route::_('index.php?option=com_dpattachments&task=attachment.upload'); ?>"
 	data-id=<?php echo $displayData['id'] ?? 0; ?>
-	data-context=<?php echo $context; ?>
-	data-item=<?php echo $itemId; ?>>
+	data-context="<?php echo htmlspecialchars($context, ENT_COMPAT, 'UTF-8'); ?>"
+	data-item="<?php echo htmlspecialchars($itemId, ENT_COMPAT, 'UTF-8'); ?>">
 	<div class="dp-form__upload dp-upload">
 		<span class="dp-upload__select"><?php echo Text::_('COM_DPATTACHMENTS_TEXT_SELECT_FILE'); ?></span>
 		<span class="dp-upload__paste"><?php echo Text::_('COM_DPATTACHMENTS_TEXT_PASTE'); ?></span>
 	</div>
 	<div class="dp-form__input dp-input">
-		<input type="file" name="file" class="dp-input__file" id="dp-input-<?php echo $context . '-' . $itemId; ?>">
-		<label for="dp-input-<?php echo $context . '-' . $itemId; ?>" class="dp-input__label">
+		<input type="file" name="file" class="dp-input__file" id="dp-input-<?php echo htmlspecialchars($context . '-' . $itemId, ENT_COMPAT, 'UTF-8'); ?>">
+		<label for="dp-input-<?php echo htmlspecialchars($context . '-' . $itemId, ENT_COMPAT, 'UTF-8'); ?>" class="dp-input__label">
 			<?php echo Factory::getApplication()->bootComponent('dpattachments')->renderLayout('block.icon', ['icon' => 'upload']); ?>
 			<?php echo Text::_('COM_DPATTACHMENTS_BUTTON_SELECT_FILE'); ?>
 		</label>

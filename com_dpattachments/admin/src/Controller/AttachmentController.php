@@ -68,7 +68,7 @@ class AttachmentController extends FormController
 	public function download(): void
 	{
 		$attachment = $this->getModel()->getItem($this->input->get('id'));
-		if (!\is_object($attachment)) {
+		if (!$attachment instanceof \stdClass || !$this->app->bootComponent('dpattachments')->canView($attachment)) {
 			header('HTTP/1.0 404 Not Found');
 			exit(0);
 		}
