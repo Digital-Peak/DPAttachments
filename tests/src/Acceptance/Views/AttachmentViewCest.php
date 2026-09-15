@@ -151,9 +151,9 @@ class AttachmentViewCest extends BasicDPAttachmentsCestClass
 		$registeredLevel = $I->grabFromDatabase('viewlevels', 'id', ['title' => 'Registered']);
 		$attachment      = $I->createAttachment(['path' => 'test.txt', 'access' => $registeredLevel]);
 
-		$I->doFrontEndLogin('user', 'user');
+		$I->doFrontEndLogin('user', 'user', false);
 		$I->amOnPage('/index.php?option=com_dpattachments&task=attachment.download&id=' . $attachment['id']);
-		$I->wait(1);
+		$I->doFrontendLogout('user');
 
 		$I->seeFileFound('test.txt', $I->getConfiguration('downloads', 'DigitalPeak\Module\DPBrowser'));
 	}
@@ -166,7 +166,8 @@ class AttachmentViewCest extends BasicDPAttachmentsCestClass
 		$attachment      = $I->createAttachment(['path' => 'test.txt', 'access' => $registeredLevel]);
 
 		$I->amOnPage('/index.php?option=com_dpattachments&task=attachment.download&id=' . $attachment['id'], false);
-		$I->wait(1);
+		$I->doFrontEndLogin('user', 'user', false);
+		$I->doFrontendLogout('user');
 
 		$I->dontSeeFileFound('test.txt', $I->getConfiguration('downloads', 'DigitalPeak\Module\DPBrowser'));
 	}
