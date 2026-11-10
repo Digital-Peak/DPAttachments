@@ -39,7 +39,7 @@ HTMLHelper::_('stylesheet', 'com_dpattachments/dpattachments/views/attachment/cs
 		<?php foreach ($csv->data as $row) { ?>
 			<tr>
 				<?php foreach ($row as $value) { ?>
-					<td><?php echo nl2br($this->escape((string)$value)); ?></td>
+					<td><?php echo nl2br((string)$this->escape((string)$value)); ?></td>
 				<?php } ?>
 			</tr>
 		<?php } ?>

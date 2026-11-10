@@ -7,12 +7,21 @@
 
 namespace DigitalPeak\Component\DPAttachments\Administrator\Extension;
 
+use DigitalPeak\Component\DPAttachments\Administrator\Event\AfterProcessListEvent;
+use DigitalPeak\Component\DPAttachments\Administrator\Event\AfterRenderLayoutEvent;
+use DigitalPeak\Component\DPAttachments\Administrator\Event\BeforeProcessListEvent;
+use DigitalPeak\Component\DPAttachments\Administrator\Event\BeforeRenderLayoutEvent;
+use DigitalPeak\Component\DPAttachments\Administrator\Event\CheckPermissionEvent;
 use DigitalPeak\Component\DPAttachments\Administrator\Model\AttachmentsModel;
 use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Date\Date;
 use Joomla\CMS\Dispatcher\ComponentDispatcherFactoryInterface;
+use Joomla\CMS\Event\Content\AfterDisplayEvent;
+use Joomla\CMS\Event\Content\AfterTitleEvent;
+use Joomla\CMS\Event\Content\BeforeDisplayEvent;
+use Joomla\CMS\Event\Content\ContentPrepareEvent;
 use Joomla\CMS\Extension\LegacyComponent;
 use Joomla\CMS\Extension\MVCComponent;
 use Joomla\CMS\Fields\FieldsServiceInterface;
@@ -22,7 +31,6 @@ use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Table\Table;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Event\DispatcherInterface;
-use Joomla\Event\Event;
 use Joomla\Registry\Registry;
 
 /**
@@ -75,45 +83,41 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 
 		PluginHelper::importPlugin('content');
 
-		$event = new Event(
+		$event = new BeforeProcessListEvent(
 			'onDPAttachmentsBeforeProcessList',
 			['context' => $context, 'item_id' => $itemId, 'attachments' => $attachments, 'component' => $this, 'options' => $options]
 		);
 		$this->dispatcher->dispatch('onDPAttachmentsBeforeProcessList', $event);
 
-		foreach ($event->getArgument('attachments') as $attachment) {
+		foreach ($event->getAttachments() as $attachment) {
 			$attachment->text = '';
-			$this->app->triggerEvent('onContentPrepare', ['com_dpattachments.attachment', &$attachment, &$options, 0]);
+			$arguments        = ['context' => 'com_dpattachments.attachment', 'subject' => $attachment, 'params' => $options, 'page' => 0];
+			$this->dispatcher->dispatch('onContentPrepare', new ContentPrepareEvent('onContentPrepare', $arguments));
 
 			$attachment->event = new \stdClass();
-			$results           = $this->app->triggerEvent(
-				'onContentAfterTitle',
-				['com_dpattachments.attachment', &$attachment, &$options, 0]
-			);
-			$attachment->event->afterDisplayTitle = trim(implode("\n", $results));
 
-			$results = $this->app->triggerEvent(
-				'onContentBeforeDisplay',
-				['com_dpattachments.attachment', &$attachment, &$options, 0]
-			);
-			$attachment->event->beforeDisplayAttachment = trim(implode("\n", $results));
+			$contentEvent = new AfterTitleEvent('onContentAfterTitle', $arguments);
+			$this->dispatcher->dispatch('onContentAfterTitle', $contentEvent);
+			$attachment->event->afterDisplayTitle = trim(implode("\n", $contentEvent->getArgument('result', [])));
 
-			$results = $this->app->triggerEvent(
-				'onContentAfterDisplay',
-				['com_dpattachments.attachment', &$attachment, &$options, 0]
-			);
-			$attachment->event->afterDisplayAttachment = trim(implode("\n", $results));
+			$contentEvent = new BeforeDisplayEvent('onContentBeforeDisplay', $arguments);
+			$this->dispatcher->dispatch('onContentBeforeDisplay', $contentEvent);
+			$attachment->event->beforeDisplayAttachment = trim(implode("\n", $contentEvent->getArgument('result', [])));
+
+			$contentEvent = new AfterDisplayEvent('onContentAfterDisplay', $arguments);
+			$this->dispatcher->dispatch('onContentAfterDisplay', $contentEvent);
+			$attachment->event->afterDisplayAttachment = trim(implode("\n", $contentEvent->getArgument('result', [])));
 		}
 
-		$event = new Event(
+		$event = new AfterProcessListEvent(
 			'onDPAttachmentsAfterProcessList',
-			['context' => $context, 'item_id' => $itemId, 'attachments' => $event->getArgument('attachments'), 'component' => $this, 'options' => $options]
+			['context' => $context, 'item_id' => $itemId, 'attachments' => $event->getAttachments(), 'component' => $this, 'options' => $options]
 		);
 		$this->dispatcher->dispatch('onDPAttachmentsAfterProcessList', $event);
 
 		$buffer = $this->renderLayout(
 			'attachments.render',
-			['context' => $context, 'itemid' => $itemId, 'attachments' => $event->getArgument('attachments'), 'options' => $options]
+			['context' => $context, 'itemid' => $itemId, 'attachments' => $event->getAttachments(), 'options' => $options]
 		);
 
 		if (!$canEdit || $renderForm !== true) {
@@ -158,9 +162,9 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 		$action = $action === 'core.edit' && str_contains($itemId, 'tmp-') ? 'core.create' : $action;
 
 		PluginHelper::importPlugin('dpattachments');
-		$event = new Event('onDPAttachmentsCheckPermission', ['action' => $action, 'context' => $context, 'item_id' => $itemId]);
+		$event = new CheckPermissionEvent('onDPAttachmentsCheckPermission', ['action' => $action, 'context' => $context, 'item_id' => $itemId]);
 		$this->dispatcher->dispatch('onDPAttachmentsCheckPermission', $event);
-		if ($event->hasArgument('allowed') && $event->getArgument('allowed') === true) {
+		if ($event->isAllowed()) {
 			return true;
 		}
 
@@ -301,11 +305,12 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 	 */
 	public function renderLayout(string $name, array $data): string
 	{
-		$event = new Event(
+		$event = new BeforeRenderLayoutEvent(
 			'onDPAttachmentsBeforeRenderLayout',
 			['name' => $name, 'data' => $data, 'component' => $this]
 		);
 		$this->dispatcher->dispatch('onDPAttachmentsBeforeRenderLayout', $event);
+		$data = $event->getData();
 
 		$content = LayoutHelper::render(
 			$name,
@@ -314,13 +319,13 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			['component' => 'com_dpattachments', 'client' => 0]
 		);
 
-		$event = new Event(
+		$event = new AfterRenderLayoutEvent(
 			'onDPAttachmentsAfterRenderLayout',
 			['name' => $name, 'data' => $data, 'content' => $content, 'component' => $this]
 		);
 		$this->dispatcher->dispatch('onDPAttachmentsAfterRenderLayout', $event);
 
-		return $event->getArgument('content');
+		return $event->getContent();
 	}
 
 	public function validateSection($section, $item = null): ?string
