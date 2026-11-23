@@ -9,15 +9,26 @@ namespace DigitalPeak\Plugin\Installer\DPAttachments\Extension;
 
 \defined('_JEXEC') or die();
 
+use Joomla\CMS\Application\CMSApplicationInterface;
+use Joomla\CMS\Event\Installer\BeforePackageDownloadEvent;
 use Joomla\CMS\Event\Installer\BeforeUpdateSiteDownloadEvent;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Database\DatabaseAwareTrait;
+use Joomla\Event\SubscriberInterface;
 use Joomla\Registry\Registry;
 
-class DPAttachments extends CMSPlugin
+class DPAttachments extends CMSPlugin implements SubscriberInterface
 {
 	use DatabaseAwareTrait;
+
+	public static function getSubscribedEvents(): array
+	{
+		return [
+			'onInstallerBeforeUpdateSiteDownload' => 'onInstallerBeforeUpdateSiteDownload',
+			'onInstallerBeforePackageDownload'    => 'onInstallerBeforePackageDownload'
+		];
+	}
 
 	public function onInstallerBeforeUpdateSiteDownload(BeforeUpdateSiteDownloadEvent $event): void
 	{
@@ -56,5 +67,24 @@ class DPAttachments extends CMSPlugin
 		}
 
 		$event->updateUrl($uri->toString());
+	}
+
+	public function onInstallerBeforePackageDownload(BeforePackageDownloadEvent $event): void
+	{
+		$url = $event->getUrl();
+		if (!str_contains($url, '/download/dpattachments/')) {
+			return;
+		}
+
+		$app = $this->getApplication();
+		if (!$app instanceof CMSApplicationInterface) {
+			return;
+		}
+
+		$headers = $event->getHeaders();
+		if (!\array_key_exists('Accept', $headers)) {
+			$headers['Accept'] = '*/*';
+		}
+		$event->updateHeaders($headers);
 	}
 }
