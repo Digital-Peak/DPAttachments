@@ -22,6 +22,16 @@
 					]
 				}
 			]
+		},
+		{
+			"name": "plg_webservices_dpattachments",
+			"originalManifestFileName": "dpattachments",
+			"substituteManifestFileName": "dpattachments",
+			"extensions": [
+				{
+					"name": "plg_webservices_dpattachments"
+				}
+			]
 		}
 	]
 }

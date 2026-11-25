@@ -56,4 +56,9 @@
 			<folder>vendor</folder>
 		</files>
 	</administration>
+	<api>
+		<files folder="api">
+			<folder>src</folder>
+		</files>
+	</api>
 </extension>

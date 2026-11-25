@@ -4,6 +4,7 @@
 		<action name="core.admin" title="JACTION_ADMIN" description="JACTION_ADMIN_COMPONENT_DESC" />
 		<action name="core.manage" title="JACTION_MANAGE"
 			description="JACTION_MANAGE_COMPONENT_DESC" />
+		<action name="core.api" title="JACTION_API" />
 		<action name="core.create" title="JACTION_CREATE"
 			description="JACTION_CREATE_COMPONENT_DESC" />
 		<action name="core.delete" title="JACTION_DELETE"

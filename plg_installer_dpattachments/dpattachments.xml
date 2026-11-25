@@ -15,4 +15,7 @@
 		<folder plugin="dpattachments">services</folder>
 		<folder>src</folder>
 	</files>
+	<updateservers>
+		<server type="extension" priority="1" name="DPAttachments Plugin Webservices"><![CDATA[https://cdn.digital-peak.com/update/stream.php?id=104]]></server>
+	</updateservers>
 </extension>

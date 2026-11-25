@@ -110,10 +110,10 @@ class AttachmentsModel extends ListModel
 
 	protected function getStoreId($id = '')
 	{
-		// Compile the store id.
+		// Compile the store id
 		$id .= ':' . $this->getState('filter.search');
 		$id .= ':' . $this->getState('filter.access');
-		$id .= ':' . $this->getState('filter.state');
+		$id .= ':' . implode(',', (array)$this->getState('filter.state'));
 		$id .= ':' . $this->getState('filter.author_id');
 
 		return parent::getStoreId($id);
