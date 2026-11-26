@@ -2,7 +2,7 @@
 This is the official DPAttachments Github repository. DPAttachments is a slick Joomla attachment extension which provides drag and drop or copy paste file uploads for articles, DPCalendar events or DPCases cases, basically every component which triggers an onContentAfterDisplay event.
 
 ## PREREQUISITS
-- Joomla 4.4
+- Joomla 5.4
 - mysql >= 8.0.0
 - PHP >= 8.1.0
 

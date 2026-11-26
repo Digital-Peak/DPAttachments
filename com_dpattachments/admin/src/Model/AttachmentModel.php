@@ -20,6 +20,7 @@ use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\User\UserFactoryAwareInterface;
 use Joomla\CMS\User\UserFactoryAwareTrait;
 use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
 use Joomla\Utilities\ArrayHelper;
 
 class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
@@ -65,9 +66,20 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 		$table->version++;
 	}
 
-	public function upload(array $data): bool
+	/**
+	 * Stores the given file as attachment. When no file is passed, then the uploaded file from the request
+	 * ($_FILES['file']) is used. A passed file is an array with the keys name, type, tmp_name and size like
+	 * the PHP upload array, the tmp_name file will be moved to the attachment folder.
+	 */
+	public function upload(array $data, ?array $file = null): bool
 	{
-		if (!preg_match('/^[a-zA-Z][a-zA-Z0-9_]*\.[a-zA-Z][a-zA-Z0-9_]*$/', (string)$data['context'])) {
+		$isUpload = $file === null;
+		$file ??= $_FILES['file'] ?? [];
+		if (empty($file['tmp_name'])) {
+			throw new \Exception(Text::_('COM_DPATTACHMENTS_UPLOAD_ERROR'));
+		}
+
+		if (!preg_match('/^[a-zA-Z]\w*\.[a-zA-Z]\w*$/', (string)$data['context'])) {
 			throw new \Exception(Text::_('COM_DPATTACHMENTS_UPLOAD_ERROR'));
 		}
 
@@ -78,10 +90,10 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 
 		$targetFile = null;
 		if (empty($data['id'])) {
-			$fileName = $_FILES['file']['name'];
+			$fileName = $file['name'] ?? '';
 
 			if ($fileName == 'blob') {
-				$extension = explode('/', (string)$_FILES['file']['type']);
+				$extension = explode('/', (string)($file['type'] ?? ''));
 				if (\count($extension) > 1) {
 					$fileName = 'clipboard.' . $extension[1];
 				}
@@ -124,16 +136,22 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 			throw new \Exception(Text::_('COM_DPATTACHMENTS_UPLOAD_ERROR'));
 		}
 
-		$descriptor = ['tmp_name' => $_FILES['file']['tmp_name'], 'name' => basename((string)$targetFile)];
+		$descriptor = ['tmp_name' => $file['tmp_name'], 'name' => basename((string)$targetFile)];
 		if (!ComponentHelper::getParams('com_dpattachments')->get('allow_unsafe_uploads', 0) && !InputFilter::isSafeFile($descriptor)) {
 			throw new \Exception(Text::_('COM_DPATTACHMENTS_UPLOAD_ERROR'));
 		}
 
-		if (!File::upload($_FILES['file']['tmp_name'], $targetFile)) {
+		if ($isUpload) {
+			$success = File::upload($file['tmp_name'], $targetFile);
+		} else {
+			$success = Folder::create(\dirname((string)$targetFile)) && File::move($file['tmp_name'], $targetFile);
+		}
+
+		if (!$success) {
 			throw new \Exception(Text::_('COM_DPATTACHMENTS_UPLOAD_ERROR'));
 		}
 
-		$data['size'] = $_FILES['file']['size'];
+		$data['size'] = (int)($file['size'] ?? filesize($targetFile));
 
 		$result = parent::save($data);
 		if (!$result) {

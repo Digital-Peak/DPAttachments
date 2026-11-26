@@ -30,8 +30,8 @@ HTMLHelper::_('script', 'com_dpattachments/layouts/attachment/form.min.js', ['re
 <div class="com-dpattachments-layout-form"
 	data-upload-url="<?php echo Route::_('index.php?option=com_dpattachments&task=attachment.upload'); ?>"
 	data-id=<?php echo $displayData['id'] ?? 0; ?>
-	data-context="<?php echo htmlspecialchars($context, ENT_COMPAT, 'UTF-8'); ?>"
-	data-item="<?php echo htmlspecialchars($itemId, ENT_COMPAT, 'UTF-8'); ?>">
+	data-context="<?php echo htmlspecialchars((string)$context, ENT_COMPAT, 'UTF-8'); ?>"
+	data-item="<?php echo htmlspecialchars((string)$itemId, ENT_COMPAT, 'UTF-8'); ?>">
 	<div class="dp-form__upload dp-upload">
 		<span class="dp-upload__select"><?php echo Text::_('COM_DPATTACHMENTS_TEXT_SELECT_FILE'); ?></span>
 		<span class="dp-upload__paste"><?php echo Text::_('COM_DPATTACHMENTS_TEXT_PASTE'); ?></span>

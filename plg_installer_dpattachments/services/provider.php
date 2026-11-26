@@ -14,7 +14,6 @@ use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Database\DatabaseInterface;
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
-use Joomla\Event\DispatcherInterface;
 
 return new class () implements ServiceProviderInterface {
 	public function register(Container $container): void
@@ -22,9 +21,7 @@ return new class () implements ServiceProviderInterface {
 		$container->set(
 			PluginInterface::class,
 			static function (Container $container): DPAttachments {
-				$dispatcher = $container->get(DispatcherInterface::class);
-				$plugin     = new DPAttachments(
-					$dispatcher,
+				$plugin = new DPAttachments(
 					(array)PluginHelper::getPlugin('installer', 'dpattachments')
 				);
 				$plugin->setApplication(Factory::getApplication());

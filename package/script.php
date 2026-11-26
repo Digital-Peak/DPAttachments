@@ -19,7 +19,7 @@ class Pkg_DPAttachmentsInstallerScript extends InstallerScript implements Databa
 
 	protected $minimumPhp = '8.1.0';
 
-	protected $minimumJoomla = '4.4.0';
+	protected $minimumJoomla = '5.4.0';
 
 	public function update(InstallerAdapter $parent): void
 	{
